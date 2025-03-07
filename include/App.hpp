@@ -1,7 +1,10 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+
+#include "Util/Renderer.hpp"
 #include "pch.hpp" // IWYU pragma: export
+#include "ResourceManager.hpp"
 
 class App {
 public:
@@ -24,6 +27,12 @@ private:
 
 private:
     State m_CurrentState = State::START;
+
+
+    Util::Renderer m_Root;
+
+
+    std::shared_ptr<ResourceManager> m_RM;
 };
 
 #endif

@@ -7,6 +7,11 @@
 
 void App::Start() {
     LOG_TRACE("Start");
+
+
+    m_RM = std::make_shared<ResourceManager>();
+    m_Root.AddChildren(m_RM->GetChildren());
+
     m_CurrentState = State::UPDATE;
 }
 
@@ -22,6 +27,9 @@ void App::Update() {
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
+
+
+    m_Root.Update();
 }
 
 void App::End() { // NOLINT(this method will mutate members in the future)
