@@ -4,6 +4,7 @@
 
 #include "Util/Renderer.hpp"
 #include "pch.hpp" // IWYU pragma: export
+#include "Button.hpp"
 #include "ResourceManager.hpp"
 
 class App {
@@ -31,6 +32,7 @@ private:
 
     Util::Renderer m_Root;
 
+    std::shared_ptr<Button> m_start;
 
     std::shared_ptr<ResourceManager> m_RM;
 };

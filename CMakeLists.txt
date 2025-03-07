@@ -38,6 +38,8 @@ add_executable(${PROJECT_NAME}
         src/ResourceManager.cpp
         include/ResourceManager.hpp
         include/BackgroundImage.hpp
+        src/Button.cpp
+        include/Button.hpp
 )
 
 if(MSVC)
