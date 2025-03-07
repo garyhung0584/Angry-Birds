@@ -13,7 +13,7 @@ public:
     ResourceManager();
 
     [[nodiscard]] std::vector<std::shared_ptr<Util::GameObject>> GetChildren() const {
-        return { m_Background};
+        return { m_Background };
     }
 
     void NextPhase();
