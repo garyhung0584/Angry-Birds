@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Util/Logger.hpp"
+
 #include "Util/GameObject.hpp"
 
 class Button : public Util::GameObject {
@@ -28,7 +30,11 @@ public:
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
 
     bool ifClick(glm::vec2 position) const {
-        return position.y > -250 && position.y < -110 && position.x > -65 && position.x < 65;
+        auto myPos = GetPosition();
+        auto bias = position-myPos;
+        LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
+        LOG_DEBUG("Button: {}", GetImagePath());
+        return bias.x < 150 && bias.y < 150;
     }
 
     // TODO: Add and implement more methods and properties as needed to finish Giraffe Adventure.
