@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
         include/BackgroundImage.hpp
         src/Button.cpp
         include/Button.hpp
+        include/AppUtil.hpp
+        src/AppUtil.cpp
 )
 
 if(MSVC)

@@ -16,13 +16,13 @@ public:
         return { m_Background };
     }
 
-    void NextPhase();
+    void EnterLevel(const int level);
 
 private:
     // std::shared_ptr<TaskText> m_TaskText;
     std::shared_ptr<BackgroundImage> m_Background;
 
-    int m_Phase = 1;
+    int m_level = 0;
 };
 
 #endif //RESOURCEMANAGER_HPP
