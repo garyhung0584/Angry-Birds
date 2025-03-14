@@ -24,7 +24,8 @@ void App::PhaseManager() {
         case Phase::LEVEL_SELECT:
             for (int i = 0; i < 10; i++) {
                 std::shared_ptr<Button> m_button = std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png");
-                m_button ->SetPosition({-300.f+50*i, -180.f});
+                m_button ->SetPosition({-400.f+200*(i%5), 180.f-200*(i/5)});
+                m_Root.AddChild(m_button);
             }
 
         break;
