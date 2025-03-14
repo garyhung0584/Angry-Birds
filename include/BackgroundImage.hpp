@@ -21,7 +21,7 @@ public:
 
 private:
     inline std::string ImagePath(const int phase) {
-        return RESOURCE_DIR"/Image/Background/level" + std::to_string(phase) + ".png";
+        return RESOURCE_DIR"/Background/level" + std::to_string(phase) + ".png";
     }
 };
 

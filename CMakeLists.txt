@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME}
         include/Button.hpp
         include/AppUtil.hpp
         src/AppUtil.cpp
+        src/AppUpdate.cpp
+        src/AppEnd.cpp
 )
 
 if(MSVC)
