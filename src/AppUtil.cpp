@@ -8,23 +8,28 @@
  * @warning Do not modify this function.
  * @note See README.md for the task details.
  */
-// void App::PhaseManager() {
-//     bool isMainMenu;;
-//     bool is;
-//     LOG_DEBUG("Validating the task {}", static_cast<int>(m_Phase));
-//     switch (m_Phase) {
-//         case Phase::MAIN_MENU:
-//             if (m_Giraffe->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/giraffe.png") {
-//                 m_Phase = Phase::ABLE_TO_MOVE;
-//                 m_Giraffe->SetPosition({-112.5f, -140.5f});
-//
-//                 m_RM->EnterLevel(0);
-//             } else {
-//                 LOG_DEBUG("The image is not correct");
-//                 LOG_DEBUG("The image path is {} instead.", m_Giraffe->GetImagePath());
-//             }
-//         break;
-//     }
+void App::PhaseManager() {
+    bool isMainMenu;
+    bool is;
+    LOG_DEBUG("Validating the task {}", static_cast<int>(m_Phase));
+    switch (m_Phase) {
+        case Phase::MAIN_MENU:
+
+            m_start = std::make_shared<Button>(RESOURCE_DIR"/Button_Start.png");
+            m_start->SetPosition({-1.5f, -180.f});
+
+            m_start->SetZIndex(50);
+            m_Root.AddChild(m_start);
+        break;
+        case Phase::LEVEL_SELECT:
+            for (int i = 0; i < 10; i++) {
+                std::shared_ptr<Button> m_button = std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png");
+                m_button ->SetPosition({-300.f+50*i, -180.f});
+            }
+
+        break;
+    }
+}
 //         case Phase::ABLE_TO_MOVE:
 //             if (isInsideTheSquare(*m_Giraffe)) {
 //                 m_Phase = Phase::COLLIDE_DETECTION;

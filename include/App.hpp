@@ -24,7 +24,7 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
 private:
-    void ValidTask();
+    void PhaseManager();
 
 private:
     enum class Phase {
