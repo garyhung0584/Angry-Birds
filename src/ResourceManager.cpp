@@ -8,9 +8,9 @@ ResourceManager::ResourceManager() {
     m_Background = std::make_shared<BackgroundImage>();
 }
 
-void ResourceManager::EnterLevel(int level) {
+void ResourceManager::EnterLevel(const int level) {
     m_level = level;
     LOG_DEBUG("Current level: {}", m_level);
-    // m_Background->NextPhase(m_Phase);
+    m_Background->SetPhase(m_level);
     // m_TaskText->NextPhase(m_Phase++);
 }

@@ -16,7 +16,7 @@ public:
         return { m_Background };
     }
 
-    void EnterLevel(const int level);
+    void EnterLevel(int level);
 
 private:
     // std::shared_ptr<TaskText> m_TaskText;
