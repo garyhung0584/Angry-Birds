@@ -15,7 +15,6 @@ void App::Update() {
 
         if (m_start->ifClick(position) && m_Phase == Phase::MAIN_MENU) {
             m_RM->EnterLevel(0);
-            m_start->SetVisible(false);
             m_Phase = Phase::LEVEL_SELECT;
             PhaseManager();
         }

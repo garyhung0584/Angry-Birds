@@ -23,6 +23,7 @@ void App::PhaseManager() {
 
         break;
         case Phase::LEVEL_SELECT:
+            m_Root.RemoveChild(m_start);
             for (int i = 0; i < 10; i++) {
                 std::shared_ptr<Button> m_button = std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png");
                 m_button ->SetPosition({-400.f+200*(i%5), 120.f-250*(i/5)});
