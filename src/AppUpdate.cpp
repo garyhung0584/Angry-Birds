@@ -16,10 +16,14 @@ void App::Update() {
                 PhaseManager();
             }
         } else if (m_Phase == Phase::LEVEL_SELECT) {
-            LOG_DEBUG("Mouse position: x: {}, y: {}", position.x, position.y);
             for (int i = 0; i < 10; i++) {
                 if (m_buttons[i]->ifButtonClick(position)) {
-                    LOG_DEBUG("Mouse button: {}", i+1);
+                    m_RM->EnterLevel(i + 1);
+                    m_Phase = static_cast<Phase>(i + 2);
+                    for (const std::shared_ptr<Button> &button: m_buttons) {
+                        m_Root.RemoveChild(button);
+                    };
+                    PhaseManager();
                 }
             }
         }

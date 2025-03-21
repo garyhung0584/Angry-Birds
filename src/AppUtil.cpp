@@ -9,9 +9,6 @@
  * @note See README.md for the task details.
  */
 void App::PhaseManager() {
-    bool isMainMenu;
-    bool is;
-    LOG_DEBUG("Validating the task {}", static_cast<int>(m_Phase));
     switch (m_Phase) {
         case Phase::MAIN_MENU:
 
@@ -32,8 +29,24 @@ void App::PhaseManager() {
             }
             break;
         case Phase::LEVEL_1:
-
-
+            break;
+        case Phase::LEVEL_2:
+            break;
+        case Phase::LEVEL_3:
+            break;
+        case Phase::LEVEL_4:
+            break;
+        case Phase::LEVEL_5:
+            break;
+        case Phase::LEVEL_6:
+            break;
+        case Phase::LEVEL_7:
+            break;
+        case Phase::LEVEL_8:
+            break;
+        case Phase::LEVEL_9:
+            break;
+        case Phase::LEVEL_10:
             break;
     }
 }
