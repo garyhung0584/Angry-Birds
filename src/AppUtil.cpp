@@ -21,11 +21,17 @@ void App::PhaseManager() {
             break;
         case Phase::LEVEL_SELECT:
             m_Root.RemoveChild(m_start);
-            for (int i = 0; i < 10; i++) {
-                m_buttons.push_back(
-                    std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png"));
-                m_buttons[i]->SetPosition({-400.f + 200 * (i % 5), 120.f - 250 * (i / 5)});
-                m_Root.AddChild(m_buttons[i]);
+            if (m_buttons.empty()) {
+                for (int i = 0; i < 10; i++) {
+                    m_buttons.push_back(
+                        std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png"));
+                    m_buttons[i]->SetPosition({-400.f + 200 * (i % 5), 120.f - 250 * (i / 5)});
+                    m_Root.AddChild(m_buttons[i]);
+                }
+            } else {
+                for (const std::shared_ptr<Button> &button: m_buttons) {
+                    m_Root.AddChild(button);
+                }
             }
             break;
         case Phase::LEVEL_1:
