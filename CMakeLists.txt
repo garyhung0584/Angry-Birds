@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
         include/BackgroundImage.hpp
         src/Button.cpp
         include/Button.hpp
+        src/Slingshot.cpp
+        include/Slingshot.hpp
         include/AppUtil.hpp
         src/AppUtil.cpp
         src/AppUpdate.cpp

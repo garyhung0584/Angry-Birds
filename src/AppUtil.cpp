@@ -29,6 +29,10 @@ void App::PhaseManager() {
             }
             break;
         case Phase::LEVEL_1:
+            m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
+            m_slingshot->SetZIndex(5);
+            m_slingshot->SetVisible(true);
+            m_Root.AddChild(m_slingshot);
             break;
         case Phase::LEVEL_2:
             break;

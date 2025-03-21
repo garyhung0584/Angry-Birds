@@ -5,6 +5,7 @@
 #include "Util/Renderer.hpp"
 #include "pch.hpp" // IWYU pragma: export
 #include "Button.hpp"
+#include "Slingshot.hpp"
 #include "ResourceManager.hpp"
 
 class App {
@@ -50,6 +51,8 @@ private:
 
     std::shared_ptr<Button> m_start;
     std::vector<std::shared_ptr<Button>> m_buttons;
+
+    std::shared_ptr<Slingshot> m_slingshot;
 
     std::shared_ptr<ResourceManager> m_RM;
 };
