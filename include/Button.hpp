@@ -29,13 +29,6 @@ public:
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
 
-    bool ifClick(glm::vec2 position) const {
-        auto myPos = GetPosition();
-        auto bias = position-myPos;
-        // LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
-        // LOG_DEBUG("Button: {}", GetImagePath());
-        return bias.x < 150 && bias.y < 150;
-    }
 
     bool ifButtonClick(glm::vec2 position) const {
         auto myPos = GetPosition();

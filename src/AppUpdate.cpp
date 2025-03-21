@@ -10,7 +10,7 @@ void App::Update() {
     if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
         auto position = Util::Input::GetCursorPosition();
         if (m_Phase == Phase::MAIN_MENU) {
-            if (m_start->ifClick(position)) {
+            if (m_start->ifButtonClick(position)) {
                 m_RM->EnterLevel(0);
                 m_Phase = Phase::LEVEL_SELECT;
                 PhaseManager();
