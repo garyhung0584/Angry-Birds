@@ -46,6 +46,10 @@ add_executable(${PROJECT_NAME}
         src/AppUtil.cpp
         src/AppUpdate.cpp
         src/AppEnd.cpp
+        include/physics2D.hpp
+        src/physics2D.cpp
+        include/PhysicsEngine.hpp
+        src/PhysicsEngine.cpp
 )
 
 if(MSVC)
