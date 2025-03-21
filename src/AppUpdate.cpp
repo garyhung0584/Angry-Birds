@@ -10,7 +10,7 @@ void App::Update() {
 
 
 
-    if (Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB)) {
+    if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
         auto position = Util::Input::GetCursorPosition	();
 
         if (m_start->ifClick(position) && m_Phase == Phase::MAIN_MENU) {
@@ -19,7 +19,11 @@ void App::Update() {
             PhaseManager();
         }
         LOG_DEBUG("Mouse position: x: {}, y: {}", position.x, position.y);
-
+        for (int i = 0; i < 10; i++) {
+            if (m_buttons[i]->ifButtonClick(position)) {
+                LOG_DEBUG("Mouse button: {}", i+1);
+            }
+        }
 
     }
 

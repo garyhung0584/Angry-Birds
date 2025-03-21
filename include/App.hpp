@@ -49,6 +49,7 @@ private:
     Util::Renderer m_Root;
 
     std::shared_ptr<Button> m_start;
+    std::vector<std::shared_ptr<Button>> m_buttons;
 
     std::shared_ptr<ResourceManager> m_RM;
 };

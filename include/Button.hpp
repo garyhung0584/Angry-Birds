@@ -37,6 +37,12 @@ public:
         return bias.x < 150 && bias.y < 150;
     }
 
+    bool ifButtonClick(glm::vec2 position) const {
+        auto myPos = GetPosition();
+        auto bias = position- myPos;
+        //LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
+        return -75 < bias.x && bias.x < 75 && -75 < bias.y && bias.y < 75;
+    }
     // TODO: Add and implement more methods and properties as needed to finish Giraffe Adventure.
 
 private:
