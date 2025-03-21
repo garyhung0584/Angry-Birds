@@ -21,18 +21,23 @@ void App::PhaseManager() {
             m_start->SetZIndex(50);
             m_Root.AddChild(m_start);
 
-        break;
+            break;
         case Phase::LEVEL_SELECT:
             m_Root.RemoveChild(m_start);
             for (int i = 0; i < 10; i++) {
-                m_buttons.push_back(std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png"));
-                m_buttons[i] ->SetPosition({-400.f+200*(i%5), 120.f-250*(i/5)});
+                m_buttons.push_back(
+                    std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png"));
+                m_buttons[i]->SetPosition({-400.f + 200 * (i % 5), 120.f - 250 * (i / 5)});
                 m_Root.AddChild(m_buttons[i]);
             }
-        break;
+            break;
+        case Phase::LEVEL_1:
 
+
+            break;
     }
 }
+
 //         case Phase::ABLE_TO_MOVE:
 //             if (isInsideTheSquare(*m_Giraffe)) {
 //                 m_Phase = Phase::COLLIDE_DETECTION;

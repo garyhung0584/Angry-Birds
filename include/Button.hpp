@@ -32,8 +32,8 @@ public:
     bool ifClick(glm::vec2 position) const {
         auto myPos = GetPosition();
         auto bias = position-myPos;
-        LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
-        LOG_DEBUG("Button: {}", GetImagePath());
+        // LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
+        // LOG_DEBUG("Button: {}", GetImagePath());
         return bias.x < 150 && bias.y < 150;
     }
 
