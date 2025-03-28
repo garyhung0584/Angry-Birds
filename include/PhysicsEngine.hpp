@@ -6,6 +6,8 @@
 #include "Util/GameObject.hpp"
 
 class PhysicsEngine : public Util::GameObject {
+public:
+    PhysicsEngine();
 
     PhysicsEngine(const PhysicsEngine &) = delete;
 

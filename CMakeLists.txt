@@ -19,8 +19,19 @@ FetchContent_Declare(
 
     SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/PTSD
 )
+FetchContent_Declare(
+        box2d
 
-FetchContent_MakeAvailable(ptsd)
+        URL         https://github.com/erincatto/box2d/archive/refs/tags/v3.0.0.zip
+
+        # Or alternatively if you want to use a specific git commit instead of a release:
+        # GIT_REPOSITORY  https://github.com/ntut-open-source-club/practical-tools-for-simple-design.git
+        # GIT_TAG         <git_tag>
+
+        SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/box2d
+)
+
+FetchContent_MakeAvailable(ptsd box2d)
 
 include(files.cmake)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
@@ -67,9 +78,11 @@ endif()
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${DEPENDENCY_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/PTSD/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/box2d/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(${PROJECT_NAME}
     SDL2::SDL2main
     PTSD
+    box2d
 )
