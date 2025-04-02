@@ -2,10 +2,12 @@
 #define PHYSICSENGINE_HPP
 
 #include <string>
+#include "Util/Logger.hpp"
 
-#include "Util/GameObject.hpp"
+#include "box2d/box2d.h"
 
-class PhysicsEngine : public Util::GameObject {
+
+class PhysicsEngine {
 public:
     PhysicsEngine();
 
@@ -17,7 +19,12 @@ public:
 
     PhysicsEngine &operator=(PhysicsEngine &&) = delete;
 
+    void runWorld();
+    void stopWorld();
+    void addObject(b2BodyDef &bodyDef);
 
+private:
+    b2WorldId worldId;
 
 };
 

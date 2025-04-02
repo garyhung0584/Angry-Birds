@@ -39,6 +39,8 @@ void App::PhaseManager() {
             m_slingshot->SetZIndex(5);
             m_slingshot->SetVisible(true);
             m_Root.AddChild(m_slingshot);
+            m_PE = std::make_shared<PhysicsEngine>();
+            m_PE -> runWorld();
             break;
         case Phase::LEVEL_2:
             break;

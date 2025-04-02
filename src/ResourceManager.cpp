@@ -1,4 +1,3 @@
-
 #include "ResourceManager.hpp"
 
 #include "Util/Logger.hpp"
