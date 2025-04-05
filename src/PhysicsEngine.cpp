@@ -1,4 +1,4 @@
-#include "PhysicsEngine.hpp"\
+#include "PhysicsEngine.hpp"
 
 #include "Util/Logger.hpp"
 
@@ -6,11 +6,6 @@ PhysicsEngine::PhysicsEngine() {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -10.0f};
     worldId = b2CreateWorld(&worldDef);
-}
-
-void PhysicsEngine::runWorld() {
-    float timeStep = 1.0f / 60.0f;
-    int subStepCount = 4;
 
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = b2Vec2{0.0f, -10.0f};
@@ -18,6 +13,17 @@ void PhysicsEngine::runWorld() {
     b2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
     b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+}
+
+void PhysicsEngine::addObject(const std::shared_ptr<Physics2D> &obj) const {
+    // b2BodyId bodyId = b2CreateBody(worldId, obj->m_bodyDef);
+    // b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
+    // b2CreatePolygonShape(bodyId, obj->m_shapeDef, &dynamicBox);
+}
+
+void PhysicsEngine::runWorld() const {
+    float timeStep = 1.0f / 60.0f;
+    int subStepCount = 4;
 
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;

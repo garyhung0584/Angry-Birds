@@ -46,21 +46,25 @@ add_executable(${PROJECT_NAME}
     ${SRC_DIR}/main.cpp
     ${SRC_FILES}
     ${HEADER_FILES}
-        src/ResourceManager.cpp
-        include/ResourceManager.hpp
-        include/BackgroundImage.hpp
-        src/Button.cpp
-        include/Button.hpp
-        src/Slingshot.cpp
-        include/Slingshot.hpp
         include/AppUtil.hpp
-        src/AppUtil.cpp
-        src/AppUpdate.cpp
-        src/AppEnd.cpp
+        include/BackgroundImage.hpp
+        include/Birds.hpp
+        include/Button.hpp
         include/physics2D.hpp
-        src/physics2D.cpp
         include/PhysicsEngine.hpp
+        include/ResourceManager.hpp
+        include/Slingshot.hpp
+        include/wood.hpp
+        src/AppEnd.cpp
+        src/AppUpdate.cpp
+        src/AppUtil.cpp
+        src/Birds.cpp
+        src/Button.cpp
+        src/Physics2D.cpp
         src/PhysicsEngine.cpp
+        src/ResourceManager.cpp
+        src/Slingshot.cpp
+        src/wood.cpp
 )
 
 if(MSVC)
