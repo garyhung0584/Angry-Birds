@@ -35,17 +35,17 @@ void App::PhaseManager() {
             }
             break;
         case Phase::LEVEL_1: {
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
             m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
             m_slingshot->SetZIndex(5);
             m_slingshot->SetVisible(true);
-            m_slingshot->SetPosition({-400.f, -150.f});
+            m_slingshot->SetPosition({-450.f, -140.f});
             m_Root.AddChild(m_slingshot);
-            m_PE = std::make_shared<PhysicsEngine>();
-            m_PE->CreateWorld();
-            std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(RESOURCE_DIR"/Birds/RedBird.png",{-30.f, 8.f},{1.f, 1.f},1.6f);
-            // m_PE->AddObject(m_bird);
-            m_Root.AddChild(m_bird);
-            // m_PE->RunWorld();
+            const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
+                RESOURCE_DIR"/Birds/RedBird.png", {0.f, 5.f}, {2.f, 2.f}, 0.2f, 0, false);
+            m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {50.f, 10.f}, {2.f, 2.f});
+            m_bird->ApplyForce({1.f, 1.f});
+
             break;
         }
         case Phase::LEVEL_2:

@@ -26,6 +26,7 @@ void App::Update() {
                     PhaseManager();
                 }
             }
+        } else {
         }
     }
 
@@ -33,7 +34,7 @@ void App::Update() {
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
-    if (m_Phase == Phase::LEVEL_1) {
+    if (m_Phase != Phase::MAIN_MENU && m_Phase != Phase::LEVEL_SELECT) {
         m_PE->UpdateWorld();
     }
     m_Root.Update();
