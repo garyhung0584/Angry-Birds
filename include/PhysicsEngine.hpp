@@ -2,7 +2,6 @@
 #define PHYSICSENGINE_HPP
 
 #include <string>
-#include "Util/GameObject.hpp"
 #include "Physics2D.hpp"
 #include "Util/Logger.hpp"
 
@@ -13,25 +12,26 @@ class PhysicsEngine {
 public:
     explicit PhysicsEngine();
 
-    void addObject(const std::shared_ptr<Physics2D> &obj) const;
+    void CreateWorld();
 
-    PhysicsEngine(const PhysicsEngine &) = delete;
+    void AddObject(std::shared_ptr<Physics2D> obj) const;
 
-    PhysicsEngine(PhysicsEngine &&) = delete;
+    std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position, const glm::vec2 &size, float rotation );
 
-    PhysicsEngine &operator=(const PhysicsEngine &) = delete;
+    void RunWorld() const;
 
-    PhysicsEngine &operator=(PhysicsEngine &&) = delete;
+    void UpdateWorld() const;
 
-    void runWorld() const;
+    void DestroyWorld() const;
 
-    void stopWorld();
 
+    // ~PhysicsEngine() {
+    //     b2DestroyWorld(worldId);
+    // }
 
 private:
-    b2WorldId worldId;
-
-
+    b2WorldId worldId{};
+    std::vector<std::shared_ptr<Physics2D> > objects;
 };
 
 #endif //PHYSICSENGINE_HPP

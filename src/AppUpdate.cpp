@@ -33,7 +33,8 @@ void App::Update() {
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
-
-
+    if (m_Phase == Phase::LEVEL_1) {
+        m_PE->UpdateWorld();
+    }
     m_Root.Update();
 }

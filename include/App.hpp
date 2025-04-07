@@ -5,6 +5,7 @@
 #include "Util/Renderer.hpp"
 #include "pch.hpp" // IWYU pragma: export
 #include "Button.hpp"
+#include "Birds.hpp"
 #include "Slingshot.hpp"
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
