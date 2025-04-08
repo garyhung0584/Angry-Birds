@@ -16,6 +16,8 @@ public:
     std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position, const glm::vec2 &size,
                       float scale = 1.f, float rotation = 0.f, bool isAwake = true);
 
+    static void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) ;
+
     void UpdateWorld() const;
 
     void DestroyWorld() const;

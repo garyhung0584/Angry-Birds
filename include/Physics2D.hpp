@@ -26,13 +26,7 @@ public:
 
     [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
 
-    // [[nodiscard]] float &GetRotation() { return m_Transform.rotation; }
-
     [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
-
-    [[nodiscard]] const b2BodyDef *GetBodyDef() const { return &m_BodyDef; }
-
-    [[nodiscard]] const b2ShapeDef *GetShapeDef() const { return &m_ShapeDef; }
 
     [[nodiscard]] b2BodyId GetBodyId() const { return m_BodyId; }
 
@@ -48,19 +42,13 @@ public:
 
     void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; };
 
-    void ApplyForce(b2Vec2 force);
-
-
-    void Update();
-
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
     std::string m_ImagePath;
 
     b2BodyId m_BodyId{};
-    b2BodyDef m_BodyDef;
-    b2ShapeDef m_ShapeDef;
+
 };
 
 #endif //PHYSICS2D_HPP

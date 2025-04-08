@@ -51,8 +51,8 @@ private:
 
     Util::Renderer m_Root;
 
-    std::shared_ptr<Button> m_start;
-    std::vector<std::shared_ptr<Button>> m_buttons;
+    std::shared_ptr<Button> m_Start;
+    std::vector<std::shared_ptr<Button>> m_Buttons;
 
     std::shared_ptr<Slingshot> m_slingshot;
 

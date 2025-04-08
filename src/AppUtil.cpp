@@ -3,33 +3,26 @@
 
 #include "Util/Logger.hpp"
 
-/**
- * @brief The function to validate the tasks.
- * @warning Do not modify this function.
- * @note See README.md for the task details.
- */
 void App::PhaseManager() {
     switch (m_Phase) {
         case Phase::MAIN_MENU:
+            m_Start = std::make_shared<Button>(RESOURCE_DIR"/Button_Start.png");
+            m_Start->SetPosition({-1.5f, -180.f});
+            m_Start->SetZIndex(50);
 
-            m_start = std::make_shared<Button>(RESOURCE_DIR"/Button_Start.png");
-            m_start->SetPosition({-1.5f, -180.f});
-
-            m_start->SetZIndex(50);
-            m_Root.AddChild(m_start);
-
+            m_Root.AddChild(m_Start);
             break;
         case Phase::LEVEL_SELECT:
-            m_Root.RemoveChild(m_start);
-            if (m_buttons.empty()) {
+            m_Root.RemoveChild(m_Start);
+            if (m_Buttons.empty()) {
                 for (int i = 0; i < 10; i++) {
-                    m_buttons.push_back(
+                    m_Buttons.push_back(
                         std::make_shared<Button>(RESOURCE_DIR"/Level/level" + std::to_string(i + 1) + ".png"));
-                    m_buttons[i]->SetPosition({-400.f + 200 * (i % 5), 120.f - 250 * (i / 5)});
-                    m_Root.AddChild(m_buttons[i]);
+                    m_Buttons[i]->SetPosition({-400.f + 200 * (i % 5), 120.f - 250 * (i / 5)});
+                    m_Root.AddChild(m_Buttons[i]);
                 }
             } else {
-                for (const std::shared_ptr<Button> &button: m_buttons) {
+                for (const std::shared_ptr<Button> &button: m_Buttons) {
                     m_Root.AddChild(button);
                 }
             }
@@ -44,7 +37,6 @@ void App::PhaseManager() {
             const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
                 RESOURCE_DIR"/Birds/RedBird.png", {0.f, 5.f}, {2.f, 2.f}, 0.2f, 0, false);
             m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {50.f, 10.f}, {2.f, 2.f});
-            m_bird->ApplyForce({1.f, 1.f});
 
             break;
         }
@@ -68,33 +60,3 @@ void App::PhaseManager() {
             break;
     }
 }
-
-//         case Phase::ABLE_TO_MOVE:
-//             if (isInsideTheSquare(*m_Giraffe)) {
-//                 m_Phase = Phase::COLLIDE_DETECTION;
-//                 m_Giraffe->SetPosition({-112.5f, -140.5f});
-//                 m_Chest->SetVisible(true);
-//
-//                 m_PRM->NextPhase();
-//             } else {
-//                 LOG_DEBUG("The giraffe is not inside the square");
-//             }
-//             break;
-//
-//         case Phase::COLLIDE_DETECTION:
-//             if (m_Giraffe->IfCollides(m_Chest)) {
-//                 if (m_Chest->GetVisibility()) {
-//                     LOG_DEBUG("The giraffe collided with the chest but the chest is still visible");
-//                 } else {
-//                     m_Phase = Phase::BEE_ANIMATION;
-//                     m_Giraffe->SetVisible(false);
-//                     m_Bee->SetVisible(true);
-//
-//                     m_PRM->NextPhase();
-//                 }
-//             } else {
-//                 LOG_DEBUG("The giraffe is not colliding with the chest");
-//             }
-//             break;
-//     }
-// }

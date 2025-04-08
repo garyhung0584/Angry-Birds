@@ -6,7 +6,7 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     m_Root = Root;
 
     b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = b2Vec2{-6.0f, -10.0f};
+    worldDef.gravity = b2Vec2{0.0f, -10.0f};
     worldId = b2CreateWorld(&worldDef);
 
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
@@ -48,6 +48,10 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     objects.push_back(obj);
     m_Root->AddChild(obj);
     return obj;
+}
+
+void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) {
+        b2Body_ApplyForceToCenter(bodyId, force, true);
 }
 
 
