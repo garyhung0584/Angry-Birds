@@ -29,8 +29,7 @@ public:
 private:
     void PhaseManager();
 
-private:
-    enum class Phase {
+    typedef enum Phase {
         MAIN_MENU,
         LEVEL_SELECT,
         LEVEL_1,
@@ -43,17 +42,19 @@ private:
         LEVEL_8,
         LEVEL_9,
         LEVEL_10,
-    };
+    } Phase;
+
+
+
 
     State m_CurrentState = State::START;
-    Phase m_Phase = Phase::MAIN_MENU;
+    Phase m_Phase = MAIN_MENU;
 
 
     Util::Renderer m_Root;
 
     std::shared_ptr<Button> m_Start;
-    std::vector<std::shared_ptr<Button>> m_Buttons;
-
+    std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
 
     std::shared_ptr<ResourceManager> m_RM;

@@ -5,14 +5,14 @@
 
 void App::PhaseManager() {
     switch (m_Phase) {
-        case Phase::MAIN_MENU:
+        case MAIN_MENU:
             m_Start = std::make_shared<Button>(RESOURCE_DIR"/Button_Start.png");
             m_Start->SetPosition({-1.5f, -180.f});
             m_Start->SetZIndex(50);
 
             m_Root.AddChild(m_Start);
             break;
-        case Phase::LEVEL_SELECT:
+        case LEVEL_SELECT:
             m_Root.RemoveChild(m_Start);
             if (m_Buttons.empty()) {
                 for (int i = 0; i < 10; i++) {
@@ -27,7 +27,7 @@ void App::PhaseManager() {
                 }
             }
             break;
-        case Phase::LEVEL_1: {
+        case LEVEL_1: {
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
             m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
             m_slingshot->SetZIndex(5);
@@ -40,23 +40,23 @@ void App::PhaseManager() {
 
             break;
         }
-        case Phase::LEVEL_2:
+        case LEVEL_2:
             break;
-        case Phase::LEVEL_3:
+        case LEVEL_3:
             break;
-        case Phase::LEVEL_4:
+        case LEVEL_4:
             break;
-        case Phase::LEVEL_5:
+        case LEVEL_5:
             break;
-        case Phase::LEVEL_6:
+        case LEVEL_6:
             break;
-        case Phase::LEVEL_7:
+        case LEVEL_7:
             break;
-        case Phase::LEVEL_8:
+        case LEVEL_8:
             break;
-        case Phase::LEVEL_9:
+        case LEVEL_9:
             break;
-        case Phase::LEVEL_10:
+        case LEVEL_10:
             break;
     }
 }

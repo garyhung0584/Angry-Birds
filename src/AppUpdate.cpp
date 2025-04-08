@@ -7,16 +7,16 @@
 
 
 void App::Update() {
-    if (m_Phase == Phase::MAIN_MENU || m_Phase == Phase::LEVEL_SELECT) {
+    if (m_Phase == MAIN_MENU || m_Phase == LEVEL_SELECT) {
         if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
             auto position = Util::Input::GetCursorPosition();
-            if (m_Phase == Phase::MAIN_MENU) {
+            if (m_Phase == MAIN_MENU) {
                 if (m_Start->ifButtonClick(position)) {
                     m_RM->EnterLevel(0);
-                    m_Phase = Phase::LEVEL_SELECT;
+                    m_Phase = LEVEL_SELECT;
                     PhaseManager();
                 }
-            } else if (m_Phase == Phase::LEVEL_SELECT) {
+            } else if (m_Phase == LEVEL_SELECT) {
                 for (int i = 0; i < 10; i++) {
                     if (m_Buttons[i]->ifButtonClick(position)) {
                         m_RM->EnterLevel(i + 1);
@@ -30,7 +30,7 @@ void App::Update() {
             }
         }
     }
-    if (m_Phase != Phase::LEVEL_SELECT && m_Phase != Phase::MAIN_MENU) {
+    if (m_Phase != LEVEL_SELECT && m_Phase != MAIN_MENU) {
         bool isPressed = false;
         glm::vec2 posStart;
         if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
@@ -43,11 +43,17 @@ void App::Update() {
             }
         }
         if (isPressed && Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
+            m_PE->Release();
             isPressed = false;
         }
         if (isPressed) {
             auto position = Util::Input::GetCursorPosition();
             auto posBias = position - posStart;
+            float len = length(posBias);
+            if (len > 100.0f) {
+                posBias = (posBias / len ) * 100.0f;
+            }
+            m_PE->Pull(posBias);
         }
     }
 
@@ -55,7 +61,7 @@ void App::Update() {
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
-    if (m_Phase != Phase::MAIN_MENU && m_Phase != Phase::LEVEL_SELECT) {
+    if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
         m_PE->UpdateWorld();
     }
     m_Root.Update();

@@ -30,13 +30,12 @@ public:
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
 
 
-    bool ifButtonClick(glm::vec2 position) const {
-        auto myPos = GetPosition();
-        auto bias = position- myPos;
+    bool ifButtonClick(const glm::vec2 position) const {
+        const auto PosButton = GetPosition();
+        const auto bias = position- PosButton;
         //LOG_DEBUG("Bias: x: {}, y: {}", bias.x, bias.y);
         return -75 < bias.x && bias.x < 75 && -75 < bias.y && bias.y < 75;
     }
-    // TODO: Add and implement more methods and properties as needed to finish Giraffe Adventure.
 
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }

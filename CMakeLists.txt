@@ -65,6 +65,7 @@ add_executable(${PROJECT_NAME}
         src/ResourceManager.cpp
         src/Slingshot.cpp
         src/wood.cpp
+        include/type.hpp
 )
 
 if(MSVC)

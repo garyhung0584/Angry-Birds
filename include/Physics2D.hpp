@@ -4,33 +4,40 @@
 
 #include <string>
 #include <box2d/box2d.h>
+
+#include "type.hpp"
 #include "Util/GameObject.hpp"
 
 class Physics2D : public Util::GameObject {
 public:
-    explicit Physics2D(const std::string &ImagePath);
-
-    Physics2D(const Physics2D &) = delete;
-
-    Physics2D(Physics2D &&) = delete;
+    Physics2D &operator=(Physics2D &&) = delete;
 
     Physics2D &operator=(const Physics2D &) = delete;
 
-    Physics2D &operator=(Physics2D &&) = delete;
+    Physics2D(Physics2D &&) = delete;
+
+    Physics2D(const Physics2D &) = delete;
+
+    Physics2D(const std::string &ImagePath, int health, EntityType entityType);
 
     ~Physics2D() override {
         b2DestroyBody(m_BodyId);
     }
 
-    [[nodiscard]] const std::string &GetImagePath() const { return m_ImagePath; }
-
-    [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
 
     [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
+
 
     [[nodiscard]] b2BodyId GetBodyId() const { return m_BodyId; }
 
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+
+    [[nodiscard]] const std::string &GetImagePath() const { return m_ImagePath; }
+
+    [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
+
+
+    void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; }
 
     void SetImage(const std::string &ImagePath);
 
@@ -40,8 +47,6 @@ public:
 
     void SetScale(float Scale) { m_Transform.scale = {Scale, Scale}; }
 
-    void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; };
-
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
@@ -49,8 +54,8 @@ private:
 
     b2BodyId m_BodyId{};
 
-    int health;
-
+    int m_Health;
+    EntityType m_EntityType;
 };
 
 #endif //PHYSICS2D_HPP

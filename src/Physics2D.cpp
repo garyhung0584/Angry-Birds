@@ -2,8 +2,11 @@
 
 #include "Util/Image.hpp"
 
-Physics2D::Physics2D(const std::string &ImagePath) {
+Physics2D::Physics2D(const std::string &ImagePath, const int health, const EntityType entityType) {
     SetImage(ImagePath);
+
+    m_Health = health;
+    m_EntityType = entityType;
 
     ResetPosition();
 }
