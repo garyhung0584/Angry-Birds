@@ -35,8 +35,8 @@ void App::PhaseManager() {
             m_slingshot->SetPosition({-450.f, -140.f});
             m_Root.AddChild(m_slingshot);
             const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
-                RESOURCE_DIR"/Birds/RedBird.png", {0.f, 5.f}, {2.f, 2.f}, 0.2f, 0, false);
-            m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {50.f, 10.f}, {2.f, 2.f});
+                RESOURCE_DIR"/Birds/RedBird.png", {0.f, 0.5f}, {0.2f, 0.2f}, 0.2f, 0);
+            m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {5.f, 2.f}, {0.2f, 0.2f});
 
             break;
         }

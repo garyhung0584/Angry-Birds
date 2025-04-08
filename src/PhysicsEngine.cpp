@@ -10,9 +10,9 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     worldId = b2CreateWorld(&worldDef);
 
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
-    groundBodyDef.position = b2Vec2{45.0f, -10.0f};
+    groundBodyDef.position = b2Vec2{4.5f, -1.0f};
     b2BodyId groundId = b2CreateBody(worldId, &groundBodyDef);
-    b2Polygon groundBox = b2MakeBox(64.0f, 10.0f);
+    b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
     b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 }
@@ -37,7 +37,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
 
     b2Polygon dynamicBox = b2MakeBox(size.x, size.y);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.density = 1.0f;
+    shapeDef.density = 0.1f;
     shapeDef.friction = 0.3f;
 
     b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
@@ -50,8 +50,12 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     return obj;
 }
 
-void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) {
-        b2Body_ApplyForceToCenter(bodyId, force, true);
+void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const {
+    if (B2_IS_NULL(worldId) || B2_IS_NULL(bodyId)) {
+        LOG_ERROR("World or body is null");
+        return;
+    }
+    b2Body_ApplyForceToCenter(bodyId, force, true);
 }
 
 
@@ -65,7 +69,7 @@ void PhysicsEngine::UpdateWorld() const {
         b2Vec2 position = b2Body_GetPosition(bodyId);
         b2Rot rotation = b2Body_GetRotation(bodyId);
 
-        obj->SetPosition({position.x * 10 + X_OFFSET, position.y * 10 + Y_OFFSET});
+        obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
 
         LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));

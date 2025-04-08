@@ -49,6 +49,8 @@ private:
 
     b2BodyId m_BodyId{};
 
+    int health;
+
 };
 
 #endif //PHYSICS2D_HPP

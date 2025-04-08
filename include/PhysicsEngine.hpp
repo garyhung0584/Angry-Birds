@@ -13,10 +13,11 @@ class PhysicsEngine {
 public:
     explicit PhysicsEngine(Util::Renderer *Root);
 
-    std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position, const glm::vec2 &size,
-                      float scale = 1.f, float rotation = 0.f, bool isAwake = true);
+    std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position,
+                                            const glm::vec2 &size,
+                                            float scale = 1.f, float rotation = 0.f, bool isAwake = true);
 
-    static void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) ;
+    void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
 
     void UpdateWorld() const;
 
@@ -33,8 +34,8 @@ private:
     std::vector<std::shared_ptr<Physics2D> > objects;
 
     // offset the box2d world to the screen
-    const int X_OFFSET= -450;
-    const int Y_OFFSET= -210;
+    const int X_OFFSET = -450;
+    const int Y_OFFSET = -210;
 };
 
 #endif //PHYSICSENGINE_HPP
