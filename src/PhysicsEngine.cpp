@@ -89,7 +89,7 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
     }
 
     const std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
-    CreateObject(imagePath, position, health, PIG, size, 0.05f, 0);
+    CreateObject(imagePath, position, health, PIG, size, 0.05f, 0, 0.1f, 0.3f, true);
 }
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
