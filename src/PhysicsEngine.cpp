@@ -83,6 +83,7 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
             size = {0.2f, 0.2f};
             break;
         default:
+            health = 0;
             LOG_ERROR("Pig type not recognized");
             return;
     }
@@ -127,6 +128,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
     switch (structureType) {
         case FRAME_BLOCK:
             shape = "A1";
+            size = {0.4f, 0.4f};
             break;
         case FRAME_TRIANGLE:
             shape = "B1";
@@ -146,12 +148,14 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case BAR_LONG:
             shape = "G1";
+            size = {1.f, 0.1f};
             break;
         case RECTANGLE_SMALL:
             shape = "H1";
             break;
         case BAR:
             shape = "I1";
+            size = {0.8f, 0.1f};
             break;
         case BLOCK_SMALL:
             shape = "J1";
@@ -205,7 +209,7 @@ void PhysicsEngine::UpdateWorld() const {
         obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
 
-        // LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));
+        LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));
     }
 }
 

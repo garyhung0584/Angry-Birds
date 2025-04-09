@@ -47,8 +47,8 @@ void App::PhaseManager() {
 
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i*2.f, 0.2f}, STONE, BAR_SHORT, b2_pi/2);
-                m_PE->CreateStructure({4.f + i*2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.f + i*2.f, 2.f}, NORMAL);
+                m_PE->CreateStructure({4.f + i*2.f, 1.f}, WOOD, BAR, 0);
+                //m_PE->CreatePig({4.f + i*2.f, 2.f}, NORMAL);
             }
 
 
