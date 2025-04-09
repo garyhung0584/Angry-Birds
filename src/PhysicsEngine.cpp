@@ -81,8 +81,8 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
             return;
     }
 
-    std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
-    CreateObject(imagePath, position, health, PIG, size, 0.2f, 0);
+    const std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
+    CreateObject(imagePath, position, health, PIG, size, 0.05f, 0);
 }
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
@@ -219,12 +219,18 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
 
     const b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
 
-    const b2Polygon dynamicBox = b2MakeBox(size.x, size.y);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.density = density;
     shapeDef.friction = friction;
 
-    b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+    if (entityType == BIRD || entityType == PIG) {
+        const b2Circle dynamicBox = {{0,0}, size.x};
+        b2CreateCircleShape(bodyId, &shapeDef, &dynamicBox);
+    } else {
+        const b2Polygon dynamicBox = b2MakeBox(size.x, size.y);
+        b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+    }
+
 
     obj->SetBodyId(bodyId);
     obj->SetScale(scale);

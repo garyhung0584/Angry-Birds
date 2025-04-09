@@ -1,5 +1,6 @@
 #include "AppUtil.hpp"
 #include "App.hpp"
+#include "Util/Color.hpp"
 
 #include "Util/Logger.hpp"
 
@@ -34,9 +35,13 @@ void App::PhaseManager() {
             m_slingshot->SetVisible(true);
             m_slingshot->SetPosition({-450.f, -140.f});
             m_Root.AddChild(m_slingshot);
-            const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
-                RESOURCE_DIR"/Birds/RedBird.png", {0.f, 0.5f}, {0.2f, 0.2f}, 0.2f, 0);
-            m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {5.f, 2.f}, {0.2f, 0.2f});
+            // const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
+            //     RESOURCE_DIR"/Birds/RedBird.png", {0.f, 0.5f}, {0.2f, 0.2f}, 0.2f, 0);
+            // m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {5.f, 2.f}, {0.2f, 0.2f});
+
+            m_PE->CreateBird({0.f, 0.5f}, RED);
+            m_PE->CreateBird({0.5f, 0.1f},BIG);
+            m_PE->CreatePig({5.f, 0.3f}, NORMAL);
 
             break;
         }
