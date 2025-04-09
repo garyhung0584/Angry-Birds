@@ -83,7 +83,6 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
             size = {0.2f, 0.2f};
             break;
         default:
-            health = 0;
             LOG_ERROR("Pig type not recognized");
             return;
     }
@@ -209,7 +208,7 @@ void PhysicsEngine::UpdateWorld() const {
         obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
 
-        LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));
+        // LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));
     }
 }
 
