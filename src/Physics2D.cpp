@@ -4,6 +4,7 @@
 
 Physics2D::Physics2D(const std::string &ImagePath, const int health, const EntityType entityType) {
     SetImage(ImagePath);
+    this->SetZIndex(3);
 
     m_Health = health;
     m_EntityType = entityType;
