@@ -6,7 +6,7 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     m_Root = Root;
 
     b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = b2Vec2{0.0f, -10.0f};
+    worldDef.gravity = b2Vec2{0.0f, -9.0f};
     worldId = b2CreateWorld(&worldDef);
 
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
@@ -17,10 +17,17 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 }
 
-void PhysicsEngine::CreateBird(const glm::vec2 &position, const BirdType birdType) {
+void PhysicsEngine::CreateBird(const BirdType birdType) {
     std::string birdName;
     glm::vec2 size;
+    glm::vec2 position;
     const int health = 1;
+    int count = m_Birds.size();
+    if (count == 0) {
+        position = {0.f, 1.3f};
+    } else {
+        position = { count * -0.4f, 0.2f};
+    }
     switch (birdType) {
         case RED:
             birdName = "Red";
@@ -44,7 +51,7 @@ void PhysicsEngine::CreateBird(const glm::vec2 &position, const BirdType birdTyp
             break;
         case BIG:
             birdName = "Big";
-            size = {0.5f, 0.5f};
+            size = {0.2f, 0.2f};
             break;
         default:
             LOG_ERROR("Invalid bird type");
@@ -89,7 +96,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
                                     const StructureType structureType, const float rotation) {
     std::string material;
     std::string shape;
-    glm::vec2 size;
+    glm::vec2 size = {0.2f, 0.2f};
     float friction;
     float density;
     int health;
@@ -165,15 +172,21 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
 }
 
 
-void PhysicsEngine::Pull(glm::vec2 &pos) {
-    b2BodyId bodyId = m_Objects[0]->GetBodyId();
-    b2Vec2 force = b2Vec2{pos.x, pos.y};
-    ApplyForce(bodyId, force);
+void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
+    b2BodyId bodyId = m_Birds.front()->GetBodyId();
+    auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
+
+    b2Rot rot = b2MakeRot(angle);
+    b2Body_SetTransform(bodyId, transform, rot);
+    b2Body_SetAwake(bodyId, false);
 }
 
-void PhysicsEngine::Release() {
-    b2BodyId bodyId = m_Objects[0]->GetBodyId();
-    b2Vec2 force = b2Vec2{0.0f, 0.0f};
+void PhysicsEngine::Release(glm::vec2 &posBias) {
+    if (posBias.x > 0) {
+        return;
+    }
+    b2BodyId bodyId = m_Birds.front()->GetBodyId();
+    b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 9.f;
     ApplyForce(bodyId, force);
 }
 
@@ -224,7 +237,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     shapeDef.friction = friction;
 
     if (entityType == BIRD || entityType == PIG) {
-        const b2Circle dynamicBox = {{0,0}, size.x};
+        const b2Circle dynamicBox = {{0, 0}, size.x};
         b2CreateCircleShape(bodyId, &shapeDef, &dynamicBox);
     } else {
         const b2Polygon dynamicBox = b2MakeBox(size.x, size.y);

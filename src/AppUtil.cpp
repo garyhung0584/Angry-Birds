@@ -30,18 +30,22 @@ void App::PhaseManager() {
             break;
         case LEVEL_1: {
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
-            m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
+            m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot.png");
             m_slingshot->SetZIndex(5);
             m_slingshot->SetVisible(true);
             m_slingshot->SetPosition({-450.f, -140.f});
             m_Root.AddChild(m_slingshot);
-            // const std::shared_ptr<Physics2D> m_bird = m_PE->CreateObject(
-            //     RESOURCE_DIR"/Birds/RedBird.png", {0.f, 0.5f}, {0.2f, 0.2f}, 0.2f, 0);
-            // m_PE->CreateObject(RESOURCE_DIR"/Wood/Wood_F1.png", {5.f, 2.f}, {0.2f, 0.2f});
+            std::shared_ptr<Slingshot> m_slingshot1 = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
+            m_slingshot1->SetVisible(true);
+            m_slingshot1->SetPosition({-450.f, -140.f});
+            m_slingshot1->SetZIndex(0);
+            m_Root.AddChild(m_slingshot1);
 
-            m_PE->CreateBird({0.f, 0.5f}, RED);
-            m_PE->CreateBird({0.5f, 0.1f},BIG);
+
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BIG);
             m_PE->CreatePig({5.f, 0.3f}, NORMAL);
+            m_PE->CreateStructure({10.0f, 1.0f}, WOOD, BLOCK, 0);
 
             break;
         }

@@ -13,15 +13,15 @@ class PhysicsEngine {
 public:
     explicit PhysicsEngine(Util::Renderer *Root);
 
-    void CreateBird(const glm::vec2 &position, BirdType birdType);
+    void CreateBird(BirdType birdType);
 
     void CreatePig(const glm::vec2 &position, PigType pigType);
 
     void CreateStructure(const glm::vec2 &position, EntityType entityType, StructureType structureType, float rotation);
 
-    void Pull(glm::vec2 &pos);
+    void Pull(const glm::vec2 &pos, float angle);
 
-    void Release();
+    void Release(glm::vec2 &posbias);
 
     void UpdateWorld() const;
 

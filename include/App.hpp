@@ -44,6 +44,8 @@ private:
         LEVEL_10,
     } Phase;
 
+    bool isPressed = false;
+
 
 
 
