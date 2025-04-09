@@ -10,6 +10,8 @@
 
 class Physics2D : public Util::GameObject {
 public:
+    Physics2D(const std::string &ImagePath, int health, EntityType entityType);
+
     Physics2D &operator=(Physics2D &&) = delete;
 
     Physics2D &operator=(const Physics2D &) = delete;
@@ -18,7 +20,6 @@ public:
 
     Physics2D(const Physics2D &) = delete;
 
-    Physics2D(const std::string &ImagePath, int health, EntityType entityType);
 
     ~Physics2D() override {
         b2DestroyBody(m_BodyId);

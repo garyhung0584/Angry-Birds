@@ -30,16 +30,8 @@ void App::PhaseManager() {
             break;
         case LEVEL_1: {
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
-            m_slingshot = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot.png");
-            m_slingshot->SetZIndex(5);
-            m_slingshot->SetVisible(true);
-            m_slingshot->SetPosition({-450.f, -140.f});
-            m_Root.AddChild(m_slingshot);
-            std::shared_ptr<Slingshot> m_slingshot1 = std::make_shared<Slingshot>(RESOURCE_DIR"/Slingshot/Slingshot1.png");
-            m_slingshot1->SetVisible(true);
-            m_slingshot1->SetPosition({-450.f, -140.f});
-            m_slingshot1->SetZIndex(0);
-            m_Root.AddChild(m_slingshot1);
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
+            m_Root.AddChildren(m_slingshot->GetSlingshot());
 
 
             m_PE->CreateBird(RED);

@@ -3,9 +3,8 @@
 
 
 #include "Util/Renderer.hpp"
-#include "pch.hpp" // IWYU pragma: export
+#include "pch.hpp"
 #include "Button.hpp"
-#include "Birds.hpp"
 #include "Slingshot.hpp"
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
@@ -45,8 +44,6 @@ private:
     } Phase;
 
     bool isPressed = false;
-
-
 
 
     State m_CurrentState = State::START;

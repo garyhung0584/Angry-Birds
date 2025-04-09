@@ -7,9 +7,9 @@
 
 #include "Util/GameObject.hpp"
 
-class Slingshot : public Util::GameObject {
+class Slingshot {
 public:
-    explicit Slingshot(const std::string& ImagePath);
+    explicit Slingshot(const glm::vec2 &pos);
 
     Slingshot(const Slingshot&) = delete;
 
@@ -19,21 +19,16 @@ public:
 
     Slingshot& operator=(Slingshot&&) = delete;
 
-    [[nodiscard]] const std::string& GetImagePath() const { return m_ImagePath; }
+    [[nodiscard]] const glm::vec2& GetPosition() const { return m_slingshot.back()->m_Transform.translation; }
 
-    [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
+    void SetVisible(bool Visible);
 
-    [[nodiscard]] bool GetVisibility() const { return m_Visible; }
-
-    void SetImage(const std::string& ImagePath);
-
-    void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
+    void SetPosition(const glm::vec2& Position);
+    std::vector<std::shared_ptr<Util::GameObject>> GetSlingshot() { return m_slingshot; }
 
 
 private:
-    void ResetPosition() { m_Transform.translation = {0, 0}; }
-
-    std::string m_ImagePath;
+    std::vector<std::shared_ptr<Util::GameObject>> m_slingshot;
 };
 
 #endif //SLINGSHOT_HPP
