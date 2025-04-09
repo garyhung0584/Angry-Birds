@@ -39,18 +39,6 @@ void App::Update() {
                 isPressed = true;
             }
         }
-        if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
-            auto position = Util::Input::GetCursorPosition();
-            const auto posSlingshot = m_slingshot->GetPosition();
-            auto posStart = posSlingshot + glm::vec2(0, 70);
-            auto posBias = position - posStart;
-            float len = length(posBias);
-            if (len > 80.0f) {
-                posBias =(posBias / len) * 80.0f;
-            }
-            m_PE->Release(posBias);
-            isPressed = false;
-        }
         if (isPressed) {
             auto position = Util::Input::GetCursorPosition();
             const auto posSlingshot = m_slingshot->GetPosition();
@@ -60,8 +48,14 @@ void App::Update() {
             float len = length(posBias);
             if (len > 80.0f) {
                 position = posStart + (posBias / len) * 80.0f;
+                posBias = (posBias / len) * 80.0f;
             }
             m_PE->Pull(position, angle);
+
+            if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
+                m_PE->Release(posBias);
+                isPressed = false;
+            }
         }
     }
 
