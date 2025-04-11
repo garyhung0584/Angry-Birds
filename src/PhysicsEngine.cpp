@@ -105,7 +105,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             material = "Wood";
             health = 100;
             density = 0.1f;
-            friction = 0.5f;
+            friction = 1.0f;
             break;
         case STONE:
             material = "Stone";
@@ -155,7 +155,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case BAR:
             shape = "I1";
-            size = {0.8f, 0.1f};
+            size = {0.7f, 0.1f};
             break;
         case BLOCK_SMALL:
             shape = "J1";
@@ -174,7 +174,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
     }
 
     std::string imagePath = RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png";
-    CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, true);
+    CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, false);
 }
 
 

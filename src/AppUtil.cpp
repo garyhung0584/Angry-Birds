@@ -1,6 +1,7 @@
 #include "AppUtil.hpp"
 #include "App.hpp"
 #include "Util/Color.hpp"
+#include "imgui.h"
 
 #include "Util/Logger.hpp"
 
@@ -39,9 +40,9 @@ void App::PhaseManager() {
             m_PE->CreateBird(RED);
 
             for (int i = 0; i < 3; i++) {
-                m_PE->CreateStructure({4.f + i * 2.f, 0.2f}, STONE, BAR_SHORT, RAD90);
+                m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.f + i * 2.f, 2.f}, NORMAL);
+                m_PE->CreatePig({4.f + i * 2.f, 1.5f}, NORMAL);
             }
 
             // if (m_PE->Gameover()) {
@@ -60,16 +61,22 @@ void App::PhaseManager() {
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
 
-            m_PE->CreateStructure({6.6f, 0.2f}, STONE, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.4f, 0.2f}, STONE, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({6.0f, 1.0f}, STONE, BAR, 0);
+            m_PE->CreateStructure({6.6f, 0.4f}, STONE, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({5.4f, 0.4f}, STONE, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({6.0f, 0.9f}, STONE, BAR, 0);
 
-            m_PE->CreateStructure({7.0f, 0.2f}, WOOD, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.0f, 0.2f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({7.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({5.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
 
-            m_PE->CreateStructure({6.7f, 1.5f}, WOOD, BAR_SHORT, -RAD45);
-            m_PE->CreateStructure({5.3f, 1.5f}, WOOD, BAR_SHORT, RAD45);
+            m_PE->CreateStructure({5.25f, 1.15f}, WOOD, BAR_SHORT, RAD45);
+            m_PE->CreateStructure({6.75f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
             m_PE->CreateStructure({6.0f, 1.2f}, WOOD, RECTANGLE, 0);
+
+            m_PE->CreateStructure({4.7f, 1.0f}, GLASS, BAR_LONG, RAD90);
+            m_PE->CreateStructure({7.3f, 1.0f}, GLASS, BAR_LONG, RAD90);
+            m_PE->CreateStructure({5.5f, 2.8f}, GLASS, BAR_LONG, RAD45);
+            m_PE->CreateStructure({6.5f, 3.0f}, GLASS, BAR_LONG, -RAD45);
+            m_PE->CreateStructure({6.0f, 1.8f}, GLASS, BAR_SHORT, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
             break;
