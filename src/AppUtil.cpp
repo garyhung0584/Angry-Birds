@@ -80,6 +80,8 @@ void App::PhaseManager() {
             m_PE->CreateStructure({6.0f, 1.8f}, GLASS, BAR_SHORT, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
+
+            m_PE->SetUpWorld();
             break;
         case LEVEL_3:
             break;

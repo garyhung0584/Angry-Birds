@@ -183,6 +183,8 @@ void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
     auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 
     b2Rot rot = b2MakeRot(angle);
+    FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
+    FindObjectByBodyId(bodyId)->SetRotation(angle);
     b2Body_SetTransform(bodyId, transform, rot);
     b2Body_SetAwake(bodyId, false);
 }
@@ -214,8 +216,10 @@ void PhysicsEngine::UpdateWorld() {
     b2World_Step(worldId, timeStep, subStepCount);
 
     // auto fut = std::async( this->ProcessEvents, worldId);
-
-    ProcessEvents(worldId);
+    auto fut = std::async([this]() {
+        return this->ProcessEvents(this->worldId);
+    });
+    // ProcessEvents(worldId);
 }
 
 void PhysicsEngine::DestroyWorld() const {
