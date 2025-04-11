@@ -23,10 +23,11 @@ public:
 
     void Release(glm::vec2 &posbias);
 
-    void UpdateWorld() const;
+    void UpdateWorld();
 
     void DestroyWorld() const;
 
+    void ProcessContactEvents(b2WorldId worldId);
 
     // ~PhysicsEngine() {
     //     b2DestroyWorld(worldId);
@@ -40,11 +41,14 @@ private:
 
     void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
 
+    void DeleteObject(const std::shared_ptr<Physics2D> &obj) ;
+
+    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
+
     b2WorldId worldId{};
     Util::Renderer *m_Root;
     std::vector<std::shared_ptr<Physics2D> > m_Objects;
     std::vector<std::shared_ptr<Physics2D> > m_Birds;
-
     const int X_OFFSET = -450;
     const int Y_OFFSET = -210;
 };

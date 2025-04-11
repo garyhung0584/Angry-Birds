@@ -37,6 +37,9 @@ public:
 
     [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
 
+    [[nodiscard]] int GetHealth() const { return m_Health; }
+
+    [[nodiscard]] EntityType GetEntityType() const { return m_EntityType; }
 
     void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; }
 
@@ -48,6 +51,7 @@ public:
 
     void SetScale(float Scale) { m_Transform.scale = {Scale, Scale}; }
 
+    void SetHealth(int health) { m_Health = health; }
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
