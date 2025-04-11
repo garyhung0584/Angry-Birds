@@ -1,7 +1,6 @@
 #include "AppUtil.hpp"
 #include "App.hpp"
 #include "Util/Color.hpp"
-#include "imgui.h"
 
 #include "Util/Logger.hpp"
 
@@ -30,55 +29,25 @@ void App::PhaseManager() {
             }
             break;
         case LEVEL_1: {
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
             m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
             m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-
-            for (int i = 0; i < 3; i++) {
-                m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
-                m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.f + i * 2.f, 1.5f}, NORMAL);
+            // m_PE->CreateBird(BIG);
+            // m_PE->CreatePig({4.f, 2.f}, NORMAL);
+            // m_PE->CreateStructure({4.f, 5.f}, WOOD, BAR, 0);
+            for (int i = 0; i < 1; i++) {
+                m_PE->CreateStructure({4.f + i*2.f, 0.2f}, STONE, BAR_SHORT, b2_pi/2);
+                m_PE->CreateStructure({4.f + i*2.f, 1.f}, WOOD, BAR_SHORT, 0);
+                m_PE->CreatePig({4.f + i*2.f, 2.f}, NORMAL);
             }
 
-            // if (m_PE->Gameover()) {
-            //     m_PE->DestroyWorld();
-            // }
 
             break;
         }
         case LEVEL_2:
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
-
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-
-            m_PE->CreateStructure({6.6f, 0.4f}, STONE, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.4f, 0.4f}, STONE, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({6.0f, 0.9f}, STONE, BAR, 0);
-
-            m_PE->CreateStructure({7.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
-
-            m_PE->CreateStructure({5.25f, 1.15f}, WOOD, BAR_SHORT, RAD45);
-            m_PE->CreateStructure({6.75f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
-            m_PE->CreateStructure({6.0f, 1.2f}, WOOD, RECTANGLE, 0);
-
-            m_PE->CreateStructure({4.7f, 1.0f}, GLASS, BAR_LONG, RAD90);
-            m_PE->CreateStructure({7.3f, 1.0f}, GLASS, BAR_LONG, RAD90);
-            m_PE->CreateStructure({5.5f, 2.8f}, GLASS, BAR_LONG, RAD45);
-            m_PE->CreateStructure({6.5f, 3.0f}, GLASS, BAR_LONG, -RAD45);
-            m_PE->CreateStructure({6.0f, 1.8f}, GLASS, BAR_SHORT, RAD90);
-
-            m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
             break;
         case LEVEL_3:
             break;
