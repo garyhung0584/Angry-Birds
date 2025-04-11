@@ -105,18 +105,18 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             material = "Wood";
             health = 100;
             density = 0.1f;
-            friction = 0.3f;
+            friction = 0.5f;
             break;
         case STONE:
             material = "Stone";
             health = 300;
-            density = 0.1f;
+            density = 0.2f;
             friction = 0.3f;
             break;
         case GLASS:
             material = "Glass";
             health = 50;
-            density = 0.1f;
+            density = 0.2f;
             friction = 0.1f;
             break;
         default:
@@ -140,6 +140,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case RECTANGLE:
             shape = "E1";
+            size = {0.4f, 0.2f};
             break;
         case BLOCK:
             shape = "F1";
