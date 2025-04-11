@@ -1,5 +1,6 @@
 #include "PhysicsEngine.hpp"
 
+#include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
 PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
@@ -8,7 +9,6 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -9.0f};
     worldId = b2CreateWorld(&worldDef);
-
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = b2Vec2{4.5f, -1.0f};
     b2BodyId groundId = b2CreateBody(worldId, &groundBodyDef);
@@ -26,7 +26,7 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
     if (count == 0) {
         position = {0.f, 1.3f};
     } else {
-        position = { count * -0.4f, 0.2f};
+        position = {count * -0.4f, 0.2f};
     }
     switch (birdType) {
         case RED:
@@ -58,7 +58,7 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
             return;
     }
     const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    m_Birds.push_back(CreateObject(imagePath, position, health, BIRD, size, 0.2f, 0));
+    m_Birds.push_back(CreateObject(imagePath, position, health, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
@@ -163,7 +163,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case BAR_SHORT:
             shape = "K1";
-            size= {0.4f, 0.1f};
+            size = {0.4f, 0.1f};
             break;
         case DISC_SMALL:
             shape = "L1";
@@ -197,11 +197,12 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
 }
 
 
-void PhysicsEngine::UpdateWorld() const {
+void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
     int subStepCount = 4;
 
     b2World_Step(worldId, timeStep, subStepCount);
+    ProcessContactEvents(worldId);
     for (const auto &obj: m_Objects) {
         b2BodyId bodyId = obj->GetBodyId();
         b2Vec2 position = b2Body_GetPosition(bodyId);
@@ -210,7 +211,7 @@ void PhysicsEngine::UpdateWorld() const {
         obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
 
-        // LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation));
+        // LOG_DEBUG("Position: ({}, {}) Rotation: {}", position.x, position.y, b2Rot_GetAngle(rotation))
     }
 }
 
@@ -239,6 +240,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     const b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.enableHitEvents = true;
     shapeDef.density = density;
     shapeDef.friction = friction;
 
@@ -253,6 +255,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
 
     obj->SetBodyId(bodyId);
     obj->SetScale(scale);
+    b2Body_SetUserData(bodyId, obj.get());
 
     m_Objects.push_back(obj);
     m_Root->AddChild(obj);
@@ -265,4 +268,46 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
         return;
     }
     b2Body_ApplyForceToCenter(bodyId, force, true);
+}
+
+void PhysicsEngine::ProcessContactEvents(b2WorldId worldId) {
+    b2ContactEvents contactEvents = b2World_GetContactEvents(worldId);
+    //b2ContactHitEvent* hitEvent = contactEvents.hitEvents;
+
+    for (int i = 0; i < contactEvents.hitCount; ++i) {
+        b2ContactHitEvent *hitEvent = contactEvents.hitEvents + i;
+        b2BodyId bodyA = b2Shape_GetBody(hitEvent->shapeIdA);
+        b2BodyId bodyB = b2Shape_GetBody(hitEvent->shapeIdB);
+
+        auto objA = FindObjectByBodyId(bodyA);
+        auto objB = FindObjectByBodyId(bodyB);
+        //LOG_DEBUG(contactEvents.hitCount);
+        if (objA && objB) {
+            if (hitEvent->approachSpeed > 2.0f && objB->GetEntityType() != BIRD) {
+                objB->SetHealth(objB->GetHealth() - 100);
+                //LOG_DEBUG("objB: {},objB Health: {}",objB, objB->GetHealth());
+                if (objB->GetHealth() <= 0) {
+                    DeleteObject(objB);
+                }
+            }
+        }
+    }
+}
+
+std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
+    for (auto obj: m_Objects) {
+        b2BodyId objId = obj->GetBodyId();
+
+        if (objId.index1 == bodyId.index1 && objId.world0 == bodyId.world0) {
+            return obj;
+        }
+    }
+    return nullptr;
+}
+
+void PhysicsEngine::DeleteObject(const std::shared_ptr<Physics2D> &obj) {
+    m_Objects.pop_back();
+    m_Root->RemoveChild(obj);
+
+    b2DestroyBody(obj->GetBodyId());
 }

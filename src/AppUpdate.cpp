@@ -66,5 +66,7 @@ void App::Update() {
     if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
         m_PE->UpdateWorld();
     }
+
+
     m_Root.Update();
 }
