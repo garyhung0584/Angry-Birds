@@ -21,11 +21,6 @@ public:
     Physics2D(const Physics2D &) = delete;
 
 
-    ~Physics2D() override {
-        b2DestroyBody(m_BodyId);
-    }
-
-
     [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
 
 

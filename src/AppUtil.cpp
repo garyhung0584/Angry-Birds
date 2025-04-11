@@ -44,6 +44,7 @@ void App::PhaseManager() {
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
                 m_PE->CreatePig({4.f + i * 2.f, 1.5f}, NORMAL);
             }
+            m_PE->SetUpWorld();
 
             // if (m_PE->Gameover()) {
             //     m_PE->DestroyWorld();

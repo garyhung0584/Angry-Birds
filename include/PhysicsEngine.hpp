@@ -2,12 +2,17 @@
 #define PHYSICSENGINE_HPP
 
 #include <string>
+#include <map>
+#include <future>
 #include "Physics2D.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"
 #include "Util/Renderer.hpp"
 
+inline bool operator<(const b2BodyId& a, const b2BodyId& b) {
+    return std::tie(a.index1, a.world0, a.revision) < std::tie(b.index1, b.world0, b.revision);
+}
 
 class PhysicsEngine {
 public:
@@ -23,11 +28,15 @@ public:
 
     void Release(glm::vec2 &posbias);
 
+    void SetUpWorld();
+
     void UpdateWorld();
 
     void DestroyWorld() const;
 
-    void ProcessContactEvents(b2WorldId worldId);
+    void ProcessEvents(b2WorldId worldId);
+
+    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
 
     // ~PhysicsEngine() {
     //     b2DestroyWorld(worldId);
@@ -41,14 +50,16 @@ private:
 
     void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
 
-    void DeleteObject(const std::shared_ptr<Physics2D> &obj) ;
-
-    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
+    void DeleteObject(b2BodyId bodyId);
 
     b2WorldId worldId{};
     Util::Renderer *m_Root;
+
+
     std::vector<std::shared_ptr<Physics2D> > m_Objects;
+
     std::vector<std::shared_ptr<Physics2D> > m_Birds;
+
     const int X_OFFSET = -450;
     const int Y_OFFSET = -210;
 };
