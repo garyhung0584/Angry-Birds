@@ -183,10 +183,10 @@ void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
     auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 
     b2Rot rot = b2MakeRot(angle);
-    FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
-    FindObjectByBodyId(bodyId)->SetRotation(angle);
     b2Body_SetTransform(bodyId, transform, rot);
-    b2Body_SetAwake(bodyId, false);
+    b2Body_SetLinearVelocity(bodyId, b2Vec2{0, 0});
+    b2Body_SetAngularVelocity(bodyId, 0);
+    b2Body_SetAwake(bodyId, true);
 }
 
 void PhysicsEngine::Release(glm::vec2 &posBias) {
@@ -288,7 +288,7 @@ void PhysicsEngine::ProcessEvents(b2WorldId worldId) {
         if (objA && objB) {
             if (objB->GetEntityType() != BIRD) {
                 objB->SetHealth(objB->GetHealth() - (20 * hitEvent.approachSpeed));
-                LOG_DEBUG("objB Health: {}", objB->GetHealth());
+                LOG_DEBUG("objB Health: {}, approachSpeed: {}", objB->GetHealth(),hitEvent.approachSpeed);
                 if (objB->GetHealth() <= 0) {
                     DeleteObject(bodyB);
                 }
