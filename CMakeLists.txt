@@ -54,7 +54,6 @@ add_executable(${PROJECT_NAME}
         include/PhysicsEngine.hpp
         include/ResourceManager.hpp
         include/Slingshot.hpp
-        include/wood.hpp
         src/AppEnd.cpp
         src/AppUpdate.cpp
         src/AppUtil.cpp
@@ -64,7 +63,6 @@ add_executable(${PROJECT_NAME}
         src/PhysicsEngine.cpp
         src/ResourceManager.cpp
         src/Slingshot.cpp
-        src/wood.cpp
         include/type.hpp
 )
 
