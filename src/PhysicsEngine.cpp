@@ -219,10 +219,10 @@ void PhysicsEngine::UpdateWorld() {
 
     b2World_Step(m_WorldId, timeStep, subStepCount);
 
-    // auto fut = std::async( this->ProcessEvents, worldId);
-    auto fut = std::async([this]() {
-        return this->ProcessEvents();
-    });
+    // auto fut = std::async([this]() {
+    //     return this->ProcessEvents();
+    // });
+    ProcessEvents();
 }
 
 

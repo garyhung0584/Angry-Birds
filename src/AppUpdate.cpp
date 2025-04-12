@@ -32,6 +32,9 @@ void App::Update() {
                 m_PE->DestroyWorld();
                 PhaseManager();
             }
+            if (m_Pause->ifButtonClick(position)) {
+                isPause = !isPause;
+            }
         }
     }
     if (m_Phase != LEVEL_SELECT && m_Phase != MAIN_MENU) {
@@ -68,7 +71,9 @@ void App::Update() {
         m_CurrentState = State::END;
     }
     if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
-        m_PE->UpdateWorld();
+        if (!isPause) {
+            m_PE->UpdateWorld();
+        }
     }
 
 

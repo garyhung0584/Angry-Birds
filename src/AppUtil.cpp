@@ -33,6 +33,10 @@ void App::PhaseManager() {
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
             m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
             m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
@@ -56,6 +60,10 @@ void App::PhaseManager() {
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
             m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
             m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
