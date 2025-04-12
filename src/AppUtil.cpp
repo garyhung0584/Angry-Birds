@@ -1,14 +1,13 @@
 #include "AppUtil.hpp"
 #include "App.hpp"
 #include "Util/Color.hpp"
-#include "imgui.h"
 
 #include "Util/Logger.hpp"
 
 void App::PhaseManager() {
     switch (m_Phase) {
         case MAIN_MENU:
-            m_Start = std::make_shared<Button>(RESOURCE_DIR"/Button_Start.png");
+            m_Start = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_START.png");
             m_Start->SetPosition({-1.5f, -180.f});
             m_Start->SetZIndex(50);
 
@@ -30,6 +29,10 @@ void App::PhaseManager() {
             }
             break;
         case LEVEL_1: {
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
             m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
@@ -44,14 +47,15 @@ void App::PhaseManager() {
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
                 m_PE->CreatePig({4.f + i * 2.f, 1.5f}, NORMAL);
             }
-
-            // if (m_PE->Gameover()) {
-            //     m_PE->DestroyWorld();
-            // }
+            m_PE->SetUpWorld();
 
             break;
         }
         case LEVEL_2:
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
             m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
@@ -79,6 +83,8 @@ void App::PhaseManager() {
             m_PE->CreateStructure({6.0f, 1.8f}, GLASS, BAR_SHORT, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
+
+            m_PE->SetUpWorld();
             break;
         case LEVEL_3:
             break;

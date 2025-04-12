@@ -53,8 +53,10 @@ private:
     Util::Renderer m_Root;
 
     std::shared_ptr<Button> m_Start;
+    std::shared_ptr<Button> m_Restart;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
+    std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;
 
     std::shared_ptr<ResourceManager> m_RM;
     std::shared_ptr<PhysicsEngine> m_PE;
