@@ -7,26 +7,30 @@
 
 
 void App::Update() {
-    if (m_Phase == MAIN_MENU || m_Phase == LEVEL_SELECT) {
-        if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
-            auto position = Util::Input::GetCursorPosition();
-            if (m_Phase == MAIN_MENU) {
-                if (m_Start->ifButtonClick(position)) {
-                    m_RM->EnterLevel(0);
-                    m_Phase = LEVEL_SELECT;
+    if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
+        auto position = Util::Input::GetCursorPosition();
+
+        if (m_Phase == MAIN_MENU) {
+            if (m_Start->ifButtonClick(position)) {
+                m_RM->EnterLevel(0);
+                m_Phase = LEVEL_SELECT;
+                PhaseManager();
+            }
+        } else if (m_Phase == LEVEL_SELECT) {
+            for (int i = 0; i < 10; i++) {
+                if (m_Buttons[i]->ifButtonClick(position)) {
+                    m_RM->EnterLevel(i + 1);
+                    m_Phase = static_cast<Phase>(i + 2);
+                    for (const std::shared_ptr<Button> &button: m_Buttons) {
+                        m_Root.RemoveChild(button);
+                    };
                     PhaseManager();
                 }
-            } else if (m_Phase == LEVEL_SELECT) {
-                for (int i = 0; i < 10; i++) {
-                    if (m_Buttons[i]->ifButtonClick(position)) {
-                        m_RM->EnterLevel(i + 1);
-                        m_Phase = static_cast<Phase>(i + 2);
-                        for (const std::shared_ptr<Button> &button: m_Buttons) {
-                            m_Root.RemoveChild(button);
-                        };
-                        PhaseManager();
-                    }
-                }
+            }
+        } else {
+            if (m_Restart->ifButtonClick(position)) {
+                m_PE->DestroyWorld();
+                PhaseManager();
             }
         }
     }

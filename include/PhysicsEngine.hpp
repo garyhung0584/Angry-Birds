@@ -2,7 +2,7 @@
 #define PHYSICSENGINE_HPP
 
 #include <string>
-#include <map>
+#include <queue>
 #include <future>
 #include "Physics2D.hpp"
 #include "Util/Logger.hpp"
@@ -10,7 +10,7 @@
 #include "box2d/box2d.h"
 #include "Util/Renderer.hpp"
 
-inline bool operator<(const b2BodyId& a, const b2BodyId& b) {
+inline bool operator<(const b2BodyId &a, const b2BodyId &b) {
     return std::tie(a.index1, a.world0, a.revision) < std::tie(b.index1, b.world0, b.revision);
 }
 
@@ -34,31 +34,28 @@ public:
 
     void DestroyWorld() const;
 
-    void ProcessEvents(b2WorldId worldId);
-
-    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
-
-    // ~PhysicsEngine() {
-    //     b2DestroyWorld(worldId);
-    // }
-
 private:
     std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position, int health,
                                             EntityType entityType, const glm::vec2 &size, float scale = 1.f,
                                             float rotation = 0.f, float density = 0.1f, float friction = 0.3f,
                                             bool isAwake = false);
 
+    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
+
+    void ProcessEvents();
+
     void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
 
     void DeleteObject(b2BodyId bodyId);
 
-    b2WorldId worldId{};
+    b2WorldId m_WorldId{};
     Util::Renderer *m_Root;
 
 
     std::vector<std::shared_ptr<Physics2D> > m_Objects;
 
-    std::vector<std::shared_ptr<Physics2D> > m_Birds;
+    std::queue<std::shared_ptr<Physics2D> > m_Birds;
+    std::vector<std::shared_ptr<Physics2D> > m_Pigs;
 
     const int X_OFFSET = -450;
     const int Y_OFFSET = -210;

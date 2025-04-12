@@ -8,10 +8,10 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
 
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -9.0f};
-    worldId = b2CreateWorld(&worldDef);
+    m_WorldId = b2CreateWorld(&worldDef);
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = b2Vec2{4.5f, -1.0f};
-    b2BodyId groundId = b2CreateBody(worldId, &groundBodyDef);
+    b2BodyId groundId = b2CreateBody(m_WorldId, &groundBodyDef);
     b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
     b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
@@ -58,7 +58,7 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
             return;
     }
     const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    m_Birds.push_back(CreateObject(imagePath, position, health, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
+    m_Birds.push(CreateObject(imagePath, position, health, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
@@ -88,7 +88,7 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
     }
 
     const std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
-    CreateObject(imagePath, position, health, PIG, size, 0.05f, 0, 0.1f, 0.3f, true);
+    m_Pigs.push_back(CreateObject(imagePath, position, health, PIG, size, 0.05f, 0, 0.1f, 0.3f, true));
 }
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
@@ -109,7 +109,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case STONE:
             material = "Stone";
-            health = 300;
+            health = 130;
             density = 0.2f;
             friction = 0.3f;
             break;
@@ -179,6 +179,9 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
 
 
 void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
+    if (m_Birds.empty()) {
+        return;
+    }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
     auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 
@@ -186,16 +189,16 @@ void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
     FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
     FindObjectByBodyId(bodyId)->SetRotation(angle);
     b2Body_SetTransform(bodyId, transform, rot);
-    b2Body_SetAwake(bodyId, false);
 }
 
 void PhysicsEngine::Release(glm::vec2 &posBias) {
-    if (posBias.x > 0) {
+    if (posBias.x > 0 || m_Birds.empty()) {
         return;
     }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
     b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 9.f;
     ApplyForce(bodyId, force);
+    m_Birds.pop();
 }
 
 void PhysicsEngine::SetUpWorld() {
@@ -213,17 +216,20 @@ void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
     int subStepCount = 4;
 
-    b2World_Step(worldId, timeStep, subStepCount);
+    b2World_Step(m_WorldId, timeStep, subStepCount);
 
     // auto fut = std::async( this->ProcessEvents, worldId);
     auto fut = std::async([this]() {
-        return this->ProcessEvents(this->worldId);
+        return this->ProcessEvents();
     });
-    // ProcessEvents(worldId);
 }
 
+
 void PhysicsEngine::DestroyWorld() const {
-    b2DestroyWorld(worldId);
+    for (auto obj: m_Objects) {
+        m_Root->RemoveChild(obj);
+    }
+    b2DestroyWorld(m_WorldId);
 }
 
 std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imagePath,
@@ -244,7 +250,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     bodyDef.rotation = b2MakeRot(rotation);
     bodyDef.isAwake = isAwake;
 
-    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.enableHitEvents = true;
@@ -268,16 +274,17 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     return obj;
 }
 
-void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const {
-    if (B2_IS_NULL(worldId) || B2_IS_NULL(bodyId)) {
-        LOG_ERROR("World or body is null");
-        return;
+std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
+    for (auto obj: m_Objects) {
+        if (B2_ID_EQUALS(obj->GetBodyId(), bodyId)) {
+            return obj;
+        }
     }
-    b2Body_ApplyForceToCenter(bodyId, force, true);
+    return nullptr;
 }
 
-void PhysicsEngine::ProcessEvents(b2WorldId worldId) {
-    b2ContactEvents contactEvents = b2World_GetContactEvents(worldId);
+void PhysicsEngine::ProcessEvents() {
+    b2ContactEvents contactEvents = b2World_GetContactEvents(m_WorldId);
     for (int i = 0; i < contactEvents.hitCount; ++i) {
         b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
         const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
@@ -296,7 +303,7 @@ void PhysicsEngine::ProcessEvents(b2WorldId worldId) {
         }
     }
 
-    auto [moveEvents, moveCount] = b2World_GetBodyEvents(worldId);
+    auto [moveEvents, moveCount] = b2World_GetBodyEvents(m_WorldId);
     for (int i = 0; i < moveCount; ++i) {
         b2BodyMoveEvent &bodyEvent = moveEvents[i];
         const b2BodyId bodyId = bodyEvent.bodyId;
@@ -309,16 +316,20 @@ void PhysicsEngine::ProcessEvents(b2WorldId worldId) {
     }
 }
 
-std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
-    for (auto obj: m_Objects) {
-        if (B2_ID_EQUALS(obj->GetBodyId(), bodyId)) {
-            return obj;
-        }
+void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const {
+    if (B2_IS_NULL(m_WorldId) || B2_IS_NULL(bodyId)) {
+        LOG_ERROR("World or body is null");
+        return;
     }
-    return nullptr;
+    b2Body_ApplyForceToCenter(bodyId, force, true);
 }
 
 void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
-    m_Root->RemoveChild(FindObjectByBodyId(bodyId));
+    auto obj = FindObjectByBodyId(bodyId);
+    if (obj->GetEntityType() == PIG) {
+        m_Pigs.erase(std::remove(m_Pigs.begin(), m_Pigs.end(), obj),
+                 m_Pigs.end());
+    }
+    m_Root->RemoveChild(obj);
     b2DestroyBody(bodyId);
 }
