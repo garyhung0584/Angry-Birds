@@ -197,6 +197,7 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
     b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 9.f;
+    b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
     m_Birds.pop();
 }
@@ -258,6 +259,7 @@ std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imageP
     shapeDef.friction = friction;
 
     if (entityType == BIRD || entityType == PIG) {
+        if (entityType == BIRD) b2Body_Disable(bodyId);
         const b2Circle dynamicBox = {{0, 0}, size.x};
         b2CreateCircleShape(bodyId, &shapeDef, &dynamicBox);
     } else {
@@ -328,7 +330,7 @@ void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
     auto obj = FindObjectByBodyId(bodyId);
     if (obj->GetEntityType() == PIG) {
         m_Pigs.erase(std::remove(m_Pigs.begin(), m_Pigs.end(), obj),
-                 m_Pigs.end());
+                     m_Pigs.end());
     }
     m_Root->RemoveChild(obj);
     b2DestroyBody(bodyId);
