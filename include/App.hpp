@@ -56,6 +56,7 @@ private:
     std::shared_ptr<Button> m_Start;
     std::shared_ptr<Button> m_Restart;
     std::shared_ptr<Button> m_Pause;
+    std::shared_ptr<Button> m_Quit;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
     std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;

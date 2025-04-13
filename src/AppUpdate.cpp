@@ -28,8 +28,20 @@ void App::Update() {
                 }
             }
         } else {
-            if (m_Restart->ifButtonClick(position)) {
+            if (m_Restart->ifButtonClick(position) || m_Quit->ifButtonClick(position)) {
+                m_Root.RemoveChild(m_Pause);
+                m_Root.RemoveChild(m_Restart);
+                m_Root.RemoveChild(m_Quit);
+                m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
+                m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
+
                 m_PE->DestroyWorld();
+
+                if (m_Quit->ifButtonClick(position)) {
+                    m_Phase = LEVEL_SELECT;
+                    m_RM->EnterLevel(0);
+                }
+
                 PhaseManager();
             }
             if (m_Pause->ifButtonClick(position)) {
