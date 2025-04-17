@@ -57,6 +57,7 @@ void App::Update() {
             if (posBias.x > -50 && posBias.x < 50 && posBias.y > 0 && posBias.y < 100) {
                 isPressed = true;
             }
+            LOG_DEBUG(position);
         }
         if (isPressed) {
             auto position = Util::Input::GetCursorPosition();
