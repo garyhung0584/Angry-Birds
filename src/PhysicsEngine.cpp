@@ -295,11 +295,12 @@ void PhysicsEngine::ProcessEvents() {
         auto objB = FindObjectByBodyId(bodyB);
 
         if (objA && objB) {
-            if (objB->GetEntityType() != BIRD) {
-                objB->SetHealth(objB->GetHealth() - (20 * hitEvent.approachSpeed));
-                LOG_DEBUG("objB Health: {}", objB->GetHealth());
-                if (objB->GetHealth() <= 0) {
-                    DeleteObject(bodyB);
+            //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
+            if (objA->GetEntityType() != BIRD) {
+                objA->SetHealth(objA->GetHealth() - (20 * hitEvent.approachSpeed));
+                LOG_DEBUG("objA Health: {}", objA->GetHealth());
+                if (objA->GetHealth() <= 0) {
+                    DeleteObject(bodyA);
                 }
             }
         }
