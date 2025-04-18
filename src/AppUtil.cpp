@@ -42,7 +42,7 @@ void App::PhaseManager() {
             m_Quit->SetPosition({550.0f, 250.0f});
             m_Quit->SetZIndex(50);
             m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
@@ -74,7 +74,7 @@ void App::PhaseManager() {
             m_Quit->SetPosition({550.0f, 250.0f});
             m_Quit->SetZIndex(50);
             m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -140.f));
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
             m_Root.AddChildren(m_slingshot->GetSlingshot());
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
@@ -87,18 +87,18 @@ void App::PhaseManager() {
             m_PE->CreateStructure({5.4f, 0.4f}, STONE, BAR_SHORT, RAD90);
             m_PE->CreateStructure({6.0f, 0.9f}, STONE, BAR, 0);
 
-            m_PE->CreateStructure({7.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.0f, 0.4f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({7.1f, 0.4f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({4.9f, 0.4f}, WOOD, BAR_SHORT, RAD90);
 
             m_PE->CreateStructure({5.25f, 1.15f}, WOOD, BAR_SHORT, RAD45);
             m_PE->CreateStructure({6.75f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
             m_PE->CreateStructure({6.0f, 1.2f}, WOOD, RECTANGLE, 0);
 
-            m_PE->CreateStructure({4.7f, 1.0f}, GLASS, BAR_LONG, RAD90);
-            m_PE->CreateStructure({7.3f, 1.0f}, GLASS, BAR_LONG, RAD90);
-            m_PE->CreateStructure({5.5f, 2.8f}, GLASS, BAR_LONG, RAD45);
-            m_PE->CreateStructure({6.5f, 3.0f}, GLASS, BAR_LONG, -RAD45);
-            m_PE->CreateStructure({6.0f, 1.8f}, GLASS, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({4.4f, 0.9f}, GLASS, BAR_LONG, RAD90);
+            m_PE->CreateStructure({7.5f, 0.9f}, GLASS, BAR_LONG, RAD90);
+            m_PE->CreateStructure({5.15f, 2.4f}, GLASS, BAR_LONG, RAD35);
+            m_PE->CreateStructure({6.8f, 2.4f}, GLASS, BAR_LONG, -RAD35);
+            m_PE->CreateStructure({6.0f, 2.1f}, GLASS, BAR, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
 
