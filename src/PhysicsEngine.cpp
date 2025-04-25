@@ -148,14 +148,15 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
             break;
         case BAR_LONG:
             shape = "G1";
-            size = {0.9f, 0.1f};
+            size = {1.0f, 0.1f};
             break;
         case RECTANGLE_SMALL:
             shape = "H1";
+            size = {0.2f, 0.1f};
             break;
         case BAR:
             shape = "I1";
-            size = {0.7f, 0.1f};
+            size = {0.8f, 0.1f};
             break;
         case BLOCK_SMALL:
             shape = "J1";
