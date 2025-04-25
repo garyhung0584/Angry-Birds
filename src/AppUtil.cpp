@@ -30,7 +30,6 @@ void App::PhaseManager() {
             break;
         case LEVEL_1: {
             isPause = false;
-            m_LastIsEndCheck = std::chrono::steady_clock::now();
             m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
@@ -55,7 +54,7 @@ void App::PhaseManager() {
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.f + i * 2.f, 1.8f}, NORMAL);
+                m_PE->CreatePig({4.02f + i * 2.f, 1.3f}, NORMAL);
             }
             m_PE->SetUpWorld();
 
@@ -63,7 +62,6 @@ void App::PhaseManager() {
         }
         case LEVEL_2:
             isPause = false;
-            m_LastIsEndCheck = std::chrono::steady_clock::now();
             m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
@@ -85,29 +83,90 @@ void App::PhaseManager() {
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
 
-            m_PE->CreateStructure({6.6f, 0.4f}, STONE, BAR_SHORT, RAD90);
-            m_PE->CreateStructure({5.4f, 0.4f}, STONE, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({6.7f, 0.4f}, STONE, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({5.3f, 0.4f}, STONE, BAR_SHORT, RAD90);
             m_PE->CreateStructure({6.0f, 0.9f}, STONE, BAR, 0);
 
             m_PE->CreateStructure({7.1f, 0.4f}, WOOD, BAR_SHORT, RAD90);
             m_PE->CreateStructure({4.9f, 0.4f}, WOOD, BAR_SHORT, RAD90);
 
-            m_PE->CreateStructure({5.25f, 1.15f}, WOOD, BAR_SHORT, RAD45);
-            m_PE->CreateStructure({6.75f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
+            m_PE->CreateStructure({5.22f, 1.15f}, WOOD, BAR_SHORT, RAD45);
+            m_PE->CreateStructure({6.78f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
             m_PE->CreateStructure({6.0f, 1.2f}, WOOD, RECTANGLE, 0);
 
             m_PE->CreateStructure({4.4f, 0.9f}, GLASS, BAR_LONG, RAD90);
             m_PE->CreateStructure({7.5f, 0.9f}, GLASS, BAR_LONG, RAD90);
             m_PE->CreateStructure({5.15f, 2.4f}, GLASS, BAR_LONG, RAD35);
-            m_PE->CreateStructure({6.8f, 2.4f}, GLASS, BAR_LONG, -RAD35);
-            m_PE->CreateStructure({6.0f, 2.1f}, GLASS, BAR, RAD90);
+            m_PE->CreateStructure({6.85f, 2.4f}, GLASS, BAR_LONG, -RAD35);
+            m_PE->CreateStructure({6.0f, 2.2f}, GLASS, BAR, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
+
             m_PE->SetUpWorld();
             break;
         case LEVEL_3:
+            isPause = false;
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
+            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
+            m_Quit->SetPosition({550.0f, 250.0f});
+            m_Quit->SetZIndex(50);
+            m_Root.AddChild(m_Quit);
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
+            m_Root.AddChildren(m_slingshot->GetSlingshot());
+
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+            for(int i=0; i<2; i++){
+                m_PE->CreateStructure({4.0f + i * 3.0f, 0.2f}, STONE, RECTANGLE, 0);
+                m_PE->CreateStructure({4.8f + i * 3.0f, 0.2f}, STONE, RECTANGLE, 0);
+                m_PE->CreateStructure({4.4f + i * 3.0f, 0.5f}, STONE, BAR, 0);
+                m_PE->CreateStructure({3.8f + i * 3.0f, 1.0f}, GLASS, RECTANGLE, RAD90);
+                m_PE->CreateStructure({5.0f + i * 3.0f, 1.0f}, GLASS, RECTANGLE, RAD90);
+                m_PE->CreateStructure({4.4f + i * 3.0f, 1.5f}, GLASS, BAR, 0);
+                m_PE->CreateStructure({3.8f + i * 3.0f, 1.8f}, WOOD, BLOCK, 0);
+                m_PE->CreateStructure({4.4f + i * 3.0f, 1.8f}, WOOD, BLOCK, 0);
+                m_PE->CreateStructure({5.0f + i * 3.0f, 1.8f}, WOOD, BLOCK, 0);
+
+                m_PE->CreatePig({4.4f + i * 3.0f, 1.0f}, NORMAL);
+            }
+            m_PE->SetUpWorld();
             break;
         case LEVEL_4:
+            isPause = false;
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
+            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
+            m_Quit->SetPosition({550.0f, 250.0f});
+            m_Quit->SetZIndex(50);
+            m_Root.AddChild(m_Quit);
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
+            m_Root.AddChildren(m_slingshot->GetSlingshot());
+
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+
+            m_PE->CreateStructure({4.0f, 0.2f}, WOOD, RECTANGLE, 0);
+
+            m_PE->SetUpWorld();
             break;
         case LEVEL_5:
             break;
