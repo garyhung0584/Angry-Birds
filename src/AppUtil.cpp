@@ -54,7 +54,7 @@ void App::PhaseManager() {
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.02f + i * 2.f, 1.3f}, NORMAL);
+                m_PE->CreatePig({4.0f + i * 2.f, 1.3f}, NORMAL);
             }
             m_PE->SetUpWorld();
 
