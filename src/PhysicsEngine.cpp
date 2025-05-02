@@ -116,49 +116,6 @@ void PhysicsEngine::DestroyWorld() const {
     b2DestroyWorld(m_WorldId);
 }
 
-std::shared_ptr<Physics2D> PhysicsEngine::CreateObject(const std::string &imagePath,
-                                                       const glm::vec2 &position,
-                                                       int health,
-                                                       EntityType entityType,
-                                                       const glm::vec2 &size,
-                                                       const float scale,
-                                                       const float rotation,
-                                                       const float density,
-                                                       const float friction,
-                                                       const bool isAwake) {
-    auto obj = std::make_shared<Physics2D>(imagePath, health, entityType);
-
-    b2BodyDef bodyDef = b2DefaultBodyDef();
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position = b2Vec2{position.x, position.y};
-    bodyDef.rotation = b2MakeRot(rotation);
-    bodyDef.isAwake = isAwake;
-
-    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
-
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.enableHitEvents = true;
-    shapeDef.density = density;
-    shapeDef.friction = friction;
-
-    if (entityType == BIRD || entityType == PIG) {
-        if (entityType == BIRD) b2Body_Disable(bodyId);
-        const b2Circle dynamicBox = {{0, 0}, size.x};
-        b2CreateCircleShape(bodyId, &shapeDef, &dynamicBox);
-    } else {
-        const b2Polygon dynamicBox = b2MakeBox(size.x, size.y);
-        b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
-    }
-
-
-    obj->SetBodyId(bodyId);
-    obj->SetScale(scale);
-    m_Objects.push_back(obj);
-
-    m_Root->AddChild(obj);
-    return obj;
-}
-
 std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
     for (auto obj: m_Objects) {
         if (B2_ID_EQUALS(obj->GetBodyId(), bodyId)) {
