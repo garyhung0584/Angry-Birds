@@ -38,10 +38,6 @@ public:
     void DestroyWorld() const;
 
 private:
-    std::shared_ptr<Physics2D> CreateObject(const std::string &imagePath, const glm::vec2 &position, int health,
-                                            EntityType entityType, const glm::vec2 &size, float scale = 1.f,
-                                            float rotation = 0.f, float density = 0.1f, float friction = 0.3f,
-                                            bool isAwake = false);
 
     std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
 
