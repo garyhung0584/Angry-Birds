@@ -75,7 +75,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
         {BLOCK, {"F1", {0.2f, 0.2f}}},
         {BAR_LONG, {"G1", {0.9f, 0.1f}}},
         {RECTANGLE_SMALL, {"H1", {0.2f, 0.1f}}},
-        {BAR, {"I1", {0.7f, 0.1f}}},
+        {BAR, {"I1", {0.8f, 0.1f}}},
         {BLOCK_SMALL, {"J1", {0.1f, 0.1f}}},
         {BAR_SHORT, {"K1", {0.4f, 0.1f}}},
         {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
