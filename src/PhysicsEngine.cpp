@@ -202,6 +202,16 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     m_Birds.pop();
 }
 
+bool PhysicsEngine::IsEnd() {
+    if (m_Pigs.empty()) {
+        return true;
+    } else if (m_Birds.empty()) {
+        return true;
+    }
+    return false;
+}
+
+
 void PhysicsEngine::SetUpWorld() {
     for (const auto &obj: m_Objects) {
         b2BodyId bodyId = obj->GetBodyId();
