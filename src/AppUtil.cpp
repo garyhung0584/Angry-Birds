@@ -30,6 +30,7 @@ void App::PhaseManager() {
             break;
         case LEVEL_1: {
             isPause = false;
+            m_LastIsEndCheck = std::chrono::steady_clock::now();
             m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
@@ -54,7 +55,7 @@ void App::PhaseManager() {
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
                 m_PE->CreateStructure({4.f + i * 2.f, 1.f}, WOOD, BAR_SHORT, 0);
-                m_PE->CreatePig({4.f + i * 2.f, 1.5f}, NORMAL);
+                m_PE->CreatePig({4.f + i * 2.f, 1.8f}, NORMAL);
             }
             m_PE->SetUpWorld();
 
@@ -62,6 +63,7 @@ void App::PhaseManager() {
         }
         case LEVEL_2:
             isPause = false;
+            m_LastIsEndCheck = std::chrono::steady_clock::now();
             m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
             m_Restart->SetPosition({-400.0f, 250.0f});
             m_Restart->SetZIndex(50);
@@ -101,7 +103,6 @@ void App::PhaseManager() {
             m_PE->CreateStructure({6.0f, 2.1f}, GLASS, BAR, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
-
             m_PE->SetUpWorld();
             break;
         case LEVEL_3:

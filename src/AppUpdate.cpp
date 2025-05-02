@@ -77,6 +77,27 @@ void App::Update() {
                 isPressed = false;
             }
         }
+
+        auto now = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
+
+        if (duration.count() >= 5) {
+            if (m_PE->IsEnd()) {
+                m_Root.RemoveChild(m_Pause);
+                m_Root.RemoveChild(m_Restart);
+                m_Root.RemoveChild(m_Quit);
+                m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
+                m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
+
+                m_PE->DestroyWorld();
+
+                m_Phase = LEVEL_SELECT;
+                m_RM->EnterLevel(0);
+                PhaseManager();
+            }
+            m_LastIsEndCheck = now;
+        }
+
     }
 
     if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) ||

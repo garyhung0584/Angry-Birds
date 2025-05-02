@@ -28,6 +28,8 @@ public:
 
     void Release(glm::vec2 &posbias);
 
+    bool IsEnd();
+
     void SetUpWorld();
 
     void UpdateWorld();

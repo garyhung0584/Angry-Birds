@@ -9,6 +9,8 @@
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
 
+#include <chrono>
+
 class App {
 public:
     enum class State {
@@ -60,6 +62,9 @@ private:
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
     std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;
+
+    std::chrono::steady_clock::time_point m_LastIsEndCheck;
+
 
     std::shared_ptr<ResourceManager> m_RM;
     std::shared_ptr<PhysicsEngine> m_PE;
