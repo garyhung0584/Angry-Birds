@@ -5,6 +5,7 @@
 #include <queue>
 #include <future>
 #include "Physics2D.hpp"
+#include "ObjectFactory.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"
@@ -52,6 +53,8 @@ private:
 
     b2WorldId m_WorldId{};
     Util::Renderer *m_Root;
+
+    std::shared_ptr<ObjectFactory> m_ObjectFactory;
 
 
     std::vector<std::shared_ptr<Physics2D> > m_Objects;
