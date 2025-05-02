@@ -3,6 +3,8 @@
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
+#include <unordered_map>
+
 PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     m_Root = Root;
 
@@ -16,167 +18,87 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 }
-
 void PhysicsEngine::CreateBird(const BirdType birdType) {
-    std::string birdName;
-    glm::vec2 size;
-    glm::vec2 position;
-    const int health = 1;
-    int count = m_Birds.size();
-    if (count == 0) {
-        position = {0.f, 1.3f};
-    } else {
-        position = {count * -0.4f, 0.2f};
+    static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2>> birdProperties = {
+        {RED, {"Red", {0.2f, 0.2f}}},
+        {BLUE, {"Blue", {0.2f, 0.2f}}},
+        {YELLOW, {"Yellow", {0.2f, 0.2f}}},
+        {BLACK, {"Black", {0.2f, 0.2f}}},
+        {WHITE, {"White", {0.2f, 0.2f}}},
+        {BIG, {"Big", {0.2f, 0.2f}}}
+    };
+
+    auto it = birdProperties.find(birdType);
+    if (it == birdProperties.end()) {
+        LOG_ERROR("Invalid bird type");
+        return;
     }
-    switch (birdType) {
-        case RED:
-            birdName = "Red";
-            size = {0.2f, 0.2f};
-            break;
-        case BLUE:
-            birdName = "Blue";
-            size = {0.2f, 0.2f};
-            break;
-        case YELLOW:
-            birdName = "Yellow";
-            size = {0.2f, 0.2f};
-            break;
-        case BLACK:
-            birdName = "Black";
-            size = {0.2f, 0.2f};
-            break;
-        case WHITE:
-            birdName = "White";
-            size = {0.2f, 0.2f};
-            break;
-        case BIG:
-            birdName = "Big";
-            size = {0.2f, 0.2f};
-            break;
-        default:
-            LOG_ERROR("Invalid bird type");
-            return;
-    }
+
+    const auto &[birdName, size] = it->second;
+    glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
     const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    m_Birds.push(CreateObject(imagePath, position, health, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
+    m_Birds.push(CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
-    std::string pigName;
-    glm::vec2 size;
-    int health;
+    static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2>> pigProperties = {
+        {NORMAL, {"Normal", 100, {0.18f, 0.18f}}},
+        {KING, {"King", 1000, {0.2f, 0.2f}}},
+        {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
+    };
 
-    switch (pigType) {
-        case NORMAL:
-            pigName = "Normal";
-            health = 100;
-            size = {0.18f, 0.18f};
-            break;
-        case KING:
-            pigName = "King";
-            health = 1000;
-            size = {0.2f, 0.2f};
-            break;
-        case SOLDIER:
-            pigName = "Soldier";
-            health = 500;
-            size = {0.2f, 0.2f};
-            break;
-        default:
-            LOG_ERROR("Pig type not recognized");
-            return;
+    auto it = pigProperties.find(pigType);
+    if (it == pigProperties.end()) {
+        LOG_ERROR("Pig type not recognized");
+        return;
     }
 
+    const auto &[pigName, health, size] = it->second;
     const std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
     m_Pigs.push_back(CreateObject(imagePath, position, health, PIG, size, 0.05f, 0, 0.1f, 0.3f, true));
 }
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
                                     const StructureType structureType, const float rotation) {
-    std::string material;
-    std::string shape;
-    glm::vec2 size = {0.2f, 0.2f};
-    float friction;
-    float density;
-    int health;
+    static const std::unordered_map<EntityType, std::tuple<std::string, int, float, float>> entityProperties = {
+        {WOOD, {"Wood", 100, 0.1f, 1.0f}},
+        {STONE, {"Stone", 130, 0.2f, 0.3f}},
+        {GLASS, {"Glass", 50, 0.2f, 0.1f}}
+    };
 
-    switch (entityType) {
-        case WOOD:
-            material = "Wood";
-            health = 100;
-            density = 0.1f;
-            friction = 1.0f;
-            break;
-        case STONE:
-            material = "Stone";
-            health = 130;
-            density = 0.2f;
-            friction = 0.3f;
-            break;
-        case GLASS:
-            material = "Glass";
-            health = 50;
-            density = 0.2f;
-            friction = 0.1f;
-            break;
-        default:
-            LOG_ERROR("Structure type not recognized");
-            return;
+    static const std::unordered_map<StructureType, std::pair<std::string, glm::vec2>> structureProperties = {
+        {FRAME_BLOCK, {"A1", {0.4f, 0.4f}}},
+        {FRAME_TRIANGLE, {"B1", {0.2f, 0.2f}}},
+        {TRIANGLE, {"C1", {0.2f, 0.2f}}},
+        {DISC, {"D1", {0.2f, 0.2f}}},
+        {RECTANGLE, {"E1", {0.4f, 0.2f}}},
+        {BLOCK, {"F1", {0.2f, 0.2f}}},
+        {BAR_LONG, {"G1", {0.9f, 0.1f}}},
+        {RECTANGLE_SMALL, {"H1", {0.2f, 0.2f}}},
+        {BAR, {"I1", {0.7f, 0.1f}}},
+        {BLOCK_SMALL, {"J1", {0.1f, 0.1f}}},
+        {BAR_SHORT, {"K1", {0.4f, 0.1f}}},
+        {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
+    };
+
+    auto entityIt = entityProperties.find(entityType);
+    auto structureIt = structureProperties.find(structureType);
+
+    if (entityIt == entityProperties.end()) {
+        LOG_ERROR("Entity type not recognized");
+        return;
+    }
+    if (structureIt == structureProperties.end()) {
+        LOG_ERROR("Structure type not recognized");
+        return;
     }
 
-    switch (structureType) {
-        case FRAME_BLOCK:
-            shape = "A1";
-            size = {0.4f, 0.4f};
-            break;
-        case FRAME_TRIANGLE:
-            shape = "B1";
-            break;
-        case TRIANGLE:
-            shape = "C1";
-            break;
-        case DISC:
-            shape = "D1";
-            break;
-        case RECTANGLE:
-            shape = "E1";
-            size = {0.4f, 0.2f};
-            break;
-        case BLOCK:
-            shape = "F1";
-            size = {0.2f, 0.2f};
-            break;
-        case BAR_LONG:
-            shape = "G1";
-            size = {0.9f, 0.1f};
-            break;
-        case RECTANGLE_SMALL:
-            shape = "H1";
-            break;
-        case BAR:
-            shape = "I1";
-            size = {0.7f, 0.1f};
-            break;
-        case BLOCK_SMALL:
-            shape = "J1";
-            size = {0.1f, 0.1f};
-            break;
-        case BAR_SHORT:
-            shape = "K1";
-            size = {0.4f, 0.1f};
-            break;
-        case DISC_SMALL:
-            shape = "L1";
-            break;
-        default:
-            LOG_ERROR("Structure type not recognized");
-            return;
-    }
+    const auto &[material, health, density, friction] = entityIt->second;
+    const auto &[shape, size] = structureIt->second;
 
     std::string imagePath = RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png";
     CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, false);
 }
-
 
 void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
     if (m_Birds.empty()) {
