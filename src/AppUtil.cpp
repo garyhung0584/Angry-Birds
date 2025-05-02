@@ -164,8 +164,43 @@ void App::PhaseManager() {
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
 
-            m_PE->CreateStructure({4.0f, 0.2f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({5.0f, 0.4f}, STONE, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.1f, 0.4f}, STONE, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.6f, 0.9f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({6.7f, 0.4f}, STONE, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.8f, 0.4f}, STONE, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.2f, 0.9f}, WOOD, BAR, 0);
+            m_PE->CreatePig({6.4f, 1.2f}, NORMAL);
 
+            m_PE->CreateStructure({5.3f, 1.2f}, GLASS, RECTANGLE, 0);
+            m_PE->CreateStructure({5.9f, 1.4f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.1f, 1.8f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.5f, 1.6f}, GLASS, BLOCK, 0);
+            m_PE->CreateStructure({5.7f, 2.0f}, GLASS, RECTANGLE, 0);
+
+            m_PE->CreateStructure({6.9f, 1.4f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.5f, 1.2f}, GLASS, RECTANGLE, 0);
+            m_PE->CreateStructure({7.3f, 1.6f}, GLASS, BLOCK, 0);
+            m_PE->CreateStructure({7.7f, 1.8f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.1f, 2.0f}, GLASS, RECTANGLE, 0);
+
+            m_PE->CreateStructure({6.4f, 2.3f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({5.0f, 2.3f}, WOOD, RECTANGLE_SMALL, 0);
+            m_PE->CreateStructure({5.4f, 2.3f}, WOOD, RECTANGLE_SMALL, 0);
+            m_PE->CreateStructure({7.4f, 2.3f}, WOOD, RECTANGLE_SMALL, 0);
+            m_PE->CreateStructure({7.8f, 2.3f}, WOOD, RECTANGLE_SMALL, 0);
+
+            m_PE->CreatePig({5.2f, 2.6f}, NORMAL);
+            m_PE->CreatePig({7.6f, 2.6f}, NORMAL);
+
+            m_PE->CreateStructure({6.0f, 2.8f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.6f, 2.6f}, GLASS, RECTANGLE, 0);
+            m_PE->CreateStructure({6.4f, 3.0f}, GLASS, BLOCK, 0);
+            m_PE->CreateStructure({6.8f, 3.2f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.2f, 3.4f}, GLASS, RECTANGLE, 0);
+            m_PE->CreateStructure({5.9f, 3.7f}, GLASS, BLOCK_SMALL, 0);
+            m_PE->CreateStructure({6.4f, 3.7f}, GLASS, BLOCK_SMALL, 0);
+            m_PE->CreateStructure({6.9f, 3.7f}, GLASS, BLOCK_SMALL, 0);
             m_PE->SetUpWorld();
             break;
         case LEVEL_5:
