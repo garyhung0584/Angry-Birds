@@ -17,87 +17,38 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
     b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+
+    m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
 }
 void PhysicsEngine::CreateBird(const BirdType birdType) {
-    static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2>> birdProperties = {
-        {RED, {"Red", {0.2f, 0.2f}}},
-        {BLUE, {"Blue", {0.2f, 0.2f}}},
-        {YELLOW, {"Yellow", {0.2f, 0.2f}}},
-        {BLACK, {"Black", {0.2f, 0.2f}}},
-        {WHITE, {"White", {0.2f, 0.2f}}},
-        {BIG, {"Big", {0.2f, 0.2f}}}
-    };
-
-    auto it = birdProperties.find(birdType);
-    if (it == birdProperties.end()) {
-        LOG_ERROR("Invalid bird type");
+    glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
+    auto obj = m_ObjectFactory->CreateBird(birdType, position);
+    if (!obj) {
+        LOG_ERROR("Failed to create bird");
         return;
     }
-
-    const auto &[birdName, size] = it->second;
-    glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
-    const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    m_Birds.push(CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false));
+    m_Objects.push_back(obj);
+    m_Root->AddChild(obj);
+    m_Birds.push(obj);
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
-    static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2>> pigProperties = {
-        {NORMAL, {"Normal", 100, {0.18f, 0.18f}}},
-        {KING, {"King", 1000, {0.3f, 0.3f}}},
-        {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
-    };
-
-    auto it = pigProperties.find(pigType);
-    if (it == pigProperties.end()) {
-        LOG_ERROR("Pig type not recognized");
+    auto obj = m_ObjectFactory->CreatePig(pigType, position);
+    if (!obj) {
+        LOG_ERROR("Failed to create pig");
         return;
     }
-
-    const auto &[pigName, health, size] = it->second;
-    const std::string imagePath = RESOURCE_DIR"/Pigs/Pig" + pigName + ".png";
-    m_Pigs.push_back(CreateObject(imagePath, position, health, PIG, size, 0.05f, 0, 0.1f, 0.3f, true));
+    m_Objects.push_back(obj);
+    m_Root->AddChild(obj);
+    m_Pigs.push_back(obj);
 }
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
                                     const StructureType structureType, const float rotation) {
-    static const std::unordered_map<EntityType, std::tuple<std::string, int, float, float>> entityProperties = {
-        {WOOD, {"Wood", 100, 0.1f, 1.0f}},
-        {STONE, {"Stone", 130, 0.2f, 0.3f}},
-        {GLASS, {"Glass", 50, 0.2f, 0.1f}}
-    };
 
-    static const std::unordered_map<StructureType, std::pair<std::string, glm::vec2>> structureProperties = {
-        {FRAME_BLOCK, {"A1", {0.4f, 0.4f}}},
-        {FRAME_TRIANGLE, {"B1", {0.2f, 0.2f}}},
-        {TRIANGLE, {"C1", {0.2f, 0.2f}}},
-        {DISC, {"D1", {0.2f, 0.2f}}},
-        {RECTANGLE, {"E1", {0.4f, 0.2f}}},
-        {BLOCK, {"F1", {0.2f, 0.2f}}},
-        {BAR_LONG, {"G1", {0.9f, 0.1f}}},
-        {RECTANGLE_SMALL, {"H1", {0.2f, 0.1f}}},
-        {BAR, {"I1", {0.8f, 0.1f}}},
-        {BLOCK_SMALL, {"J1", {0.1f, 0.1f}}},
-        {BAR_SHORT, {"K1", {0.4f, 0.1f}}},
-        {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
-    };
-
-    auto entityIt = entityProperties.find(entityType);
-    auto structureIt = structureProperties.find(structureType);
-
-    if (entityIt == entityProperties.end()) {
-        LOG_ERROR("Entity type not recognized");
-        return;
-    }
-    if (structureIt == structureProperties.end()) {
-        LOG_ERROR("Structure type not recognized");
-        return;
-    }
-
-    const auto &[material, health, density, friction] = entityIt->second;
-    const auto &[shape, size] = structureIt->second;
-
-    std::string imagePath = RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png";
-    CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, false);
+    const auto obj = m_ObjectFactory->CreateStructure(entityType, structureType, position, rotation);
+    m_Objects.push_back(obj);
+    m_Root->AddChild(obj);
 }
 
 void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {

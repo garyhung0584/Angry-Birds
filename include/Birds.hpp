@@ -7,12 +7,14 @@
 
 class Birds : public Physics2D {
 public:
-    Birds(const std::string &birdType) : Physics2D(RESOURCE_DIR"/Birds/" + birdType + ".png", 1, EntityType::BIRD) {
+    Birds(const std::string &birdType) : Physics2D(RESOURCE_DIR"/Birds/" + birdType + ".png", 1, BIRD) {
     }
 
-    void init(glm::vec2 position, glm::vec2 size) {
+    void init(const glm::vec2 position, glm::vec2 size) {
         SetPosition(position);
     }
+
+    // virtual void Ability();
 };
 
 
