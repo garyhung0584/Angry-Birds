@@ -318,6 +318,64 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_7:
+            isPause = false;
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
+            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
+            m_Quit->SetPosition({550.0f, 250.0f});
+            m_Quit->SetZIndex(50);
+            m_Root.AddChild(m_Quit);
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
+            m_Root.AddChildren(m_slingshot->GetSlingshot());
+
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+
+            m_PE->CreateStructure({5.0f, 0.4f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.4f, 0.4f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.4f, 0.4f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.4f, 0.4f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({7.8f, 0.4f}, WOOD, RECTANGLE, RAD90);
+
+            m_PE->CreateStructure({5.2f, 1.0f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({7.6f, 1.0f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({6.4f, 0.9f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({6.4f, 1.1f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({5.6f, 1.3f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({7.2f, 1.3f}, WOOD, BAR, 0);
+
+            m_PE->CreateStructure({5.0f, 1.6f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({5.0f, 2.0f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({6.3f, 1.8f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({6.5f, 1.8f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({7.8f, 1.6f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({7.8f, 2.0f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({5.6f, 2.3f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({7.2f, 2.3f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({5.6f, 2.5f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({7.2f, 2.5f}, WOOD, BAR, 0);
+
+            m_PE->CreateStructure({5.0f, 2.8f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({5.7f, 2.8f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({6.4f, 2.8f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({7.1f, 2.8f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({7.8f, 2.8f}, WOOD, BLOCK, 0);
+
+            m_PE->CreatePig({5.9f, 0.3f}, NORMAL);
+            m_PE->CreatePig({6.9f, 0.3f}, NORMAL);
+            m_PE->CreatePig({5.6f, 1.8f}, SOLDIER);
+            m_PE->CreatePig({7.2f, 1.8f}, SOLDIER);
+
+            m_PE->SetUpWorld();
             break;
         case LEVEL_8:
             break;
