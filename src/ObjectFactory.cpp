@@ -1,14 +1,8 @@
 #include "ObjectFactory.hpp"
 
-#include "BigBird.hpp"
-#include "BlackBird.hpp"
-#include "BlueBird.hpp"
-#include "RedBird.hpp"
-#include "WhiteBird.hpp"
-#include "YellowBird.hpp"
 
 
-std::shared_ptr<Physics2D> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
+std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
     // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
     //     {RED, {"Red", {0.2f, 0.2f}}},
     //     {BLUE, {"Blue", {0.2f, 0.2f}}},
@@ -59,8 +53,6 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateBird(const BirdType birdType, co
             return nullptr;
     }
     const float rotation = 0.0f;
-    const float density = 0.1f;
-    const float friction = 0.3f;
     const bool isAwake = false;
 
     b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -73,10 +65,10 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateBird(const BirdType birdType, co
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.enableHitEvents = true;
-    shapeDef.density = density;
-    shapeDef.friction = friction;
-
-    const b2Circle shape = {{0, 0}, 0.2f};
+    shapeDef.density = bird->GetDensity();
+    shapeDef.friction = bird->GetFriction();
+    auto center = bird->GetCenter();
+    const b2Circle shape = {{center.x,center.y} , bird->GetRadius()};
     b2CreateCircleShape(bodyId, &shapeDef, &shape);
     b2Body_Disable(bodyId);
 

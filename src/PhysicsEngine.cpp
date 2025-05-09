@@ -72,13 +72,15 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 9.f;
     b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
+    m_Flying = m_Birds.front();
     m_Birds.pop();
 }
 
 bool PhysicsEngine::IsEnd() {
     if (m_Pigs.empty()) {
         return true;
-    } else if (m_Birds.empty()) {
+    }
+    if (m_Birds.empty()) {
         return true;
     }
     return false;

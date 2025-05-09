@@ -47,7 +47,7 @@ void App::PhaseManager() {
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
-            m_PE->CreateBird(BLUE);
+            m_PE->CreateBird(RED);
             m_PE->CreateBird(YELLOW);
             m_PE->CreateBird(BIG);
             m_PE->CreateBird(BLACK);
