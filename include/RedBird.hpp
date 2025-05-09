@@ -6,14 +6,8 @@
 class RedBird : public Birds {
 public:
     RedBird();
-    // void Ability() override {
-    // }
 
-
-private:
-    static const std::string m_birdType;
-    static const std::string birdImagePath;
-    static const std::string birdSoundPath;
+    void Ability() override;
 };
 
 #endif // REDBIRD_HPP

@@ -13,8 +13,12 @@ public:
     void init(const glm::vec2 position, glm::vec2 size) {
         SetPosition(position);
     }
+    virtual void Ability() = 0;
 
-    // virtual void Ability();
+private:
+    static const std::string m_birdType;
+    static const std::string birdImagePath;
+    static const std::string birdSoundPath;
 };
 
 
