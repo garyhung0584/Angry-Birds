@@ -43,7 +43,7 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
     static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2>> pigProperties = {
         {NORMAL, {"Normal", 100, {0.18f, 0.18f}}},
-        {KING, {"King", 1000, {0.2f, 0.2f}}},
+        {KING, {"King", 1000, {0.3f, 0.3f}}},
         {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
     };
 
@@ -74,8 +74,8 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
         {RECTANGLE, {"E1", {0.4f, 0.2f}}},
         {BLOCK, {"F1", {0.2f, 0.2f}}},
         {BAR_LONG, {"G1", {0.9f, 0.1f}}},
-        {RECTANGLE_SMALL, {"H1", {0.2f, 0.2f}}},
-        {BAR, {"I1", {0.7f, 0.1f}}},
+        {RECTANGLE_SMALL, {"H1", {0.2f, 0.1f}}},
+        {BAR, {"I1", {0.8f, 0.1f}}},
         {BLOCK_SMALL, {"J1", {0.1f, 0.1f}}},
         {BAR_SHORT, {"K1", {0.4f, 0.1f}}},
         {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
