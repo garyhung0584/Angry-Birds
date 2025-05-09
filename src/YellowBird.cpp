@@ -6,7 +6,10 @@
 // const std::string RedBird::birdSoundPath = RESOURCE_DIR"/Sounds/RedBird.wav";
 
 YellowBird::YellowBird() : Birds("YellowBird") {
-    // Any additional RedBird initialization here
+    SetDensity(0.1f);
+    SetFriction(0.3f);
+    SetCenter({0.0f, 0.0f});
+    SetRadius(0.2f);
 }
 
 void YellowBird::Ability() {

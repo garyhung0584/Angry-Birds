@@ -6,6 +6,7 @@
 #include <future>
 #include "Physics2D.hpp"
 #include "ObjectFactory.hpp"
+#include "Birds.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"
@@ -55,7 +56,8 @@ private:
 
     std::vector<std::shared_ptr<Physics2D> > m_Objects;
 
-    std::queue<std::shared_ptr<Physics2D> > m_Birds;
+    std::queue<std::shared_ptr<Birds> > m_Birds;
+    std::shared_ptr<Birds> m_Flying;
     std::vector<std::shared_ptr<Physics2D> > m_Pigs;
 
     const int X_OFFSET = -450;
