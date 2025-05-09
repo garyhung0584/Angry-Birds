@@ -1,25 +1,88 @@
 #include "ObjectFactory.hpp"
 
+#include "BigBird.hpp"
+#include "BlackBird.hpp"
+#include "BlueBird.hpp"
+#include "RedBird.hpp"
+#include "WhiteBird.hpp"
+#include "YellowBird.hpp"
+
 
 std::shared_ptr<Physics2D> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
-    static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
-        {RED, {"Red", {0.2f, 0.2f}}},
-        {BLUE, {"Blue", {0.2f, 0.2f}}},
-        {YELLOW, {"Yellow", {0.2f, 0.2f}}},
-        {BLACK, {"Black", {0.2f, 0.2f}}},
-        {WHITE, {"White", {0.2f, 0.2f}}},
-        {BIG, {"Big", {0.2f, 0.2f}}}
-    };
+    // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
+    //     {RED, {"Red", {0.2f, 0.2f}}},
+    //     {BLUE, {"Blue", {0.2f, 0.2f}}},
+    //     {YELLOW, {"Yellow", {0.2f, 0.2f}}},
+    //     {BLACK, {"Black", {0.2f, 0.2f}}},
+    //     {WHITE, {"White", {0.2f, 0.2f}}},
+    //     {BIG, {"Big", {0.2f, 0.2f}}}
+    // };
+    //
+    // auto it = birdProperties.find(birdType);
+    // if (it == birdProperties.end()) {
+    //     LOG_ERROR("Invalid bird type");
+    //     return nullptr;
+    // }
+    //
+    // const auto &[birdName, size] = it->second;
+    // const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
+    // return CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false);
+    std::shared_ptr<Birds> bird;
 
-    auto it = birdProperties.find(birdType);
-    if (it == birdProperties.end()) {
-        LOG_ERROR("Invalid bird type");
-        return nullptr;
+    switch (birdType) {
+        case RED: {
+            bird = std::make_shared<RedBird>();
+            break;
+        }
+        case YELLOW: {
+            bird = std::make_shared<YellowBird>();
+            break;
+        }
+        case BIG: {
+            bird = std::make_shared<BigBird>();
+            break;
+        }
+        case BLACK: {
+            bird = std::make_shared<BlackBird>();
+            break;
+        }
+        case BLUE: {
+            bird = std::make_shared<BlueBird>();
+            break;
+        }
+        case WHITE: {
+            bird = std::make_shared<WhiteBird>();
+            break;
+        }
+        default:
+            LOG_ERROR("Unknown bird type");
+            return nullptr;
     }
+    const float rotation = 0.0f;
+    const float density = 0.1f;
+    const float friction = 0.3f;
+    const bool isAwake = false;
 
-    const auto &[birdName, size] = it->second;
-    const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    return CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false);
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = b2Vec2{position.x, position.y};
+    bodyDef.rotation = b2MakeRot(rotation);
+    bodyDef.isAwake = isAwake;
+
+    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
+
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.enableHitEvents = true;
+    shapeDef.density = density;
+    shapeDef.friction = friction;
+
+    const b2Circle shape = {{0, 0}, 0.2f};
+    b2CreateCircleShape(bodyId, &shapeDef, &shape);
+    b2Body_Disable(bodyId);
+
+    bird->SetBodyId(bodyId);
+    bird->SetScale(0.2f);
+    return bird;
 }
 
 std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const glm::vec2 &position) {

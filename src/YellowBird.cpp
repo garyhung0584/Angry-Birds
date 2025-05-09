@@ -1,14 +1,15 @@
-#include "RedBird.hpp"
+#include "YellowBird.hpp"
 #include "Util/Logger.hpp"
 
-// const std::string RedBird::m_birdType = "BigBird";
+// const std::string YellowBird::m_birdType = "YellowBird";
 // const std::string RedBird::birdImagePath = RESOURCE_DIR"/Birds/RedBird.png";
 // const std::string RedBird::birdSoundPath = RESOURCE_DIR"/Sounds/RedBird.wav";
 
-RedBird::RedBird() : Birds("RedBird") {
+YellowBird::YellowBird() : Birds("YellowBird") {
     // Any additional RedBird initialization here
 }
 
-void RedBird::Ability() {
-    LOG_DEBUG("RedBird Ability");
+void YellowBird::Ability() {
+    LOG_DEBUG("YellowBird Ability");
 }
+
