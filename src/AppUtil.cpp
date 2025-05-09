@@ -94,10 +94,10 @@ void App::PhaseManager() {
             m_PE->CreateStructure({6.78f, 1.15f}, WOOD, BAR_SHORT, -RAD45);
             m_PE->CreateStructure({6.0f, 1.2f}, WOOD, RECTANGLE, 0);
 
-            m_PE->CreateStructure({4.4f, 0.9f}, GLASS, BAR_LONG, RAD90);
+            m_PE->CreateStructure({4.5f, 0.9f}, GLASS, BAR_LONG, RAD90);
             m_PE->CreateStructure({7.5f, 0.9f}, GLASS, BAR_LONG, RAD90);
-            m_PE->CreateStructure({5.15f, 2.4f}, GLASS, BAR_LONG, RAD35);
-            m_PE->CreateStructure({6.85f, 2.4f}, GLASS, BAR_LONG, -RAD35);
+            m_PE->CreateStructure({5.15f, 2.35f}, GLASS, BAR_LONG, RAD35);
+            m_PE->CreateStructure({6.85f, 2.35f}, GLASS, BAR_LONG, -RAD35);
             m_PE->CreateStructure({6.0f, 2.2f}, GLASS, BAR, RAD90);
 
             m_PE->CreatePig({6.0f, 0.1f}, NORMAL);
@@ -433,6 +433,63 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_9:
+            isPause = false;
+            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart->SetPosition({-400.0f, 250.0f});
+            m_Restart->SetZIndex(50);
+            m_Root.AddChild(m_Restart);
+            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+            m_Pause->SetPosition({-550.0f, 250.0f});
+            m_Pause->SetZIndex(50);
+            m_Root.AddChild(m_Pause);
+            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
+            m_Quit->SetPosition({550.0f, 250.0f});
+            m_Quit->SetZIndex(50);
+            m_Root.AddChild(m_Quit);
+            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
+            m_Root.AddChildren(m_slingshot->GetSlingshot());
+
+            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
+
+            m_PE->CreateStructure({5.5f, 0.4f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({6.3f, 0.4f}, WOOD, BAR_SHORT, RAD90);
+            m_PE->CreateStructure({4.9f, 0.2f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({6.9f, 0.2f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({5.0f, 0.6f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({6.8f, 0.6f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({5.4f, 0.9f}, WOOD, RECTANGLE_SMALL, 0);
+            m_PE->CreateStructure({6.4f, 0.9f}, WOOD, RECTANGLE_SMALL, 0);
+            m_PE->CreateStructure({4.9f, 1.0f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({6.9f, 1.0f}, WOOD, BLOCK, 0);
+            m_PE->CreateStructure({5.9f, 1.1f}, WOOD, BAR, 0);
+            m_PE->CreateStructure({5.1f, 1.4f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({6.7f, 1.4f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({5.9f, 1.4f}, WOOD, RECTANGLE_SMALL, RAD90);
+            m_PE->CreateStructure({5.5f, 1.8f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({6.3f, 1.8f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({4.9f, 2.0f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.9f, 2.0f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.9f, 2.4f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.3f, 2.4f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({6.5f, 2.4f}, GLASS, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.9f, 2.9f}, GLASS, BAR, 0);
+            m_PE->CreateStructure({5.9f, 3.2f}, WOOD, RECTANGLE, 0);
+            m_PE->CreateStructure({5.9f, 3.8f}, WOOD, RECTANGLE, RAD90);
+            m_PE->CreateStructure({5.9f, 4.4f}, STONE, BLOCK, 0);
+            m_PE->CreateStructure({5.2f, 3.8f}, GLASS, BAR, RAD90);
+            m_PE->CreateStructure({6.6f, 3.8f}, GLASS, BAR, RAD90);
+            m_PE->CreateStructure({5.9f, 4.7f}, GLASS, BAR, 0);
+            m_PE->CreateStructure({5.3f, 5.0f}, GLASS, BLOCK, 0);
+            m_PE->CreateStructure({5.9f, 5.0f}, GLASS, BLOCK, 0);
+            m_PE->CreateStructure({6.5f, 5.0f}, GLASS, BLOCK, 0);
+
+            m_PE->CreatePig({5.9f, 0.3f}, SOLDIER);
+
+            m_PE->SetUpWorld();
             break;
         case LEVEL_10:
             break;
