@@ -14,5 +14,15 @@ YellowBird::YellowBird() : Birds("YellowBird") {
 
 void YellowBird::Ability() {
     LOG_DEBUG("YellowBird Ability");
-}
+    b2BodyId bodyId = GetBodyId();
 
+    auto rotation = GetTransform().rotation;
+
+    float force = 10.0f;
+    b2Vec2 speedBoost = b2Vec2{
+        force * cos(rotation),
+        force * sin(rotation)
+    };
+
+    b2Body_ApplyForceToCenter(bodyId, speedBoost, true);
+}

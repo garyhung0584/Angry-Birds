@@ -12,9 +12,6 @@
 #include "box2d/box2d.h"
 #include "Util/Renderer.hpp"
 
-inline bool operator<(const b2BodyId &a, const b2BodyId &b) {
-    return std::tie(a.index1, a.world0, a.revision) < std::tie(b.index1, b.world0, b.revision);
-}
 
 class PhysicsEngine {
 public:
@@ -45,6 +42,8 @@ private:
     void ProcessEvents();
 
     void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
+
+    void HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed);
 
     void DeleteObject(b2BodyId bodyId);
 

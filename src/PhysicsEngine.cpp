@@ -20,6 +20,7 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
 
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
 }
+
 void PhysicsEngine::CreateBird(const BirdType birdType) {
     glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
     auto obj = m_ObjectFactory->CreateBird(birdType, position);
@@ -45,7 +46,6 @@ void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) 
 
 void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType entityType,
                                     const StructureType structureType, const float rotation) {
-
     const auto obj = m_ObjectFactory->CreateStructure(entityType, structureType, position, rotation);
     m_Objects.push_back(obj);
     m_Root->AddChild(obj);
@@ -131,20 +131,15 @@ void PhysicsEngine::ProcessEvents() {
     b2ContactEvents contactEvents = b2World_GetContactEvents(m_WorldId);
     for (int i = 0; i < contactEvents.hitCount; ++i) {
         b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
+        auto speed = hitEvent.approachSpeed;
         const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
         const b2BodyId bodyB = b2Shape_GetBody(hitEvent.shapeIdB);
         auto objA = FindObjectByBodyId(bodyA);
         auto objB = FindObjectByBodyId(bodyB);
 
         if (objA && objB) {
-            //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
-            if (objA->GetEntityType() != BIRD) {
-                objA->SetHealth(objA->GetHealth() - (20 * hitEvent.approachSpeed));
-                LOG_DEBUG("objA Health: {}", objA->GetHealth());
-                if (objA->GetHealth() <= 0) {
-                    DeleteObject(bodyA);
-                }
-            }
+            HitObject(objA, bodyA, speed);
+            HitObject(objB, bodyB, speed);
         }
     }
 
@@ -167,6 +162,19 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
         return;
     }
     b2Body_ApplyForceToCenter(bodyId, force, true);
+}
+
+void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed) {
+    //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
+    if (obj->GetEntityType() != BIRD) {
+        obj->SetHealth(obj->GetHealth() - (20 * speed));
+        LOG_DEBUG("objA Health: {}", obj->GetHealth());
+        if (obj->GetHealth() <= 0) {
+            DeleteObject(bodyId);
+        }
+    } else {
+        m_Flying = nullptr;
+    }
 }
 
 void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
