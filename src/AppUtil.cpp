@@ -47,9 +47,12 @@ void App::PhaseManager() {
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
+            m_PE->CreateBird(BLACK);
             m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(YELLOW);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(WHITE);
+            m_PE->CreateBird(BLUE);
 
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);

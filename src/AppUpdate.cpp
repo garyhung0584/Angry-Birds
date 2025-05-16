@@ -51,26 +51,30 @@ void App::Update() {
     }
     if (m_Phase != LEVEL_SELECT && m_Phase != MAIN_MENU) {
         if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
+            if (m_PE->IsFlying()) {
+                m_PE->UseAbility();
+            }
             auto position = Util::Input::GetCursorPosition();
             auto posSlingshot = m_slingshot->GetPosition();
             auto posBias = position - posSlingshot;
             if (posBias.x > -50 && posBias.x < 50 && posBias.y > 0 && posBias.y < 100) {
                 isPressed = true;
             }
-            LOG_DEBUG(position);
+            // LOG_DEBUG(position);
         }
         if (isPressed) {
             auto position = Util::Input::GetCursorPosition();
             const auto posSlingshot = m_slingshot->GetPosition();
             auto posStart = posSlingshot + glm::vec2(0, 70);
             auto posBias = position - posStart;
-            float angle = atan2(-posBias.y, -posBias.x);
+            // float angle = atan2(-posBias.y, -posBias.x);
             float len = length(posBias);
+
             if (len > 80.0f) {
                 position = posStart + (posBias / len) * 80.0f;
                 posBias = (posBias / len) * 80.0f;
             }
-            m_PE->Pull(position, angle);
+            m_PE->Pull(position);
 
             if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
                 m_PE->Release(posBias);

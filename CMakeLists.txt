@@ -64,6 +64,20 @@ add_executable(${PROJECT_NAME}
         src/ResourceManager.cpp
         src/Slingshot.cpp
         include/type.hpp
+        src/RedBird.cpp
+        include/RedBird.hpp
+        src/ObjectFactory.cpp
+        include/ObjectFactory.hpp
+        src/YellowBird.cpp
+        include/YellowBird.hpp
+        src/BlueBird.cpp
+        include/BlueBird.hpp
+        src/BigBird.cpp
+        include/BigBird.hpp
+        src/BlackBird.cpp
+        include/BlackBird.hpp
+        src/WhiteBird.cpp
+        include/WhiteBird.hpp
 )
 
 if(MSVC)
