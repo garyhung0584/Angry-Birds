@@ -18,7 +18,7 @@ void YellowBird::Ability() {
 
     auto rotation = GetTransform().rotation;
 
-    float force = 10.0f;
+    float force = 5.0f;
     b2Vec2 speedBoost = b2Vec2{
         force * cos(rotation),
         force * sin(rotation)

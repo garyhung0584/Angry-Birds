@@ -5,6 +5,9 @@
 
 #include <unordered_map>
 
+#include "Util/Animation.hpp"
+#include "Util/Animation.hpp"
+
 PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     m_Root = Root;
 
@@ -51,16 +54,16 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
     m_Root->AddChild(obj);
 }
 
-void PhysicsEngine::Pull(const glm::vec2 &pos, float angle) {
+void PhysicsEngine::Pull(const glm::vec2 &pos) {
     if (m_Birds.empty()) {
         return;
     }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
     auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 
-    b2Rot rot = b2MakeRot(angle);
+    b2Rot rot = b2MakeRot(0);
     FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
-    FindObjectByBodyId(bodyId)->SetRotation(angle);
+    // FindObjectByBodyId(bodyId)->SetRotation(angle);
     b2Body_SetTransform(bodyId, transform, rot);
 }
 
@@ -75,6 +78,21 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     m_Flying = m_Birds.front();
     m_Birds.pop();
 }
+
+void PhysicsEngine::UseAbility() {
+    if (m_Flying) {
+        m_Flying->Ability();
+        m_Flying = nullptr;
+    }
+}
+
+bool PhysicsEngine::IsFlying() const {
+    if (m_Flying) {
+        return true;
+    }
+    return false;
+}
+
 
 bool PhysicsEngine::IsEnd() {
     if (m_Pigs.empty()) {
@@ -168,7 +186,7 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, 
     //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
     if (obj->GetEntityType() != BIRD) {
         obj->SetHealth(obj->GetHealth() - (20 * speed));
-        LOG_DEBUG("objA Health: {}", obj->GetHealth());
+        // LOG_DEBUG("objA Health: {}", obj->GetHealth());
         if (obj->GetHealth() <= 0) {
             DeleteObject(bodyId);
         }

@@ -23,9 +23,13 @@ public:
 
     void CreateStructure(const glm::vec2 &position, EntityType entityType, StructureType structureType, float rotation);
 
-    void Pull(const glm::vec2 &pos, float angle);
+    void Pull(const glm::vec2 & pos);
 
     void Release(glm::vec2 &posbias);
+
+    void UseAbility();
+
+    bool IsFlying() const;
 
     bool IsEnd();
 

@@ -9,7 +9,7 @@ ResourceManager::ResourceManager() {
 
 void ResourceManager::EnterLevel(const int level) {
     m_level = level;
-    LOG_DEBUG("Current level: {}", m_level);
+    // LOG_DEBUG("Current level: {}", m_level);
     m_Background->SetPhase(m_level);
     // m_TaskText->NextPhase(m_Phase++);
 }
