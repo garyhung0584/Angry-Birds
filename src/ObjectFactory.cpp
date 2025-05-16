@@ -4,12 +4,12 @@
 
 std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
     // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
-    //     {RED, {"Red", {0.2f, 0.2f}}},
-    //     {BLUE, {"Blue", {0.2f, 0.2f}}},
-    //     {YELLOW, {"Yellow", {0.2f, 0.2f}}},
-    //     {BLACK, {"Black", {0.2f, 0.2f}}},
-    //     {WHITE, {"White", {0.2f, 0.2f}}},
-    //     {BIG, {"Big", {0.2f, 0.2f}}}
+    // {RED, {"Red", {0.2f, 0.2f}}},
+    // {BLUE, {"Blue", {0.2f, 0.2f}}},
+    // {YELLOW, {"Yellow", {0.2f, 0.2f}}},
+    // {BLACK, {"Black", {0.2f, 0.2f}}},
+    // {WHITE, {"White", {0.2f, 0.2f}}},
+    // {BIG, {"Big", {0.2f, 0.2f}}}
     // };
     //
     // auto it = birdProperties.find(birdType);
@@ -81,7 +81,7 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
 std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const glm::vec2 &position) {
     static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2> > pigProperties = {
         {NORMAL, {"Normal", 100, {0.18f, 0.18f}}},
-        {KING, {"King", 1000, {0.2f, 0.2f}}},
+        {KING, {"King", 1000, {0.3f, 0.3f}}},
         {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
     };
 
@@ -113,8 +113,8 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
         {RECTANGLE, {"E1", {0.4f, 0.2f}}},
         {BLOCK, {"F1", {0.2f, 0.2f}}},
         {BAR_LONG, {"G1", {0.9f, 0.1f}}},
-        {RECTANGLE_SMALL, {"H1", {0.2f, 0.2f}}},
-        {BAR, {"I1", {0.7f, 0.1f}}},
+        {RECTANGLE_SMALL, {"H1", {0.2f, 0.1f}}},
+        {BAR, {"I1", {0.8f, 0.1f}}},
         {BLOCK_SMALL, {"J1", {0.1f, 0.1f}}},
         {BAR_SHORT, {"K1", {0.4f, 0.1f}}},
         {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
