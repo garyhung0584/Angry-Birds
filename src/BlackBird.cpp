@@ -12,6 +12,22 @@ BlackBird::BlackBird() : Birds("BlackBird") {
     SetRadius(0.2f);
 }
 
+// void BlackBird::Ability() {
+//     LOG_DEBUG("BlackBird Ability");
+// }
 void BlackBird::Ability() {
     LOG_DEBUG("BlackBird Ability");
+    b2BodyId bodyId = GetBodyId();
+
+    if (B2_IS_NULL(bodyId)) {
+        LOG_ERROR("BlackBird body is null");
+        return;
+    }
+
+    float explosionRadius = 2.0f;
+    b2Vec2 birdPosition = b2Body_GetPosition(bodyId);
+
+    b2WorldId worldId = GetWorldId();
+
+    b2World_Explode(worldId, birdPosition, explosionRadius, 1.0f);
 }

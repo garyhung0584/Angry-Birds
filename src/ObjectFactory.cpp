@@ -73,6 +73,7 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     b2Body_Disable(bodyId);
 
     bird->SetBodyId(bodyId);
+    bird->SetWorldId(m_WorldId);
     bird->SetScale(0.2f);
     return bird;
 }
@@ -135,7 +136,7 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     const auto &[shape, size] = structureIt->second;
 
     std::string imagePath = RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png";
-    LOG_DEBUG("Creating structure: {}", imagePath);
+    // LOG_DEBUG("Creating structure: {}", imagePath);
     return CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, false);
 }
 

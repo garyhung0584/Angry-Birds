@@ -50,12 +50,20 @@ public:
         return m_Radius;
     }
 
+    void SetWorldId(b2WorldId worldId) {
+        m_WorldId = worldId;
+    }
+    b2WorldId GetWorldId() const {
+        return m_WorldId;
+    }
+
 private:
     // static const std::string m_birdType;
     float m_Density = 0.1f;
     float m_Friction = 0.3f;
     glm::vec2 m_Center = {0.0f, 0.0f};
     float m_Radius = 0.2f;
+    b2WorldId m_WorldId{};
     // static const std::string birdImagePath;
     // static const std::string birdSoundPath;
 };

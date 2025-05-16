@@ -68,11 +68,14 @@ void PhysicsEngine::Pull(const glm::vec2 &pos) {
 }
 
 void PhysicsEngine::Release(glm::vec2 &posBias) {
-    if (posBias.x > 0 || m_Birds.empty()) {
+    if (m_Birds.empty()) {
+        return;
+    } else if (posBias.x > 0) {
+
         return;
     }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
-    b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 9.f;
+    b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 12.f;
     b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
     m_Flying = m_Birds.front();
@@ -179,7 +182,7 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
         LOG_ERROR("World or body is null");
         return;
     }
-    b2Body_ApplyForceToCenter(bodyId, force, true);
+    b2Body_SetLinearVelocity(bodyId, force);
 }
 
 void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed) {
