@@ -188,7 +188,7 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
 void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed) {
     //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
     if (obj->GetEntityType() != BIRD) {
-        obj->SetHealth(obj->GetHealth() - (20 * speed));
+        obj->ApplyDamage(20 * speed);
         // LOG_DEBUG("objA Health: {}", obj->GetHealth());
         if (obj->GetHealth() <= 0) {
             DeleteObject(bodyId);

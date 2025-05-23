@@ -78,6 +78,8 @@ add_executable(${PROJECT_NAME}
         include/BlackBird.hpp
         src/WhiteBird.cpp
         include/WhiteBird.hpp
+        src/Structure.cpp
+        include/Structure.hpp
 )
 
 if(MSVC)

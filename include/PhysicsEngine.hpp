@@ -19,13 +19,13 @@ public:
 
     void CreateBird(BirdType birdType);
 
-    void CreatePig(const glm::vec2 &position, PigType pigType);
+    void CreatePig(const glm::vec2& position, PigType pigType);
 
-    void CreateStructure(const glm::vec2 &position, EntityType entityType, StructureType structureType, float rotation);
+    void CreateStructure(const glm::vec2& position, EntityType entityType, StructureType structureType, float rotation);
 
-    void Pull(const glm::vec2 & pos);
+    void Pull(const glm::vec2& pos);
 
-    void Release(glm::vec2 &posbias);
+    void Release(glm::vec2& posbias);
 
     void UseAbility();
 
@@ -62,6 +62,8 @@ private:
     std::queue<std::shared_ptr<Birds> > m_Birds;
     std::shared_ptr<Birds> m_Flying;
     std::vector<std::shared_ptr<Physics2D> > m_Pigs;
+
+    std::vector<std::shared_ptr<Util::GameObject>>  m_GuideDots;
 
     const int X_OFFSET = -450;
     const int Y_OFFSET = -210;
