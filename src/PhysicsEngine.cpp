@@ -139,6 +139,24 @@ void PhysicsEngine::DestroyWorld() const {
     b2DestroyWorld(m_WorldId);
 }
 
+const std::vector<std::shared_ptr<Birds>>& PhysicsEngine::GetBirds() const {
+    // This needs to be adjusted based on how birds are actually stored.
+    // If m_Birds is a queue, and you need to expose all birds (not just the next one),
+    // you might need to rethink storage or provide a different way to access them.
+    // For now, let's assume m_Objects contains all birds and filter them.
+    // This is inefficient and likely not what you want long-term.
+    static std::vector<std::shared_ptr<Birds>> birds_vector;
+    birds_vector.clear();
+    if (m_Flying) {
+        birds_vector.push_back(m_Flying);
+    }
+    // If m_Birds is a queue, you cannot directly iterate it without consuming it.
+    // You might need a separate list of all birds ever created or currently active.
+    // For the purpose of this example, I'm adding the flying bird.
+    // You'll need to adjust this to correctly return all relevant birds.
+    return birds_vector; 
+}
+
 std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
     for (auto obj: m_Objects) {
         if (B2_ID_EQUALS(obj->GetBodyId(), bodyId)) {

@@ -2,6 +2,7 @@
 #define BIRDS_HPP
 
 #include <string>
+#include <vector>
 #include "Physics2D.hpp"
 
 
@@ -57,6 +58,9 @@ public:
         return m_WorldId;
     }
 
+    void AddPositionToTrail(const glm::vec2& position);
+    const std::vector<glm::vec2>& GetTrailPositions() const;
+
 private:
     // static const std::string m_birdType;
     float m_Density = 0.1f;
@@ -64,6 +68,7 @@ private:
     glm::vec2 m_Center = {0.0f, 0.0f};
     float m_Radius = 0.2f;
     b2WorldId m_WorldId{};
+    std::vector<glm::vec2> m_TrailPositions;
     // static const std::string birdImagePath;
     // static const std::string birdSoundPath;
 };

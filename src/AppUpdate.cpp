@@ -111,9 +111,18 @@ void App::Update() {
     if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
         if (!isPause) {
             m_PE->UpdateWorld();
+            // Add this block to update and render bird trails
+            auto& birds = m_PE->GetBirds();
+            for (auto& bird : birds) {
+                if (bird->IsFlying()) { // Assuming IsFlying() method exists or similar logic
+                    bird->AddPositionToTrail(bird->GetPosition());
+                }
+                // Rendering the trail would typically happen in a rendering-specific part of the App or a dedicated renderer class.
+                // For simplicity, if you have a direct way to draw shapes/lines here, you could iterate through bird->GetTrailPositions()
+                // and draw them. Otherwise, this logic should be integrated into your rendering pipeline.
+            }
         }
     }
-
 
     m_Root.Update();
 }

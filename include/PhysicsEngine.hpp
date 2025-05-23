@@ -39,6 +39,8 @@ public:
 
     void DestroyWorld() const;
 
+    const std::vector<std::shared_ptr<Birds>>& GetBirds() const; // Add this line
+
 private:
 
     std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
