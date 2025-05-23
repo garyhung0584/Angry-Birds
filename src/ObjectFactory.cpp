@@ -1,5 +1,6 @@
 #include "ObjectFactory.hpp"
 
+#include "Structure.hpp"
 
 
 std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
@@ -135,9 +136,25 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     const auto &[material, health, density, friction] = entityIt->second;
     const auto &[shape, size] = structureIt->second;
 
-    std::string imagePath = RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png";
-    // LOG_DEBUG("Creating structure: {}", imagePath);
-    return CreateObject(imagePath, position, health, entityType, size, 1.f, rotation, density, friction, false);
+    auto obj = std::make_shared<Structure>(RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png", health, entityType, structureType);
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = b2Vec2{position.x, position.y};
+    bodyDef.rotation = b2MakeRot(rotation);
+    bodyDef.isAwake = false;
+
+    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
+
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.enableHitEvents = true;
+    shapeDef.density = density;
+    shapeDef.friction = friction;
+    const b2Polygon dynamicBox = b2MakeBox(size.x, size.y);
+    b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
+
+    obj->SetBodyId(bodyId);
+    obj->SetScale(1.f);
+    return obj;
 }
 
 std::shared_ptr<Physics2D> ObjectFactory::CreateObject(const std::string &imagePath, const glm::vec2 &position,

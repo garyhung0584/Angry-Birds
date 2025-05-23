@@ -1,7 +1,3 @@
-//
-// Created by User on 4/9/2025.
-//
-
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
@@ -35,7 +31,6 @@ typedef enum StructureType {
     DISC_SMALL,
 } StructureType;
 
-
 typedef enum EntityType {
     BIRD,
     PIG,
@@ -51,5 +46,13 @@ typedef struct Entity {
         StructureType structureType;
     };
 } Entity;
+
+
+typedef enum  DamageLevel {
+    NONE,
+    LIGHT,
+    MEDIUM,
+    HEAVY,
+} DamageLevel ;
 
 #endif //TYPE_HPP

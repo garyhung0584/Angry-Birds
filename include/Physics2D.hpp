@@ -46,7 +46,9 @@ public:
 
     void SetScale(float Scale) { m_Transform.scale = {Scale, Scale}; }
 
-    void SetHealth(int health) { m_Health = health; }
+    void SetHealth(const int health) { m_Health = health; }
+
+    virtual void ApplyDamage(const int damage) { m_Health -= damage; }
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
