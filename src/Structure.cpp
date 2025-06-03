@@ -1,4 +1,5 @@
 #include "Structure.hpp"
+#include "Util/Logger.hpp"
 
 
 
@@ -39,21 +40,36 @@ void Structure::SetDamageLevel(const DamageLevel damageLevel) {
         {GLASS, "Glass"},
     };
 
-    const std::string &Structure = StructureString.at(m_StructureType);
-    const std::string &entity = EntityString.at(GetEntityType());
+
+    auto structure = StructureString.find(m_StructureType);
+    const auto entity = EntityString.find(GetEntityType());
+
+    if (structure == StructureString.end()) {
+        LOG_ERROR("Structure type not recognized");
+        return;
+    }
+    if (entity == EntityString.end()) {
+        LOG_ERROR("Structure type not recognized");
+        return;
+    }
+
+
+    const auto &structurestr = structure->second;
+    const auto &entitystr = entity->second;
+
     m_DamageLevel = damageLevel;
     switch (m_DamageLevel) {
         case NONE:
-            SetImage(RESOURCE_DIR"/" + entity + "/" + entity + "_" + Structure + "1.png");
+            SetImage(RESOURCE_DIR"/" + entitystr + "/" + entitystr + "_" + structurestr + "1.png");
             break;
         case LIGHT:
-            SetImage(RESOURCE_DIR"/" + entity + "/" + entity + "_" + Structure + "2.png");
+            SetImage(RESOURCE_DIR"/" + entitystr + "/" + entitystr + "_" + structurestr + "2.png");
             break;
         case MEDIUM:
-            SetImage(RESOURCE_DIR"/" + entity + "/" + entity + "_" + Structure + "3.png");
+            SetImage(RESOURCE_DIR"/" + entitystr + "/" + entitystr + "_" + structurestr + "3.png");
             break;
         case HEAVY:
-            SetImage(RESOURCE_DIR"/" + entity + "/" + entity + "_" + Structure + "4.png");
+            SetImage(RESOURCE_DIR"/" + entitystr + "/" + entitystr + "_" + structurestr + "4.png");
             break;
     }
 }
