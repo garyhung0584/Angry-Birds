@@ -80,6 +80,8 @@ add_executable(${PROJECT_NAME}
         include/WhiteBird.hpp
         src/Structure.cpp
         include/Structure.hpp
+        src/PauseMenu.cpp
+        src/PauseMenu.hpp
 )
 
 if(MSVC)
