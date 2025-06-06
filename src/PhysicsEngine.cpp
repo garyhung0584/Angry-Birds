@@ -22,6 +22,7 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
+    m_ScoreManager = std::make_shared<ScoreManager>();
 }
 
 void PhysicsEngine::CreateBird(const BirdType birdType) {
@@ -196,6 +197,15 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
         obj->ApplyDamage(20 * speed);
         // LOG_DEBUG("objA Health: {}", obj->GetHealth());
         if (obj->GetHealth() <= 0) {
+            if (obj->GetEntityType() == PIG) {
+                m_ScoreManager->IncrementScore(5000);
+                auto score = m_ScoreManager->GetScore();
+                LOG_DEBUG("Score: {}", score);
+            } else {
+                m_ScoreManager->IncrementScore(500);
+                auto score = m_ScoreManager->GetScore();
+                LOG_DEBUG("Score: {}", score);
+            }
             DeleteObject(obj->GetBodyId());
         }
     } else {
