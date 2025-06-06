@@ -63,7 +63,6 @@ void PhysicsEngine::Pull(const glm::vec2 &pos) {
 
     b2Rot rot = b2MakeRot(0);
     FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
-    // FindObjectByBodyId(bodyId)->SetRotation(angle);
     b2Body_SetTransform(bodyId, transform, rot);
 }
 
