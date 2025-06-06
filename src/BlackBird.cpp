@@ -12,9 +12,6 @@ BlackBird::BlackBird() : Birds("BlackBird") {
     SetRadius(0.2f);
 }
 
-// void BlackBird::Ability() {
-//     LOG_DEBUG("BlackBird Ability");
-// }
 void BlackBird::Ability() {
     LOG_DEBUG("BlackBird Ability");
     b2BodyId bodyId = GetBodyId();
@@ -24,10 +21,11 @@ void BlackBird::Ability() {
         return;
     }
 
-    float explosionRadius = 1.0f;
-    b2Vec2 birdPosition = b2Body_GetPosition(bodyId);
+    constexpr float explosionRadius = 2.0f;
+    constexpr float impulse = 0.6f;
+    const b2Vec2 birdPosition = b2Body_GetPosition(bodyId);
 
-    b2WorldId worldId = GetWorldId();
+    const b2WorldId worldId = GetWorldId();
 
-    b2World_Explode(worldId, birdPosition, explosionRadius, 0.8f);
+    b2World_Explode(worldId, birdPosition, explosionRadius, impulse);
 }
