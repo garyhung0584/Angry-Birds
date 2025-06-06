@@ -81,7 +81,7 @@ add_executable(${PROJECT_NAME}
         src/Structure.cpp
         include/Structure.hpp
         src/PauseMenu.cpp
-        src/PauseMenu.hpp
+        include/PauseMenu.hpp
 )
 
 if(MSVC)

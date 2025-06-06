@@ -24,11 +24,18 @@ public:
     void SetVisible(bool Visible);
 
     void SetPosition(const glm::vec2& Position);
+
+    void Pull(const glm::vec2& pos);
+
+    void Release();
+
     std::vector<std::shared_ptr<Util::GameObject>> GetSlingshot() { return m_slingshot; }
+    std::vector<std::shared_ptr<Util::GameObject>> GetWire() { return m_wires; }
 
 
 private:
     std::vector<std::shared_ptr<Util::GameObject>> m_slingshot;
+    std::vector<std::shared_ptr<Util::GameObject>> m_wires;
 };
 
 #endif //SLINGSHOT_HPP

@@ -1,4 +1,4 @@
-#include "PauseMenu.hpp"
+#include "../include/PauseMenu.hpp"
 #include "Util/Image.hpp"
 
 

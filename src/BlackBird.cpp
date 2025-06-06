@@ -24,10 +24,10 @@ void BlackBird::Ability() {
         return;
     }
 
-    float explosionRadius = 2.0f;
+    float explosionRadius = 1.0f;
     b2Vec2 birdPosition = b2Body_GetPosition(bodyId);
 
     b2WorldId worldId = GetWorldId();
 
-    b2World_Explode(worldId, birdPosition, explosionRadius, 1.0f);
+    b2World_Explode(worldId, birdPosition, explosionRadius, 0.8f);
 }

@@ -71,7 +71,6 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     if (m_Birds.empty()) {
         return;
     } else if (posBias.x > 0) {
-
         return;
     }
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
@@ -119,6 +118,7 @@ void PhysicsEngine::SetUpWorld() {
     }
 }
 
+
 void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
     int subStepCount = 4;
@@ -153,14 +153,20 @@ void PhysicsEngine::ProcessEvents() {
     for (int i = 0; i < contactEvents.hitCount; ++i) {
         b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
         auto speed = hitEvent.approachSpeed;
-        const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
-        const b2BodyId bodyB = b2Shape_GetBody(hitEvent.shapeIdB);
+        b2BodyId bodyB;
+        b2BodyId bodyA;
+        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false){
+            LOG_ERROR("Not valid shape id");
+            continue;
+        }
+        bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
+        bodyB = b2Shape_GetBody(hitEvent.shapeIdB);
         auto objA = FindObjectByBodyId(bodyA);
         auto objB = FindObjectByBodyId(bodyB);
 
         if (objA && objB) {
-            HitObject(objA, bodyA, speed);
-            HitObject(objB, bodyB, speed);
+            HitObject(objA, speed);
+            HitObject(objB, speed);
         }
     }
 
@@ -185,13 +191,13 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
     b2Body_SetLinearVelocity(bodyId, force);
 }
 
-void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed) {
+void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
     //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
     if (obj->GetEntityType() != BIRD) {
         obj->ApplyDamage(20 * speed);
         // LOG_DEBUG("objA Health: {}", obj->GetHealth());
         if (obj->GetHealth() <= 0) {
-            DeleteObject(bodyId);
+            DeleteObject(obj->GetBodyId());
         }
     } else {
         m_Flying = nullptr;

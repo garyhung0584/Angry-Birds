@@ -29,6 +29,7 @@ public:
 
 private:
     void PhaseManager();
+    void SetUpGame();
 
     typedef enum Phase {
         MAIN_MENU,

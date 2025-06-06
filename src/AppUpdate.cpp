@@ -75,9 +75,11 @@ void App::Update() {
                 posBias = (posBias / len) * 80.0f;
             }
             m_PE->Pull(position);
+            m_slingshot->Pull(position);
 
             if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
                 m_PE->Release(posBias);
+                m_slingshot->Release();
                 isPressed = false;
             }
         }

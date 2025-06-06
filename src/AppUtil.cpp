@@ -29,21 +29,7 @@ void App::PhaseManager() {
             }
             break;
         case LEVEL_1: {
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
+            SetUpGame();
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
@@ -64,23 +50,7 @@ void App::PhaseManager() {
             break;
         }
         case LEVEL_2:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -108,28 +78,12 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_3:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
-            for(int i=0; i<2; i++){
+            for (int i = 0; i < 2; i++) {
                 m_PE->CreateStructure({4.0f + i * 3.0f, 0.2f}, STONE, RECTANGLE, 0);
                 m_PE->CreateStructure({4.8f + i * 3.0f, 0.2f}, STONE, RECTANGLE, 0);
                 m_PE->CreateStructure({4.4f + i * 3.0f, 0.5f}, STONE, BAR, 0);
@@ -145,23 +99,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_4:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -207,23 +145,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_5:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -234,7 +156,7 @@ void App::PhaseManager() {
             m_PE->CreateStructure({7.6f, 0.2f}, STONE, RECTANGLE, 0);
             m_PE->CreateStructure({8.4f, 0.2f}, STONE, RECTANGLE, 0);
             m_PE->CreateStructure({6.7f, 0.5f}, WOOD, BAR, 0);
-            for (int i=0;i<2;i++){
+            for (int i = 0; i < 2; i++) {
                 m_PE->CreateStructure({5.1f + 2.8f * i, 0.6f}, WOOD, RECTANGLE, 0);
                 m_PE->CreateStructure({5.7f + 2.8f * i, 0.6f}, WOOD, BLOCK, 0);
                 m_PE->CreateStructure({4.9f + 2.8f * i, 1.0f}, WOOD, BLOCK, 0);
@@ -257,24 +179,9 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_6:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
+            SetUpGame();
 
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
-
+            m_PE->CreateBird(BLACK);
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -321,23 +228,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_7:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -381,23 +272,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_8:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -436,23 +311,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_9:
-            isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -495,23 +354,7 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
         case LEVEL_10:
-           isPause = false;
-            m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart->SetPosition({-400.0f, 250.0f});
-            m_Restart->SetZIndex(50);
-            m_Root.AddChild(m_Restart);
-            m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
-            m_Pause->SetPosition({-550.0f, 250.0f});
-            m_Pause->SetZIndex(50);
-            m_Root.AddChild(m_Pause);
-            m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
-            m_Quit->SetPosition({550.0f, 250.0f});
-            m_Quit->SetZIndex(50);
-            m_Root.AddChild(m_Quit);
-            m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
-            m_Root.AddChildren(m_slingshot->GetSlingshot());
-
-            m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+            SetUpGame();
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -571,4 +414,25 @@ void App::PhaseManager() {
             m_PE->SetUpWorld();
             break;
     }
+}
+
+void App::SetUpGame() {
+    isPause = false;
+    m_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+    m_Restart->SetPosition({-400.0f, 250.0f});
+    m_Restart->SetZIndex(50);
+    m_Root.AddChild(m_Restart);
+    m_Pause = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_PAUSE.png");
+    m_Pause->SetPosition({-550.0f, 250.0f});
+    m_Pause->SetZIndex(50);
+    m_Root.AddChild(m_Pause);
+    m_Quit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
+    m_Quit->SetPosition({550.0f, 250.0f});
+    m_Quit->SetZIndex(50);
+    m_Root.AddChild(m_Quit);
+    m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
+    m_Root.AddChildren(m_slingshot->GetSlingshot());
+    m_Root.AddChildren(m_slingshot->GetWire());
+
+    m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 }

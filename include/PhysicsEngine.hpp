@@ -47,7 +47,7 @@ private:
 
     void ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) const;
 
-    void HitObject(std::shared_ptr<Physics2D> &obj, b2BodyId bodyId, float speed);
+    void HitObject(std::shared_ptr<Physics2D> &obj, float speed);
 
     void DeleteObject(b2BodyId bodyId);
 
