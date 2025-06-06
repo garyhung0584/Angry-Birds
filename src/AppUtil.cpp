@@ -433,6 +433,7 @@ void App::SetUpGame() {
     m_slingshot = std::make_shared<Slingshot>(glm::vec2(-450.f, -135.f));
     m_Root.AddChildren(m_slingshot->GetSlingshot());
     m_Root.AddChildren(m_slingshot->GetWire());
+    m_slingshot->Release();
 
     m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 }
