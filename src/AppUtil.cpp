@@ -31,6 +31,23 @@ void App::PhaseManager() {
         case LEVEL_1: {
             SetUpGame();
 
+            m_ScoreBoard = std::make_shared<ScoreBoard>(RESOURCE_DIR"/GUI/ScoreBoard.png");
+            m_ScoreBoard->SetPosition({0.f, 50.f});
+            m_ScoreBoard->SetZIndex(60);
+            m_Root.AddChild(m_ScoreBoard);
+            m_Menu = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_MENU.png");
+            m_Menu->SetPosition({-200.0f, -125.0f});
+            m_Menu->SetZIndex(70);
+            m_Root.AddChild(m_Menu);
+            m_Restart2 = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            m_Restart2->SetPosition({0.0f, -125.0f});
+            m_Restart2->SetZIndex(70);
+            m_Root.AddChild(m_Restart2);
+            m_Next = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
+            m_Next->SetPosition({200.0f, -125.0f});
+            m_Next->SetZIndex(70);
+            m_Root.AddChild(m_Next);
+
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
             m_PE->CreateBird(BLACK);

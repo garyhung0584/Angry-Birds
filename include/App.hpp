@@ -8,7 +8,8 @@
 #include "Slingshot.hpp"
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
-
+#include "ScoreManager.hpp"
+#include "ScoreBoard.hpp"
 #include <chrono>
 
 class App {
@@ -60,15 +61,18 @@ private:
     std::shared_ptr<Button> m_Restart;
     std::shared_ptr<Button> m_Pause;
     std::shared_ptr<Button> m_Quit;
+    std::shared_ptr<Button> m_Menu;
+    std::shared_ptr<Button> m_Restart2;
+    std::shared_ptr<Button> m_Next;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
     std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;
-
     std::chrono::steady_clock::time_point m_LastIsEndCheck;
-
+    std::shared_ptr<ScoreBoard> m_ScoreBoard;
 
     std::shared_ptr<ResourceManager> m_RM;
     std::shared_ptr<PhysicsEngine> m_PE;
+
 };
 
 #endif

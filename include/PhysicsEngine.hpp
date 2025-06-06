@@ -7,6 +7,7 @@
 #include "Physics2D.hpp"
 #include "ObjectFactory.hpp"
 #include "Birds.hpp"
+#include "ScoreManager.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"
@@ -61,6 +62,7 @@ private:
 
     std::queue<std::shared_ptr<Birds> > m_Birds;
     std::shared_ptr<Birds> m_Flying;
+    std::shared_ptr<ScoreManager> m_ScoreManager;
     std::vector<std::shared_ptr<Physics2D> > m_Pigs;
 
     std::vector<std::shared_ptr<Util::GameObject>>  m_GuideDots;
