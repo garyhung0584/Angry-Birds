@@ -1,6 +1,16 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
+typedef enum ButtonType {
+    START_BUTTON,
+    EXIT_BUTTON,
+    BACK_BUTTON,
+    NEXT_BUTTON,
+    RESTART_BUTTON,
+    PAUSE_BUTTON,
+    RESUME_BUTTON,
+} ButtonType;
+
 typedef enum BirdType {
     RED,
     BLUE,

@@ -3,41 +3,22 @@
 
 #include "Util/GameObject.hpp"
 #include "ScoreManager.hpp"
+#include "UIObject.hpp"
 
-class ScoreBoard : public Util::GameObject {
+class ScoreBoard final : public UIObject {
 public:
-    explicit ScoreBoard(const std::string &ImagePath);
-
-    ScoreBoard(const ScoreBoard &) = delete;
-
-    ScoreBoard(ScoreBoard &&) = delete;
-
-    ScoreBoard &operator=(const ScoreBoard &) = delete;
-
-    ScoreBoard &operator=(ScoreBoard &&) = delete;
-
-    void SetImage(const std::string &ImagePath);
-
-    void SetScale(float Scale) { m_Transform.scale = {Scale, Scale}; }
-
-    [[nodiscard]] const std::string &GetImagePath() const { return m_ImagePath; }
-
-    [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
-
-    [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
-
-    void SetPosition(const glm::vec2 &Position) { m_Transform.translation = Position; }
-
-    //void SetScore(int score);
+    explicit ScoreBoard(const std::string &ImagePath): UIObject(ImagePath), m_Score(0) {
+    };
 
     void UpdateScore();
 
-    std::vector<std::shared_ptr<GameObject> > GetScore() const {
+    void SetScore(const int score) { m_Score = score; };
+
+    std::vector<std::shared_ptr<GameObject> > GetScoresObject() const {
         return m_Scores;
     }
 
 private:
-    std::string m_ImagePath;
     int m_Score;
 
     std::vector<std::shared_ptr<GameObject> > m_Scores;

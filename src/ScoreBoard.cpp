@@ -2,15 +2,6 @@
 #include "Util/Image.hpp"
 
 
-ScoreBoard::ScoreBoard(const std::string& ImagePath) {
-    SetImage(ImagePath);
-}
-
-void ScoreBoard::SetImage(const std::string& ImagePath) {
-    m_ImagePath = ImagePath;
-
-    m_Drawable = std::make_shared<Util::Image>(m_ImagePath);
-}
 
 // void ScoreBoard::SetScore(int score) {
 //     // for (int i = 0; i < score.size(); ++i) {
@@ -19,7 +10,7 @@ void ScoreBoard::SetImage(const std::string& ImagePath) {
 //     //     m_Scores.push_back(score);
 //     // }
 // }
-
-void ScoreBoard::UpdateScore() {
-
-}
+//
+// void ScoreBoard::UpdateScore() {
+//
+// }

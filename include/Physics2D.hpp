@@ -20,9 +20,7 @@ public:
 
     Physics2D(const Physics2D &) = delete;
 
-
-    [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
-
+    [[nodiscard]] const Util::Transform &GetTransform() const { return m_Transform; }
 
     [[nodiscard]] b2BodyId GetBodyId() const { return m_BodyId; }
 

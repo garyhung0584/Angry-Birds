@@ -86,6 +86,8 @@ add_executable(${PROJECT_NAME}
         include/ScoreBoard.hpp
         src/ScoreManager.cpp
         include/ScoreManager.hpp
+        src/UIObject.cpp
+        include/UIObject.hpp
 )
 
 if(MSVC)

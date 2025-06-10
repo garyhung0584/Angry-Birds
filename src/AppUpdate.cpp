@@ -11,14 +11,14 @@ void App::Update() {
         auto position = Util::Input::GetCursorPosition();
 
         if (m_Phase == MAIN_MENU) {
-            if (m_Start->ifButtonClick(position)) {
+            if (m_Start->IsButtonClick(position)) {
                 m_RM->EnterLevel(0);
                 m_Phase = LEVEL_SELECT;
                 PhaseManager();
             }
         } else if (m_Phase == LEVEL_SELECT) {
             for (int i = 0; i < 10; i++) {
-                if (m_Buttons[i]->ifButtonClick(position)) {
+                if (m_Buttons[i]->IsButtonClick(position)) {
                     m_RM->EnterLevel(i + 1);
                     m_Phase = static_cast<Phase>(i + 2);
                     for (const std::shared_ptr<Button> &button: m_Buttons) {
@@ -28,23 +28,19 @@ void App::Update() {
                 }
             }
         } else {
-            if (m_Restart->ifButtonClick(position) || m_Quit->ifButtonClick(position)) {
-                m_Root.RemoveChild(m_Pause);
-                m_Root.RemoveChild(m_Restart);
-                m_Root.RemoveChild(m_Quit);
-                m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
-                m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
+            if (m_Restart->IsButtonClick(position) || m_Quit->IsButtonClick(position)) {
+                ExitLevel();
 
                 m_PE->DestroyWorld();
 
-                if (m_Quit->ifButtonClick(position)) {
+                if (m_Quit->IsButtonClick(position)) {
                     m_Phase = LEVEL_SELECT;
                     m_RM->EnterLevel(0);
                 }
 
                 PhaseManager();
             }
-            if (m_Pause->ifButtonClick(position)) {
+            if (m_Pause->IsButtonClick(position)) {
                 isPause = !isPause;
             }
         }

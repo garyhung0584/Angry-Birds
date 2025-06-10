@@ -155,7 +155,7 @@ void PhysicsEngine::ProcessEvents() {
         auto speed = hitEvent.approachSpeed;
         b2BodyId bodyB;
         b2BodyId bodyA;
-        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false){
+        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false) {
             LOG_ERROR("Not valid shape id");
             continue;
         }
