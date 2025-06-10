@@ -27,6 +27,8 @@ public:
 
     void SetImage(const std::string& ImagePath);
 
+    void SetScale(float Scale) { m_Transform.scale = {Scale, Scale}; }
+
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
 
 

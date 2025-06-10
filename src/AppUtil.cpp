@@ -31,22 +31,34 @@ void App::PhaseManager() {
         case LEVEL_1: {
             SetUpGame();
 
-            m_ScoreBoard = std::make_shared<ScoreBoard>(RESOURCE_DIR"/GUI/ScoreBoard.png");
-            m_ScoreBoard->SetPosition({0.f, 50.f});
-            m_ScoreBoard->SetZIndex(60);
-            m_Root.AddChild(m_ScoreBoard);
-            m_Menu = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_MENU.png");
-            m_Menu->SetPosition({-200.0f, -125.0f});
-            m_Menu->SetZIndex(70);
-            m_Root.AddChild(m_Menu);
-            m_Restart2 = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-            m_Restart2->SetPosition({0.0f, -125.0f});
-            m_Restart2->SetZIndex(70);
-            m_Root.AddChild(m_Restart2);
-            m_Next = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
-            m_Next->SetPosition({200.0f, -125.0f});
-            m_Next->SetZIndex(70);
-            m_Root.AddChild(m_Next);
+            auto scoreBoard = std::make_shared<ScoreBoard>(RESOURCE_DIR"/GUI/ScoreBoard.png");
+            scoreBoard->SetPosition({0.f, 50.f});
+            scoreBoard->SetZIndex(59);
+            m_PauseMenu.push_back(scoreBoard);
+            const auto text_LevelClear = std::make_shared<ScoreBoard>(RESOURCE_DIR"/GUI/LevelCleared.png");
+            text_LevelClear->SetPosition({-130.f, 140.f});
+            text_LevelClear->SetScale(0.5f);
+            text_LevelClear->SetZIndex(60);
+            m_PauseMenu.push_back(text_LevelClear);
+            const auto text_Score = std::make_shared<ScoreBoard>(RESOURCE_DIR"/GUI/Score.png");
+            text_Score->SetPosition({-250.f, 70.f});
+            text_Score->SetScale(0.5f);
+            text_Score->SetZIndex(60);
+            m_PauseMenu.push_back(text_Score);
+            auto btn_Menu = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_MENU.png");
+            btn_Menu->SetPosition({-200.0f, -125.0f});
+            btn_Menu->SetZIndex(70);
+            m_PauseMenu.push_back(btn_Menu);
+            auto btn_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+            btn_Restart->SetPosition({0.0f, -125.0f});
+            btn_Restart->SetZIndex(70);
+            m_PauseMenu.push_back(btn_Restart);
+            auto btn_Next = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
+            btn_Next->SetPosition({200.0f, -125.0f});
+            btn_Next->SetZIndex(70);
+            m_PauseMenu.push_back(btn_Next);
+
+            m_Root.AddChildren(m_PauseMenu);
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
