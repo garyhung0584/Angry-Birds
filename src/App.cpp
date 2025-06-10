@@ -9,6 +9,8 @@ void App::Start() {
 
     m_RM = std::make_shared<ResourceManager>();
 
+    m_ScoreManager = std::make_shared<ScoreManager>();
+
     m_Root.AddChildren(m_RM->GetChildren());
 
     m_CurrentState = State::UPDATE;

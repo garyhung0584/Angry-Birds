@@ -448,9 +448,10 @@ void App::SetUpGame() {
     m_Root.AddChildren(m_slingshot->GetSlingshot());
     m_Root.AddChildren(m_slingshot->GetWire());
     m_slingshot->Release(); // Release the slingshot to reset state
+
     SetUpMenu();
 
-    m_PE = std::make_shared<PhysicsEngine>(&m_Root);
+    m_PE = std::make_shared<PhysicsEngine>(&m_Root, m_ScoreManager);
 }
 
 void App::SetUpMenu() {

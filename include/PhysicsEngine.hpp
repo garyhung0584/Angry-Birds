@@ -8,6 +8,7 @@
 #include "ObjectFactory.hpp"
 #include "Birds.hpp"
 #include "ScoreManager.hpp"
+#include "ScoreBoard.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"
@@ -16,7 +17,8 @@
 
 class PhysicsEngine {
 public:
-    explicit PhysicsEngine(Util::Renderer *Root);
+    explicit PhysicsEngine(Util::Renderer *Root,
+                           std::shared_ptr<ScoreManager> scoreManager);
 
     void CreateBird(BirdType birdType);
 
@@ -34,7 +36,7 @@ public:
 
     bool IsEnd();
 
-    void SetUpWorld();
+    void SetUpWorld() const;
 
     void UpdateWorld();
 
@@ -42,7 +44,7 @@ public:
 
 private:
 
-    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
+    std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId) const;
 
     void ProcessEvents();
 
