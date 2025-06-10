@@ -72,12 +72,19 @@ void PhysicsEngine::Release(glm::vec2 &posBias) {
     } else if (posBias.x > 0) {
         return;
     }
+
     b2BodyId bodyId = m_Birds.front()->GetBodyId();
     b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 12.f;
     b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
     m_Flying = m_Birds.front();
-    m_Birds.pop();
+    if (m_isCheatMode) {
+        m_Birds.pop();
+        m_Birds.push(m_Flying);
+    } else {
+        m_Birds.pop();
+    }
+    SetNextBird();
 }
 
 void PhysicsEngine::UseAbility() {
@@ -211,4 +218,28 @@ void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
     }
     m_Root->RemoveChild(obj);
     b2DestroyBody(bodyId);
+}
+
+void PhysicsEngine::SetCheatMode(bool enable) {
+    m_isCheatMode = enable;
+}
+
+void PhysicsEngine::SetNextBird() {
+    if (m_Birds.empty()) {
+        return;
+    }
+
+    auto nextBird = m_Birds.front();
+    b2BodyId bodyId = nextBird->GetBodyId();
+
+    b2Body_Disable(bodyId);
+
+    b2Body_SetLinearVelocity(bodyId, {0.0f, 0.0f});
+    b2Body_SetAngularVelocity(bodyId, 0.0f);
+
+    b2Rot rot = b2MakeRot(0);
+    b2Body_SetTransform(bodyId, SLINGSHOT_POSITION, rot);
+
+    nextBird->SetPosition({SLINGSHOT_POSITION.x * 100 + X_OFFSET, SLINGSHOT_POSITION.y * 100 + Y_OFFSET});
+    nextBird->SetRotation(0);
 }

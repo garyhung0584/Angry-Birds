@@ -24,8 +24,13 @@ void App::Update() {
                     for (const std::shared_ptr<Button> &button: m_Buttons) {
                         m_Root.RemoveChild(button);
                     };
+                    m_Root.RemoveChild(m_CheatMode);
                     PhaseManager();
                 }
+            }
+            if (m_CheatMode->ifButtonClick({position.x-150, position.y})) {
+                isCheatMode = !isCheatMode;
+                m_CheatMode->SetImage(isCheatMode ? RESOURCE_DIR"/GUI/CheatTrue.png" : RESOURCE_DIR"/GUI/CheatFalse.png");
             }
         } else {
             if (m_Restart->ifButtonClick(position) || m_Quit->ifButtonClick(position)) {
@@ -111,6 +116,7 @@ void App::Update() {
         m_CurrentState = State::END;
     }
     if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
+        m_PE->SetCheatMode(isCheatMode);
         if (!isPause) {
             m_PE->UpdateWorld();
         }

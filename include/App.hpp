@@ -48,7 +48,7 @@ private:
 
     bool isPressed = false;
     bool isPause = false;
-
+    bool isCheatMode = false;
 
     State m_CurrentState = State::START;
     Phase m_Phase = MAIN_MENU;
@@ -60,6 +60,7 @@ private:
     std::shared_ptr<Button> m_Restart;
     std::shared_ptr<Button> m_Pause;
     std::shared_ptr<Button> m_Quit;
+    std::shared_ptr<Button> m_CheatMode;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
     std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;

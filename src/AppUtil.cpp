@@ -27,18 +27,24 @@ void App::PhaseManager() {
                     m_Root.AddChild(button);
                 }
             }
+            m_CheatMode = std::make_shared<Button>(isCheatMode ? RESOURCE_DIR"/GUI/CheatTrue.png" : RESOURCE_DIR"/GUI/CheatFalse.png");
+            m_CheatMode->SetPosition({400.f, -300.f});
+            m_CheatMode->SetZIndex(50);
+            m_Root.AddChild(m_CheatMode);
             break;
         case LEVEL_1: {
             SetUpGame();
 
             m_PE = std::make_shared<PhysicsEngine>(&m_Root);
 
-            m_PE->CreateBird(BLACK);
             m_PE->CreateBird(RED);
-            m_PE->CreateBird(YELLOW);
-            m_PE->CreateBird(BIG);
-            m_PE->CreateBird(WHITE);
-            m_PE->CreateBird(BLUE);
+            m_PE->CreateBird(RED);
+            // m_PE->CreateBird(BLACK);
+            // m_PE->CreateBird(RED);
+            // m_PE->CreateBird(YELLOW);
+            // m_PE->CreateBird(BIG);
+            // m_PE->CreateBird(WHITE);
+            // m_PE->CreateBird(BLUE);
 
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);

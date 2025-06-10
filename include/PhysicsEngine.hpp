@@ -39,6 +39,7 @@ public:
 
     void DestroyWorld() const;
 
+    void SetCheatMode(bool enable);
 private:
 
     std::shared_ptr<Physics2D> FindObjectByBodyId(b2BodyId bodyId);
@@ -50,6 +51,8 @@ private:
     void HitObject(std::shared_ptr<Physics2D> &obj, float speed);
 
     void DeleteObject(b2BodyId bodyId);
+
+    void SetNextBird();
 
     b2WorldId m_WorldId{};
     Util::Renderer *m_Root;
@@ -67,6 +70,8 @@ private:
 
     const int X_OFFSET = -450;
     const int Y_OFFSET = -210;
+    bool m_isCheatMode = false;
+    const b2Vec2 SLINGSHOT_POSITION = {0.0f, 1.3f};
 };
 
 #endif //PHYSICSENGINE_HPP
