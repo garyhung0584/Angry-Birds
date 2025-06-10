@@ -37,9 +37,9 @@ private:
 
     void ExitLevel();
 
-    void ShowMenu(const std::vector<std::shared_ptr<Util::GameObject>> &menu);
+    static void ShowMenu(const std::vector<std::shared_ptr<Util::GameObject>> &menu);
 
-    void HideMenu(const std::vector<std::shared_ptr<Util::GameObject>> &menu);
+    static void HideMenu(const std::vector<std::shared_ptr<Util::GameObject>> &menu);
 
     typedef enum Phase {
         MAIN_MENU,
@@ -67,10 +67,8 @@ private:
     Util::Renderer m_Root;
 
     std::shared_ptr<Button> m_Start;
-    std::shared_ptr<Button> m_Restart;
-    std::shared_ptr<Button> m_Pause;
-    std::shared_ptr<Button> m_Quit;
     std::shared_ptr<UIObject> m_Text_Score;
+    std::vector<std::shared_ptr<Button> > m_UIButtons;
     std::vector<std::shared_ptr<Util::GameObject> > m_PauseMenu;
     std::vector<std::shared_ptr<Util::GameObject> > m_FinishMenu;
     std::vector<std::shared_ptr<Button> > m_Buttons;

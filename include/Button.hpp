@@ -17,6 +17,7 @@ public:
     ButtonType GetButtonType() const { return m_ButtonType; }
 
     bool IsButtonClick(const glm::vec2 position) {
+        if (!IsVisible()) return false;
         const auto PosButton = GetPosition();
         const glm::vec2 halfSize = m_size * 0.5f;
         const glm::vec2 bias = position - PosButton;

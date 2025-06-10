@@ -16,7 +16,7 @@ public:
 
     UIObject(const UIObject &) = delete;
 
-    bool GetVisibility() const { return m_Visible; }
+    bool IsVisible() const { return m_Visible; }
 
     glm::vec2 &GetPosition() { return m_Transform.translation; }
 

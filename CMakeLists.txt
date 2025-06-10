@@ -80,8 +80,6 @@ add_executable(${PROJECT_NAME}
         include/WhiteBird.hpp
         src/Structure.cpp
         include/Structure.hpp
-        src/PauseMenu.cpp
-        include/PauseMenu.hpp
         src/ScoreBoard.cpp
         include/ScoreBoard.hpp
         src/ScoreManager.cpp

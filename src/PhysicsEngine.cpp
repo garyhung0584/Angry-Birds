@@ -106,7 +106,7 @@ bool PhysicsEngine::IsEnd() {
     return false;
 }
 
-
+//Set up the window with initial positions and rotations of objects in physics world
 void PhysicsEngine::SetUpWorld() {
     for (const auto &obj: m_Objects) {
         b2BodyId bodyId = obj->GetBodyId();
@@ -125,9 +125,6 @@ void PhysicsEngine::UpdateWorld() {
 
     b2World_Step(m_WorldId, timeStep, subStepCount);
 
-    // auto fut = std::async([this]() {
-    //     return this->ProcessEvents();
-    // });
     ProcessEvents();
 }
 
