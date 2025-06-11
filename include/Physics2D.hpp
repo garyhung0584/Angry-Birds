@@ -20,21 +20,17 @@ public:
 
     Physics2D(const Physics2D &) = delete;
 
+    b2BodyId GetBodyId() const { return m_BodyId; }
 
-    [[nodiscard]] Util::Transform &GetTransform() { return m_Transform; }
+    bool GetVisibility() const { return m_Visible; }
 
+    const std::string &GetImagePath() const { return m_ImagePath; }
 
-    [[nodiscard]] b2BodyId GetBodyId() const { return m_BodyId; }
+    glm::vec2 &GetPosition() { return m_Transform.translation; }
 
-    [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+    int GetHealth() const { return m_Health; }
 
-    [[nodiscard]] const std::string &GetImagePath() const { return m_ImagePath; }
-
-    [[nodiscard]] glm::vec2 &GetPosition() { return m_Transform.translation; }
-
-    [[nodiscard]] int GetHealth() const { return m_Health; }
-
-    [[nodiscard]] EntityType GetEntityType() const { return m_EntityType; }
+    EntityType GetEntityType() const { return m_EntityType; }
 
     void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; }
 
@@ -49,13 +45,12 @@ public:
     void SetHealth(const int health) { m_Health = health; }
 
     virtual void ApplyDamage(const int damage) { m_Health -= damage; }
+
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
     std::string m_ImagePath;
-
     b2BodyId m_BodyId{};
-
     int m_Health;
     EntityType m_EntityType;
 };

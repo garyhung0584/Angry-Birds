@@ -21,16 +21,16 @@ public:
 
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_slingshot.back()->m_Transform.translation; }
 
-    void SetVisible(bool Visible);
+    void SetVisible(bool visible) const;
 
-    void SetPosition(const glm::vec2& Position);
+    void SetPosition(const glm::vec2& Position) const;
 
-    void Pull(const glm::vec2& pos);
+    void Pull(const glm::vec2& pos) const;
 
-    void Release();
+    void Release() const;
 
-    std::vector<std::shared_ptr<Util::GameObject>> GetSlingshot() { return m_slingshot; }
-    std::vector<std::shared_ptr<Util::GameObject>> GetWire() { return m_wires; }
+    std::vector<std::shared_ptr<Util::GameObject>>& GetSlingshot() { return m_slingshot; }
+    std::vector<std::shared_ptr<Util::GameObject>>& GetWire() { return m_wires; }
 
 
 private:

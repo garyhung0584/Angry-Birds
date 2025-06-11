@@ -1,19 +1,20 @@
 #include "PhysicsEngine.hpp"
 
-#include "Util/Keycode.hpp"
+#include "Util/Keycode.hpp"  // For input handling
 #include "Util/Logger.hpp"
 
 #include <unordered_map>
 
-#include "Util/Animation.hpp"
-#include "Util/Animation.hpp"
+// #include "Util/Animation.hpp"
 
-PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
+PhysicsEngine::PhysicsEngine(Util::Renderer *Root,
+                             std::shared_ptr<ScoreManager> scoreManager) {
     m_Root = Root;
 
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -9.0f};
     m_WorldId = b2CreateWorld(&worldDef);
+    b2World_SetHitEventThreshold(m_WorldId, 0.5f);
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = b2Vec2{4.5f, -1.0f};
     b2BodyId groundId = b2CreateBody(m_WorldId, &groundBodyDef);
@@ -22,6 +23,7 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root) {
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
+    m_ScoreManager = scoreManager;
 }
 
 void PhysicsEngine::CreateBird(const BirdType birdType) {
@@ -37,7 +39,7 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
-    auto obj = m_ObjectFactory->CreatePig(pigType, position);
+    const auto obj = m_ObjectFactory->CreatePig(pigType, position);
     if (!obj) {
         LOG_ERROR("Failed to create pig");
         return;
@@ -66,25 +68,20 @@ void PhysicsEngine::Pull(const glm::vec2 &pos) {
     b2Body_SetTransform(bodyId, transform, rot);
 }
 
-void PhysicsEngine::Release(glm::vec2 &posBias) {
-    if (m_Birds.empty()) {
-        return;
-    } else if (posBias.x > 0) {
+void PhysicsEngine::Release(const glm::vec2 &posBias) {
+    if (m_Birds.empty() || posBias.x > 0) {
         return;
     }
-
-    b2BodyId bodyId = m_Birds.front()->GetBodyId();
-    b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 12.f;
+    const b2BodyId bodyId = m_Birds.front()->GetBodyId();
+    const b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 12.f;
     b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
     m_Flying = m_Birds.front();
-    if (m_isCheatMode) {
-        m_Birds.pop();
-        m_Birds.push(m_Flying);
-    } else {
-        m_Birds.pop();
+    m_Birds.pop();
+    if (m_Birds.empty()) {
+        m_isLastBirdReleased = true;
+        m_LastBirdReleaseTime = std::chrono::steady_clock::now();
     }
-    SetNextBird();
 }
 
 void PhysicsEngine::UseAbility() {
@@ -106,20 +103,20 @@ bool PhysicsEngine::IsEnd() {
     if (m_Pigs.empty()) {
         return true;
     }
-    if (m_Birds.empty()) {
-        return true;
-    }
+    // if (m_Birds.empty()) {
+    //     return true;
+    // }
     return false;
 }
 
-
-void PhysicsEngine::SetUpWorld() {
+//Set up the window with initial positions and rotations of objects in physics world
+void PhysicsEngine::SetUpWorld() const {
     for (const auto &obj: m_Objects) {
-        b2BodyId bodyId = obj->GetBodyId();
-        b2Vec2 position = b2Body_GetPosition(bodyId);
-        b2Rot rotation = b2Body_GetRotation(bodyId);
+        const b2BodyId bodyId = obj->GetBodyId();
+        auto [x, y] = b2Body_GetPosition(bodyId);
+        const b2Rot rotation = b2Body_GetRotation(bodyId);
 
-        obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
+        obj->SetPosition({x * 100 + X_OFFSET, y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
     }
 }
@@ -127,13 +124,13 @@ void PhysicsEngine::SetUpWorld() {
 
 void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
-    int subStepCount = 4;
+    const int subStepCount = 4;
+    if (m_isFastForward) {
+        timeStep *= 4.0f;
+    }
 
     b2World_Step(m_WorldId, timeStep, subStepCount);
 
-    // auto fut = std::async([this]() {
-    //     return this->ProcessEvents();
-    // });
     ProcessEvents();
 }
 
@@ -145,7 +142,7 @@ void PhysicsEngine::DestroyWorld() const {
     b2DestroyWorld(m_WorldId);
 }
 
-std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
+std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(const b2BodyId bodyId) const {
     for (auto obj: m_Objects) {
         if (B2_ID_EQUALS(obj->GetBodyId(), bodyId)) {
             return obj;
@@ -155,18 +152,16 @@ std::shared_ptr<Physics2D> PhysicsEngine::FindObjectByBodyId(b2BodyId bodyId) {
 }
 
 void PhysicsEngine::ProcessEvents() {
-    b2ContactEvents contactEvents = b2World_GetContactEvents(m_WorldId);
+    const b2ContactEvents contactEvents = b2World_GetContactEvents(m_WorldId);
     for (int i = 0; i < contactEvents.hitCount; ++i) {
-        b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
-        auto speed = hitEvent.approachSpeed;
-        b2BodyId bodyB;
-        b2BodyId bodyA;
-        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false){
-            LOG_ERROR("Not valid shape id");
+        const b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
+        const auto speed = hitEvent.approachSpeed;
+        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false) {
+            // LOG_ERROR("Not valid shape id");
             continue;
         }
-        bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
-        bodyB = b2Shape_GetBody(hitEvent.shapeIdB);
+        const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
+        const b2BodyId bodyB = b2Shape_GetBody(hitEvent.shapeIdB);
         auto objA = FindObjectByBodyId(bodyA);
         auto objB = FindObjectByBodyId(bodyB);
 
@@ -178,14 +173,38 @@ void PhysicsEngine::ProcessEvents() {
 
     auto [moveEvents, moveCount] = b2World_GetBodyEvents(m_WorldId);
     for (int i = 0; i < moveCount; ++i) {
-        b2BodyMoveEvent &bodyEvent = moveEvents[i];
+        const b2BodyMoveEvent &bodyEvent = moveEvents[i];
         const b2BodyId bodyId = bodyEvent.bodyId;
-        const auto position = bodyEvent.transform.p;
+        const auto [x, y] = bodyEvent.transform.p;
         const auto rotation = bodyEvent.transform.q;
-        auto obj = FindObjectByBodyId(bodyId);
+        const auto obj = FindObjectByBodyId(bodyId);
 
-        obj->SetPosition({position.x * 100 + X_OFFSET, position.y * 100 + Y_OFFSET});
+        obj->SetPosition({x * 100 + X_OFFSET, y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
+    }
+    auto contact = contactEvents.beginEvents;
+    for (int i = 0; i < contactEvents.beginCount; ++i, ++contact) {
+        if (b2Shape_IsValid(contact->shapeIdA) == false || b2Shape_IsValid(contact->shapeIdB) == false) {
+            // LOG_ERROR("Not valid shape id");
+            continue;
+        }
+        const b2BodyId bodyA = b2Shape_GetBody(contact->shapeIdA);
+        const b2BodyId bodyB = b2Shape_GetBody(contact->shapeIdB);
+        if (B2_IS_NULL(bodyA) || B2_IS_NULL(bodyB)) {
+            LOG_ERROR("Body ID is null");
+            continue;
+        }
+        auto objA = FindObjectByBodyId(bodyA);
+        auto objB = FindObjectByBodyId(bodyB);
+        if (!objA || !objB) {
+            continue; // Skip if either object is not found
+        }
+        const auto entityA = objA->GetEntityType();
+        auto entityB = objB->GetEntityType();
+        if ((entityA == BIRD && entityB == PIG)|| (entityA == PIG && entityB == BIRD)){
+            HitObject(objA, 100.f);
+            HitObject(objB, 100.f);
+        }
     }
 }
 
@@ -198,11 +217,19 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
 }
 
 void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
-    //LOG_DEBUG("Hit event: {} {} {}", objA->GetImagePath(), objB->GetImagePath(), hitEvent.approachSpeed);
     if (obj->GetEntityType() != BIRD) {
         obj->ApplyDamage(20 * speed);
-        // LOG_DEBUG("objA Health: {}", obj->GetHealth());
         if (obj->GetHealth() <= 0) {
+            if (obj->GetEntityType() == PIG) {
+                m_ScoreManager->AddScore(5000); // Pig score
+            } else {
+                m_ScoreManager->AddScore(500); // Structure score
+            }
+            for (const auto &score: m_ScoreManager->GetScoresObject()) {
+                m_Root->RemoveChild(score);
+            }
+            m_ScoreManager->UpdateScore();
+            m_Root->AddChildren(m_ScoreManager->GetScoresObject());
             DeleteObject(obj->GetBodyId());
         }
     } else {
