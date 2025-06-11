@@ -1,9 +1,6 @@
 #include "ObjectFactory.hpp"
 
-#include "Structure.hpp"
-
-
-std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) {
+std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) const {
     // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
     // {RED, {"Red", {0.2f, 0.2f}}},
     // {BLUE, {"Blue", {0.2f, 0.2f}}},
@@ -12,16 +9,7 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     // {WHITE, {"White", {0.2f, 0.2f}}},
     // {BIG, {"Big", {0.2f, 0.2f}}}
     // };
-    //
-    // auto it = birdProperties.find(birdType);
-    // if (it == birdProperties.end()) {
-    //     LOG_ERROR("Invalid bird type");
-    //     return nullptr;
-    // }
-    //
-    // const auto &[birdName, size] = it->second;
-    // const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    // return CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false);
+
     std::shared_ptr<Birds> bird;
 
     switch (birdType) {
@@ -53,8 +41,8 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
             LOG_ERROR("Unknown bird type");
             return nullptr;
     }
-    const float rotation = 0.0f;
-    const bool isAwake = false;
+    constexpr float rotation = 0.0f;
+    constexpr bool isAwake = false;
 
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
@@ -62,14 +50,14 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     bodyDef.rotation = b2MakeRot(rotation);
     bodyDef.isAwake = isAwake;
 
-    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
+    const b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.enableHitEvents = true;
     shapeDef.density = bird->GetDensity();
     shapeDef.friction = bird->GetFriction();
-    auto center = bird->GetCenter();
-    const b2Circle shape = {{center.x,center.y} , bird->GetRadius()};
+    const auto center = bird->GetCenter();
+    const b2Circle shape = {{center.x, center.y}, bird->GetRadius()};
     b2CreateCircleShape(bodyId, &shapeDef, &shape);
     b2Body_Disable(bodyId);
 
@@ -79,11 +67,12 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     return bird;
 }
 
-std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const glm::vec2 &position) {
+std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const glm::vec2 &position) const {
+    // Pig type: { Name, Health, Size }
     static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2> > pigProperties = {
-        {NORMAL, {"Normal", 100, {0.18f, 0.18f}}},
+        {NORMAL, {"Normal", 70, {0.18f, 0.18f}}},
         {KING, {"King", 1000, {0.3f, 0.3f}}},
-        {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
+        {SOLDIER, {"Soldier", 150, {0.2f, 0.2f}}}
     };
 
     auto it = pigProperties.find(pigType);
@@ -99,13 +88,15 @@ std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const
 
 std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entityType,
                                                           const StructureType structureType,
-                                                          const glm::vec2 &position, const float rotation) {
+                                                          const glm::vec2 &position, const float rotation) const {
+    // Entity type: { Material, Health, Density, Friction }
     static const std::unordered_map<EntityType, std::tuple<std::string, int, float, float> > entityProperties = {
-        {WOOD, {"Wood", 100, 0.1f, 1.0f}},
-        {STONE, {"Stone", 130, 0.2f, 0.3f}},
-        {GLASS, {"Glass", 50, 0.2f, 0.1f}}
+        {WOOD, {"Wood", 100, 0.1f, 0.3f}},
+        {STONE, {"Stone", 120, 0.2f, 0.3f}},
+        {GLASS, {"Glass", 50, 0.1f, 0.1f}}
     };
 
+    // Structure type: { Shape, Size }
     static const std::unordered_map<StructureType, std::pair<std::string, glm::vec2> > structureProperties = {
         {FRAME_BLOCK, {"A1", {0.4f, 0.4f}}},
         {FRAME_TRIANGLE, {"B1", {0.2f, 0.2f}}},
@@ -121,8 +112,8 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
         {DISC_SMALL, {"L1", {0.2f, 0.2f}}}
     };
 
-    auto entityIt = entityProperties.find(entityType);
-    auto structureIt = structureProperties.find(structureType);
+    const auto entityIt = entityProperties.find(entityType);
+    const auto structureIt = structureProperties.find(structureType);
 
     if (entityIt == entityProperties.end()) {
         LOG_ERROR("Entity type not recognized");
@@ -136,12 +127,13 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     const auto &[material, health, density, friction] = entityIt->second;
     const auto &[shape, size] = structureIt->second;
 
-    auto obj = std::make_shared<Structure>(RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png", health, entityType, structureType);
+    auto obj = std::make_shared<Structure>(RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png", health,
+                                           entityType, structureType);
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2{position.x, position.y};
     bodyDef.rotation = b2MakeRot(rotation);
-    bodyDef.isAwake = false;
+    bodyDef.isAwake = true;
 
     b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
 
@@ -160,7 +152,7 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
 std::shared_ptr<Physics2D> ObjectFactory::CreateObject(const std::string &imagePath, const glm::vec2 &position,
                                                        int health, EntityType entityType, const glm::vec2 &size,
                                                        float scale, float rotation, float density, float friction,
-                                                       bool isAwake) {
+                                                       bool isAwake) const {
     auto obj = std::make_shared<Physics2D>(imagePath, health, entityType);
 
     b2BodyDef bodyDef = b2DefaultBodyDef();

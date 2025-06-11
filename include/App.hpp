@@ -8,7 +8,7 @@
 #include "Slingshot.hpp"
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
-
+#include "ScoreManager.hpp"
 #include <chrono>
 
 class App {
@@ -29,7 +29,16 @@ public:
 
 private:
     void PhaseManager();
+
     void SetUpGame();
+
+    void SetUpMenu();
+
+    void ExitLevel();
+
+    static void ShowMenu(const std::vector<std::shared_ptr<Util::GameObject> > &menu);
+
+    static void HideMenu(const std::vector<std::shared_ptr<Util::GameObject> > &menu);
 
     typedef enum Phase {
         MAIN_MENU,
@@ -57,16 +66,16 @@ private:
     Util::Renderer m_Root;
 
     std::shared_ptr<Button> m_Start;
-    std::shared_ptr<Button> m_Restart;
-    std::shared_ptr<Button> m_Pause;
-    std::shared_ptr<Button> m_Quit;
+    std::shared_ptr<UIObject> m_Text_Score;
+    std::vector<std::shared_ptr<Button> > m_UIButtons;
+    std::vector<std::shared_ptr<Util::GameObject> > m_PauseMenu;
+    std::vector<std::shared_ptr<Util::GameObject> > m_FinishMenu;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
-    std::vector<std::shared_ptr<Util::GameObject> > m_GameObjects;
 
     std::chrono::steady_clock::time_point m_LastIsEndCheck;
 
-
+    std::shared_ptr<ScoreManager> m_ScoreManager;
     std::shared_ptr<ResourceManager> m_RM;
     std::shared_ptr<PhysicsEngine> m_PE;
 };

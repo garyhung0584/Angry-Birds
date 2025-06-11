@@ -12,9 +12,9 @@ public:
 
     Birds();
 
-    void init(const glm::vec2 position, glm::vec2 size) {
-        SetPosition(position);
-    }
+    // void init(const glm::vec2 position, glm::vec2 size) {
+    //     SetPosition(position);
+    // }
 
     virtual void Ability() = 0;
 

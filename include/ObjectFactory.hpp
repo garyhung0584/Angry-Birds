@@ -11,6 +11,7 @@
 #include "RedBird.hpp"
 #include "WhiteBird.hpp"
 #include "YellowBird.hpp"
+#include "Structure.hpp"
 
 #include <memory>
 #include <string>
@@ -21,10 +22,10 @@ public:
     ObjectFactory(b2WorldId worldId)
         : m_WorldId(worldId) {}
 
-    std::shared_ptr<Birds> CreateBird(BirdType birdType, const glm::vec2& position);
-    std::shared_ptr<Physics2D> CreatePig(PigType pigType, const glm::vec2& position);
+    std::shared_ptr<Birds> CreateBird(BirdType birdType, const glm::vec2& position) const;
+    std::shared_ptr<Physics2D> CreatePig(PigType pigType, const glm::vec2& position) const;
     std::shared_ptr<Physics2D> CreateStructure(EntityType material, StructureType shape,
-                                               const glm::vec2& position, float rotation);
+                                               const glm::vec2& position, float rotation) const;
 
 private:
     b2WorldId m_WorldId;
@@ -38,7 +39,7 @@ private:
                                             float rotation,
                                             float density,
                                             float friction,
-                                            bool isAwake);
+                                            bool isAwake) const;
 };
 
 #endif // OBJECT_FACTORY_HPP

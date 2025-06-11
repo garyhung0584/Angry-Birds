@@ -1,55 +1,97 @@
 #include "App.hpp"
-
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
-
 void App::Update() {
+    // Handle global exit
+    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
+        m_CurrentState = State::END;
+        return;
+    }
+
+    // Handle mouse up events
     if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
         auto position = Util::Input::GetCursorPosition();
 
-        if (m_Phase == MAIN_MENU) {
-            if (m_Start->ifButtonClick(position)) {
-                m_RM->EnterLevel(0);
-                m_Phase = LEVEL_SELECT;
-                PhaseManager();
-            }
-        } else if (m_Phase == LEVEL_SELECT) {
-            for (int i = 0; i < 10; i++) {
-                if (m_Buttons[i]->ifButtonClick(position)) {
-                    m_RM->EnterLevel(i + 1);
-                    m_Phase = static_cast<Phase>(i + 2);
-                    for (const std::shared_ptr<Button> &button: m_Buttons) {
-                        m_Root.RemoveChild(button);
-                    };
+        switch (m_Phase) {
+            case MAIN_MENU:
+                if (m_Start->IsButtonClick(position)) {
+                    m_RM->EnterLevel(0);
+                    m_Phase = LEVEL_SELECT;
                     PhaseManager();
                 }
-            }
-        } else {
-            if (m_Restart->ifButtonClick(position) || m_Quit->ifButtonClick(position)) {
-                m_Root.RemoveChild(m_Pause);
-                m_Root.RemoveChild(m_Restart);
-                m_Root.RemoveChild(m_Quit);
-                m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
-                m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
-
-                m_PE->DestroyWorld();
-
-                if (m_Quit->ifButtonClick(position)) {
-                    m_Phase = LEVEL_SELECT;
-                    m_RM->EnterLevel(0);
+                break;
+            case LEVEL_SELECT:
+                for (int i = 0; i < 10; i++) {
+                    if (m_Buttons[i]->IsButtonClick(position)) {
+                        m_RM->EnterLevel(i + 1);
+                        m_Phase = static_cast<Phase>(i + 2);
+                        for (const auto &button: m_Buttons) {
+                            m_Root.RemoveChild(button);
+                        }
+                        PhaseManager();
+                        break;
+                    }
                 }
-
-                PhaseManager();
-            }
-            if (m_Pause->ifButtonClick(position)) {
-                isPause = !isPause;
-            }
+                break;
+            default:
+                for (const auto &button: m_UIButtons) {
+                    if (button->IsButtonClick(position)) {
+                        switch (button->GetButtonType()) {
+                            case PAUSE_BUTTON:
+                                isPause = true;
+                                ShowMenu(m_PauseMenu);
+                                break;
+                            case EXIT_BUTTON:
+                            case BACK_BUTTON:
+                                ExitLevel();
+                                m_PE->DestroyWorld();
+                                m_Phase = LEVEL_SELECT;
+                                m_RM->EnterLevel(0);
+                                PhaseManager();
+                                break;
+                            case RESTART_BUTTON:
+                                ExitLevel();
+                                m_PE->DestroyWorld();
+                                PhaseManager();
+                                break;
+                            case RESUME_BUTTON:
+                            case NEXT_BUTTON:
+                                // they're at the same place
+                                if (isPause) {
+                                    isPause = false;
+                                    HideMenu(m_PauseMenu);
+                                } else {
+                                    ExitLevel();
+                                    m_PE->DestroyWorld();
+                                    if (m_Phase == LEVEL_10) {
+                                        m_RM->EnterLevel(0);
+                                        m_Phase = LEVEL_SELECT;
+                                    } else {
+                                        m_RM->EnterLevel(m_Phase);
+                                        m_Phase = static_cast<Phase>(static_cast<int>(m_Phase) + 1);
+                                    }
+                                    PhaseManager();
+                                }
+                                break;
+                            case FASTFORWARD_BUTTON:
+                                m_PE->SetFasForward();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                }
+                break;
         }
     }
-    if (m_Phase != LEVEL_SELECT && m_Phase != MAIN_MENU) {
+
+    // Handle game phases (not menu/select)
+    if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
+        // Handle slingshot and ability input
         if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
             if (m_PE->IsFlying()) {
                 m_PE->UseAbility();
@@ -60,14 +102,13 @@ void App::Update() {
             if (posBias.x > -50 && posBias.x < 50 && posBias.y > 0 && posBias.y < 100) {
                 isPressed = true;
             }
-            // LOG_DEBUG(position);
         }
-        if (isPressed) {
+
+        if (isPressed and !m_PE->IsLastBirdReleased()) {
             auto position = Util::Input::GetCursorPosition();
             const auto posSlingshot = m_slingshot->GetPosition();
             auto posStart = posSlingshot + glm::vec2(0, 70);
             auto posBias = position - posStart;
-            // float angle = atan2(-posBias.y, -posBias.x);
             float len = length(posBias);
 
             if (len > 80.0f) {
@@ -84,38 +125,29 @@ void App::Update() {
             }
         }
 
-        auto now = std::chrono::steady_clock::now();
+        // Periodic end check (commented out, can be enabled as needed)
+        const auto now = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
-
         if (duration.count() >= 5) {
-            // if (m_PE->IsEnd()) {
-            //     m_Root.RemoveChild(m_Pause);
-            //     m_Root.RemoveChild(m_Restart);
-            //     m_Root.RemoveChild(m_Quit);
-            //     m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
-            //     m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
-            //
-            //     m_PE->DestroyWorld();
-            //
-            //     m_Phase = LEVEL_SELECT;
-            //     m_RM->EnterLevel(0);
-            //     PhaseManager();
-            // }
-            // m_LastIsEndCheck = now;
+            if (m_PE->IsLastBirdReleased()) {
+                for (const auto &button: m_UIButtons) {
+                    if (button->GetButtonType() == FASTFORWARD_BUTTON) {
+                        button->SetVisible(true);
+                    }
+                }
+            }
+            if (m_PE->IsEnd()) {
+                isPause = true;
+                ShowMenu(m_FinishMenu);
+            }
+            m_LastIsEndCheck = now;
         }
 
-    }
-
-    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) ||
-        Util::Input::IfExit()) {
-        m_CurrentState = State::END;
-    }
-    if (m_Phase != MAIN_MENU && m_Phase != LEVEL_SELECT) {
+        // Update world if not paused
         if (!isPause) {
             m_PE->UpdateWorld();
         }
     }
-
 
     m_Root.Update();
 }
