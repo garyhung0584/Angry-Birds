@@ -9,24 +9,26 @@ public:
     ScoreManager() : m_Score(0), m_history(10, 0) {
     }
 
+
+    [[nodiscard]] int GetHistory(const int level) const { return m_history[level - 2]; }
+
+    [[nodiscard]] int GetScore() const { return m_Score; }
+
+    [[nodiscard]] std::vector<int> GetHistory() const { return m_history; }
+
+    std::vector<std::shared_ptr<Util::GameObject> > &GetScoresObject() { return m_Scores; }
+
     void AddScore(const int amount) { m_Score += amount; }
 
-    int GetScore() const { return m_Score; }
-
-    int GetHistory(const int level) const { return m_history[level - 1]; }
-
-    std::vector<int> GetHistory() const { return m_history; }
-
-    void UpdateScore();
-
-    void SetOffset(const glm::vec2 &offset) { m_Offset = offset; }
-
-    std::vector<std::shared_ptr<Util::GameObject> >& GetScoresObject() { return m_Scores; }
+    void AddToHistory(int level);
 
     void ResetScore() { m_Score = 0; }
 
+    void SetOffset(const glm::vec2 &offset) { m_Offset = offset; }
+
+    void UpdateScore();
+
 private:
-    void AddToHistory(int level);
 
     int m_Score;
 

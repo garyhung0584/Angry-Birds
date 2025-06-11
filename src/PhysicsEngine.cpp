@@ -6,10 +6,11 @@
 #include <unordered_map>
 
 // #include "Util/Animation.hpp"
-
-PhysicsEngine::PhysicsEngine(Util::Renderer *Root,
-                             std::shared_ptr<ScoreManager> scoreManager) {
+PhysicsEngine::PhysicsEngine(Util::Renderer *Root, const std::shared_ptr<ScoreManager> &scoreManager,
+                             const bool cheat) {
     m_Root = Root;
+    m_isCheatMode = cheat;
+    m_ScoreManager = scoreManager;
 
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -9.0f};
@@ -17,25 +18,31 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root,
     b2World_SetHitEventThreshold(m_WorldId, 0.5f);
     b2BodyDef groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = b2Vec2{4.5f, -1.0f};
-    b2BodyId groundId = b2CreateBody(m_WorldId, &groundBodyDef);
-    b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
-    b2ShapeDef groundShapeDef = b2DefaultShapeDef();
+    const b2BodyId groundId = b2CreateBody(m_WorldId, &groundBodyDef);
+    const b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
+    const b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
 
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
-    m_ScoreManager = scoreManager;
 }
 
 void PhysicsEngine::CreateBird(const BirdType birdType) {
-    const glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
+    if (m_isCheatMode && m_Birds.empty()) {
+        const auto obj = m_ObjectFactory->CreateBird(BLACK, BIRD_POSITION_0);
+        obj->SetPosition(B2Pos2GamePos(BIRD_POSITION_0));
+        m_Root->AddChild(obj);
+        m_Objects.push_back(obj);
+        m_Birds.push(obj);
+    }
+    const glm::vec2 position = m_Birds.empty() ? BIRD_POSITION_0 : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
     const auto obj = m_ObjectFactory->CreateBird(birdType, position);
     if (!obj) {
         LOG_ERROR("Failed to create bird");
         return;
     }
-    m_Objects.push_back(obj);
-    m_Root->AddChild(obj);
     m_Birds.push(obj);
+    m_Root->AddChild(obj);
+    m_Objects.push_back(obj); // order of push_back matters
 }
 
 void PhysicsEngine::CreatePig(const glm::vec2 &position, const PigType pigType) {
@@ -56,32 +63,47 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
     m_Root->AddChild(obj);
 }
 
-void PhysicsEngine::Pull(const glm::vec2 &pos) const {
+void PhysicsEngine::Pull(const glm::vec2 &pos) {
     if (m_Birds.empty()) {
         return;
     }
-    b2BodyId bodyId = m_Birds.front()->GetBodyId();
-    auto transform = b2Vec2{(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
+    const b2BodyId bodyId = m_Birds.front()->GetBodyId();
+    const auto b2Pos = GamePos2B2Pos(pos);
+    const auto transform = b2Vec2{b2Pos.x, b2Pos.y};
 
-    b2Rot rot = b2MakeRot(0);
+    const b2Rot rot = b2MakeRot(0);
     FindObjectByBodyId(bodyId)->SetPosition({pos.x, pos.y});
     b2Body_SetTransform(bodyId, transform, rot);
 }
 
 void PhysicsEngine::Release(const glm::vec2 &posBias) {
-    if (m_Birds.empty() || posBias.x > 0) {
+    if (m_Birds.empty()) {
         return;
     }
-    const b2BodyId bodyId = m_Birds.front()->GetBodyId();
+    if (posBias.x > 0) {
+        m_Birds.front()->SetPosition(B2Pos2GamePos(BIRD_POSITION_0));
+        return;
+    }
+    b2BodyId bodyId;
+    if (m_isCheatMode) {
+        const auto obj = m_ObjectFactory->CreateBird(BLACK, BIRD_POSITION_0);
+        bodyId = obj->GetBodyId();
+        m_Flying = obj;
+        m_Objects.push_back(obj);
+        m_Root->AddChild(obj);
+        m_Birds.front()->SetPosition(B2Pos2GamePos(BIRD_POSITION_0));
+    } else {
+        bodyId = m_Birds.front()->GetBodyId();
+        m_Flying = m_Birds.front();
+        m_Birds.pop();
+        if (m_Birds.empty()) {
+            m_isLastBirdReleased = true;
+            m_LastBirdReleaseTime = std::chrono::steady_clock::now();
+        }
+    }
     const b2Vec2 force = b2Vec2{-posBias.x * 0.01f, -posBias.y * 0.01f} * 12.f;
     b2Body_Enable(bodyId);
     ApplyForce(bodyId, force);
-    m_Flying = m_Birds.front();
-    m_Birds.pop();
-    if (m_Birds.empty()) {
-        m_isLastBirdReleased = true;
-        m_LastBirdReleaseTime = std::chrono::steady_clock::now();
-    }
 }
 
 void PhysicsEngine::UseAbility() {
@@ -99,24 +121,44 @@ bool PhysicsEngine::IsFlying() const {
 }
 
 
-bool PhysicsEngine::IsEnd() const {
+GameState PhysicsEngine::GetGameState() const {
     if (m_Pigs.empty()) {
-        return true;
+        return WON;
     }
-    // if (m_Birds.empty()) {
-    //     return true;
-    // }
-    return false;
+    if (m_isLastBirdReleased) {
+        const auto now = std::chrono::steady_clock::now();
+        const auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastBirdReleaseTime);
+        if (duration.count() >= 5) {
+            return LOST;
+        }
+    }
+    return ONGOING;
 }
 
-//Set up the window with initial positions and rotations of objects in physics world
+bool PhysicsEngine::SetCheatMode(const bool enable) {
+    m_isCheatMode = enable;
+    if (m_Birds.empty()) {
+        m_isCheatMode = false;
+    }
+    if (m_isCheatMode) {
+        const auto obj = m_ObjectFactory->CreateBird(BLACK, BIRD_POSITION_0);
+        obj->SetPosition(B2Pos2GamePos(BIRD_POSITION_0));
+        m_Root->AddChild(obj);
+        m_Objects.push_back(obj);
+        m_Root->RemoveChild(m_Birds.front());
+        m_Birds.front() = obj;
+    }
+    return m_isCheatMode;
+}
+
+//Set up the window with initial positions and rotations of objects in the physics world
 void PhysicsEngine::SetUpWorld() const {
     for (const auto &obj: m_Objects) {
         const b2BodyId bodyId = obj->GetBodyId();
         auto [x, y] = b2Body_GetPosition(bodyId);
         const b2Rot rotation = b2Body_GetRotation(bodyId);
 
-        obj->SetPosition({x * 100 + X_OFFSET, y * 100 + Y_OFFSET});
+        obj->SetPosition(B2Pos2GamePos({x, y}));
         obj->SetRotation(b2Rot_GetAngle(rotation));
     }
 }
@@ -137,7 +179,7 @@ void PhysicsEngine::UpdateWorld() {
 
 
 void PhysicsEngine::DestroyWorld() const {
-    for (auto obj: m_Objects) {
+    for (const auto &obj: m_Objects) {
         m_Root->RemoveChild(obj);
     }
     b2DestroyWorld(m_WorldId);
@@ -202,7 +244,7 @@ void PhysicsEngine::ProcessEvents() {
         }
         const auto entityA = objA->GetEntityType();
         const auto entityB = objB->GetEntityType();
-        if ((entityA == BIRD && entityB == PIG)|| (entityA == PIG && entityB == BIRD)){
+        if ((entityA == BIRD && entityB == PIG) || (entityA == PIG && entityB == BIRD)) {
             HitObject(objA, 100.f);
             HitObject(objB, 100.f);
         }
@@ -234,8 +276,16 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
             DeleteObject(obj->GetBodyId());
         }
     } else {
-        m_Flying = nullptr;
+        if (obj == m_Flying) m_Flying = nullptr;
     }
+}
+
+glm::vec2 PhysicsEngine::B2Pos2GamePos(const glm::vec2 &pos) const {
+    return {pos.x * 100.0f + X_OFFSET, pos.y * 100.0f + Y_OFFSET};
+}
+
+glm::vec2 PhysicsEngine::GamePos2B2Pos(const glm::vec2 &pos) const {
+    return {(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 }
 
 void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
@@ -246,28 +296,4 @@ void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
     }
     m_Root->RemoveChild(obj);
     b2DestroyBody(bodyId);
-}
-
-void PhysicsEngine::SetCheatMode(const bool enable) {
-    m_isCheatMode = enable;
-}
-
-void PhysicsEngine::SetNextBird() const {
-    if (m_Birds.empty()) {
-        return;
-    }
-
-    const auto nextBird = m_Birds.front();
-    const b2BodyId bodyId = nextBird->GetBodyId();
-
-    b2Body_Disable(bodyId);
-
-    b2Body_SetLinearVelocity(bodyId, {0.0f, 0.0f});
-    b2Body_SetAngularVelocity(bodyId, 0.0f);
-
-    const b2Rot rot = b2MakeRot(0);
-    b2Body_SetTransform(bodyId, SLINGSHOT_POSITION, rot);
-
-    nextBird->SetPosition({SLINGSHOT_POSITION.x * 100 + X_OFFSET, SLINGSHOT_POSITION.y * 100 + Y_OFFSET});
-    nextBird->SetRotation(0);
 }

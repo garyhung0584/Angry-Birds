@@ -13,7 +13,7 @@ void App::Update() {
 
     // Handle mouse up events
     if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
-        auto position = Util::Input::GetCursorPosition();
+        const auto position = Util::Input::GetCursorPosition();
 
         switch (m_Phase) {
             case MAIN_MENU:
@@ -41,7 +41,7 @@ void App::Update() {
                     if (button->IsButtonClick(position)) {
                         switch (button->GetButtonType()) {
                             case PAUSE_BUTTON:
-                                isPause = true;
+                                m_isPause = true;
                                 ShowMenu(m_PauseMenu);
                                 break;
                             case EXIT_BUTTON:
@@ -60,10 +60,11 @@ void App::Update() {
                             case RESUME_BUTTON:
                             case NEXT_BUTTON:
                                 // they're at the same place
-                                if (isPause) {
-                                    isPause = false;
+                                if (m_PE->GetGameState() == ONGOING) {
+                                    m_isPause = false;
                                     HideMenu(m_PauseMenu);
                                 } else {
+                                    m_ScoreManager->AddToHistory(m_Phase);
                                     ExitLevel();
                                     m_PE->DestroyWorld();
                                     if (m_Phase == LEVEL_10) {
@@ -79,6 +80,12 @@ void App::Update() {
                             case FASTFORWARD_BUTTON:
                                 m_PE->SetFasForward();
                                 break;
+                            case CHEAT_BUTTON:
+                                m_isCheatMode = !m_isCheatMode;
+                                m_isCheatMode = m_PE->SetCheatMode(m_isCheatMode);
+                                button->SetImage(m_isCheatMode
+                                                     ? RESOURCE_DIR"/GUI/CheatTrue.png"
+                                                     : RESOURCE_DIR"/GUI/CheatFalse.png");
                             default:
                                 break;
                         }
@@ -96,20 +103,20 @@ void App::Update() {
             if (m_PE->IsFlying()) {
                 m_PE->UseAbility();
             }
-            auto position = Util::Input::GetCursorPosition();
-            auto posSlingshot = m_slingshot->GetPosition();
+            const auto position = Util::Input::GetCursorPosition();
+            const auto posSlingshot = m_slingshot->GetPosition();
             auto posBias = position - posSlingshot;
             if (posBias.x > -50 && posBias.x < 50 && posBias.y > 0 && posBias.y < 100) {
-                isPressed = true;
+                m_isPressed = true;
             }
         }
 
-        if (isPressed and !m_PE->IsLastBirdReleased()) {
+        if (m_isPressed and !m_PE->IsLastBirdReleased()) {
             auto position = Util::Input::GetCursorPosition();
             const auto posSlingshot = m_slingshot->GetPosition();
-            auto posStart = posSlingshot + glm::vec2(0, 70);
+            const auto posStart = posSlingshot + glm::vec2(0, 70);
             auto posBias = position - posStart;
-            float len = length(posBias);
+            const float len = length(posBias);
 
             if (len > 80.0f) {
                 position = posStart + (posBias / len) * 80.0f;
@@ -121,14 +128,14 @@ void App::Update() {
             if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_LB)) {
                 m_PE->Release(posBias);
                 m_slingshot->Release();
-                isPressed = false;
+                m_isPressed = false;
             }
         }
 
-        // Periodic end check (commented out  can be enabled as needed)
+        // Periodic end check (commented out can be enabled as needed)
         const auto now = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
-        if (duration.count() >= 5) {
+        const auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
+        if (duration.count() >= 1) {
             if (m_PE->IsLastBirdReleased()) {
                 for (const auto &button: m_UIButtons) {
                     if (button->GetButtonType() == FASTFORWARD_BUTTON) {
@@ -136,15 +143,29 @@ void App::Update() {
                     }
                 }
             }
-            if (m_PE->IsEnd()) {
-                isPause = true;
-                ShowMenu(m_FinishMenu);
+            switch (m_PE->GetGameState()) {
+                case WON:
+                    m_isPause = true;
+                    m_ScoreManager->SetOffset({0, 0.0f});
+                    for (const auto &score: m_ScoreManager->GetScoresObject()) {
+                        m_Root.RemoveChild(score);
+                    }
+                    m_ScoreManager->UpdateScore();
+                    m_Root.AddChildren(m_ScoreManager->GetScoresObject());
+                    ShowMenu(m_FinishMenu);
+                    break;
+                case LOST:
+                    m_isPause = true;
+                    ShowMenu(m_LostMenu);
+                    break;
+                case ONGOING:
+                    break;
             }
             m_LastIsEndCheck = now;
         }
 
         // Update world if not paused
-        if (!isPause) {
+        if (!m_isPause) {
             m_PE->UpdateWorld();
         }
     }
