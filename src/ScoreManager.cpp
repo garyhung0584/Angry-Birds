@@ -15,7 +15,7 @@ void ScoreManager::UpdateScore() {
         auto scoreObj = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/" + std::to_string(digit) + ".png");
         scoreObj->SetPosition({m_Offset.x - 40.0f * i, m_Offset.y});
         scoreObj->SetScale(0.8f);
-        scoreObj->SetZIndex(61); // Z-index for score objects
+        scoreObj->SetZIndex(20); //in game UI:10, Physics2D: 4, slingshot: 3 & 5, popMenu 20, score 20
         m_Scores.push_back(scoreObj);
     }
 

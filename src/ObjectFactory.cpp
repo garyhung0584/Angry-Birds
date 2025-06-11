@@ -133,9 +133,9 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2{position.x, position.y};
     bodyDef.rotation = b2MakeRot(rotation);
-    bodyDef.isAwake = true;
+    bodyDef.isAwake = false;
 
-    b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
+    const b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
 
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.enableHitEvents = true;
