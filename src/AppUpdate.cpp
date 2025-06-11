@@ -125,7 +125,7 @@ void App::Update() {
             }
         }
 
-        // Periodic end check (commented out, can be enabled as needed)
+        // Periodic end check (commented out  can be enabled as needed)
         const auto now = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
         if (duration.count() >= 5) {

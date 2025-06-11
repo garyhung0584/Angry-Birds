@@ -25,7 +25,7 @@ public:
 
     void CreateStructure(const glm::vec2 &position, EntityType entityType, StructureType structureType, float rotation);
 
-    void Pull(const glm::vec2 &pos);
+    void Pull(const glm::vec2 &pos) const;
 
     void Release(const glm::vec2 &posBias);
 
@@ -33,7 +33,7 @@ public:
 
     bool IsFlying() const;
 
-    bool IsEnd();
+    bool IsEnd() const;
 
     bool IsLastBirdReleased() const { return m_isLastBirdReleased; }
 
@@ -56,7 +56,9 @@ private:
 
     void DeleteObject(b2BodyId bodyId);
 
-    void SetNextBird();
+    void SetCheatMode(bool enable);
+
+    void SetNextBird() const;
 
     bool m_isLastBirdReleased = false;
     bool m_isFastForward = false;

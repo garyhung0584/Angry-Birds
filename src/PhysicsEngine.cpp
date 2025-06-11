@@ -27,8 +27,8 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root,
 }
 
 void PhysicsEngine::CreateBird(const BirdType birdType) {
-    glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
-    auto obj = m_ObjectFactory->CreateBird(birdType, position);
+    const glm::vec2 position = m_Birds.empty() ? glm::vec2{0.f, 1.3f} : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
+    const auto obj = m_ObjectFactory->CreateBird(birdType, position);
     if (!obj) {
         LOG_ERROR("Failed to create bird");
         return;
@@ -56,7 +56,7 @@ void PhysicsEngine::CreateStructure(const glm::vec2 &position, const EntityType 
     m_Root->AddChild(obj);
 }
 
-void PhysicsEngine::Pull(const glm::vec2 &pos) {
+void PhysicsEngine::Pull(const glm::vec2 &pos) const {
     if (m_Birds.empty()) {
         return;
     }
@@ -99,7 +99,7 @@ bool PhysicsEngine::IsFlying() const {
 }
 
 
-bool PhysicsEngine::IsEnd() {
+bool PhysicsEngine::IsEnd() const {
     if (m_Pigs.empty()) {
         return true;
     }
@@ -124,7 +124,8 @@ void PhysicsEngine::SetUpWorld() const {
 
 void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
-    const int subStepCount = 4;
+    constexpr int subStepCount = 4;
+    // ReSharper disable once CppDFAConstantConditions
     if (m_isFastForward) {
         timeStep *= 4.0f;
     }
@@ -191,7 +192,7 @@ void PhysicsEngine::ProcessEvents() {
         const b2BodyId bodyA = b2Shape_GetBody(contact->shapeIdA);
         const b2BodyId bodyB = b2Shape_GetBody(contact->shapeIdB);
         if (B2_IS_NULL(bodyA) || B2_IS_NULL(bodyB)) {
-            LOG_ERROR("Body ID is null");
+            // LOG_ERROR("Body ID is null");
             continue;
         }
         auto objA = FindObjectByBodyId(bodyA);
@@ -200,7 +201,7 @@ void PhysicsEngine::ProcessEvents() {
             continue; // Skip if either object is not found
         }
         const auto entityA = objA->GetEntityType();
-        auto entityB = objB->GetEntityType();
+        const auto entityB = objB->GetEntityType();
         if ((entityA == BIRD && entityB == PIG)|| (entityA == PIG && entityB == BIRD)){
             HitObject(objA, 100.f);
             HitObject(objB, 100.f);
@@ -238,7 +239,7 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
 }
 
 void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
-    auto obj = FindObjectByBodyId(bodyId);
+    const auto obj = FindObjectByBodyId(bodyId);
     if (obj->GetEntityType() == PIG) {
         m_Pigs.erase(std::remove(m_Pigs.begin(), m_Pigs.end(), obj),
                      m_Pigs.end());
@@ -247,24 +248,24 @@ void PhysicsEngine::DeleteObject(const b2BodyId bodyId) {
     b2DestroyBody(bodyId);
 }
 
-void PhysicsEngine::SetCheatMode(bool enable) {
+void PhysicsEngine::SetCheatMode(const bool enable) {
     m_isCheatMode = enable;
 }
 
-void PhysicsEngine::SetNextBird() {
+void PhysicsEngine::SetNextBird() const {
     if (m_Birds.empty()) {
         return;
     }
 
-    auto nextBird = m_Birds.front();
-    b2BodyId bodyId = nextBird->GetBodyId();
+    const auto nextBird = m_Birds.front();
+    const b2BodyId bodyId = nextBird->GetBodyId();
 
     b2Body_Disable(bodyId);
 
     b2Body_SetLinearVelocity(bodyId, {0.0f, 0.0f});
     b2Body_SetAngularVelocity(bodyId, 0.0f);
 
-    b2Rot rot = b2MakeRot(0);
+    const b2Rot rot = b2MakeRot(0);
     b2Body_SetTransform(bodyId, SLINGSHOT_POSITION, rot);
 
     nextBird->SetPosition({SLINGSHOT_POSITION.x * 100 + X_OFFSET, SLINGSHOT_POSITION.y * 100 + Y_OFFSET});
