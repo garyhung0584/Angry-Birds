@@ -10,7 +10,14 @@ typedef enum ButtonType {
     PAUSE_BUTTON,
     RESUME_BUTTON,
     FASTFORWARD_BUTTON,
+    CHEAT_BUTTON,
 } ButtonType;
+
+typedef enum GameState {
+    WON,
+    LOST,
+    ONGOING,
+} GameState;
 
 typedef enum BirdType {
     RED,

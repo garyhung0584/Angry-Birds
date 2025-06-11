@@ -20,17 +20,17 @@ public:
 
     Physics2D(const Physics2D &) = delete;
 
-    b2BodyId GetBodyId() const { return m_BodyId; }
-
-    bool GetVisibility() const { return m_Visible; }
-
-    const std::string &GetImagePath() const { return m_ImagePath; }
-
     glm::vec2 &GetPosition() { return m_Transform.translation; }
 
-    int GetHealth() const { return m_Health; }
+    [[nodiscard]] b2BodyId GetBodyId() const { return m_BodyId; }
 
-    EntityType GetEntityType() const { return m_EntityType; }
+    [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+
+    [[nodiscard]] const std::string &GetImagePath() const { return m_ImagePath; }
+
+    [[nodiscard]] int GetHealth() const { return m_Health; }
+
+    [[nodiscard]] EntityType GetEntityType() const { return m_EntityType; }
 
     void SetBodyId(const b2BodyId bodyId) { m_BodyId = bodyId; }
 
@@ -49,10 +49,10 @@ public:
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
 
-    std::string m_ImagePath;
+    EntityType m_EntityType;
     b2BodyId m_BodyId{};
     int m_Health;
-    EntityType m_EntityType;
+    std::string m_ImagePath;
 };
 
 #endif //PHYSICS2D_HPP

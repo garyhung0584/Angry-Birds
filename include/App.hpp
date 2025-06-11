@@ -19,13 +19,13 @@ public:
         END,
     };
 
-    State GetCurrentState() const { return m_CurrentState; }
+    [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
 
     void Start();
 
     void Update();
 
-    void End(); // NOLINT(readability-convert-member-functions-to-static)
+    void End();
 
 private:
     void PhaseManager();
@@ -55,9 +55,9 @@ private:
         LEVEL_10,
     } Phase;
 
-    bool isPressed = false;
-    bool isPause = false;
-
+    bool m_isPressed = false;
+    bool m_isPause = false;
+    bool m_isCheatMode = false;
 
     State m_CurrentState = State::START;
     Phase m_Phase = MAIN_MENU;
@@ -70,6 +70,7 @@ private:
     std::vector<std::shared_ptr<Button> > m_UIButtons;
     std::vector<std::shared_ptr<Util::GameObject> > m_PauseMenu;
     std::vector<std::shared_ptr<Util::GameObject> > m_FinishMenu;
+    std::vector<std::shared_ptr<Util::GameObject> > m_LostMenu;
     std::vector<std::shared_ptr<Button> > m_Buttons;
     std::shared_ptr<Slingshot> m_slingshot;
 

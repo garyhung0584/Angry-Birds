@@ -31,14 +31,9 @@ void App::PhaseManager() {
         case LEVEL_1: {
             SetUpGame();
 
-            // ShowMenu(m_FinishMenu);
-
-            m_PE->CreateBird(BLACK);
             m_PE->CreateBird(RED);
-            m_PE->CreateBird(YELLOW);
-            m_PE->CreateBird(BIG);
-            m_PE->CreateBird(WHITE);
-            m_PE->CreateBird(BLUE);
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
 
             for (int i = 0; i < 3; i++) {
                 m_PE->CreateStructure({4.f + i * 2.f, 0.4f}, STONE, BAR_SHORT, RAD90);
@@ -355,7 +350,6 @@ void App::PhaseManager() {
             break;
         case LEVEL_10:
             SetUpGame();
-            ShowMenu(m_FinishMenu);
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -419,7 +413,7 @@ void App::PhaseManager() {
 
 // Function to set up the in game UI, including buttons and slingshot, also to initialize the physics engine
 void App::SetUpGame() {
-    isPause = false;
+    m_isPause = false;
     const auto btnRestart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
     btnRestart->SetButtonType(RESTART_BUTTON);
     btnRestart->SetPosition({-400.0f, 250.0f});
@@ -462,62 +456,88 @@ void App::SetUpGame() {
 
     SetUpMenu();
 
-    m_PE = std::make_shared<PhysicsEngine>(&m_Root, m_ScoreManager);
+    m_PE = std::make_shared<PhysicsEngine>(&m_Root, m_ScoreManager, m_isCheatMode);
 }
 
 void App::SetUpMenu() {
     const auto scoreBoard = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/ScoreBoard.png");
     scoreBoard->SetPosition({0.f, 50.f});
     scoreBoard->SetZIndex(59);
-    m_PauseMenu.push_back(scoreBoard);
     m_FinishMenu.push_back(scoreBoard);
+    m_LostMenu.push_back(scoreBoard);
+    m_PauseMenu.push_back(scoreBoard);
     m_Root.AddChild(scoreBoard);
-    const auto text_LevelClear = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/LevelCleared.png");
-    text_LevelClear->SetPosition({-130.f, 140.f});
-    text_LevelClear->SetScale(0.5f);
-    text_LevelClear->SetZIndex(60);
-    m_FinishMenu.push_back(text_LevelClear);
-    m_Root.AddChild(text_LevelClear);
-    const auto text_Score = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/Score.png");
-    text_Score->SetPosition({-250.f, 70.f});
-    text_Score->SetScale(0.5f);
-    text_Score->SetZIndex(60);
-    m_PauseMenu.push_back(text_Score);
-    m_FinishMenu.push_back(text_Score);
-    m_Root.AddChild(text_Score);
-    const auto btn_Menu = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_MENU.png");
-    btn_Menu->SetButtonType(BACK_BUTTON);
-    btn_Menu->SetPosition({-200.0f, -125.0f});
-    btn_Menu->SetZIndex(70);
-    m_PauseMenu.push_back(btn_Menu);
-    m_FinishMenu.push_back(btn_Menu);
-    m_UIButtons.push_back(btn_Menu);
-    m_Root.AddChild(btn_Menu);
-    const auto btn_Restart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
-    btn_Restart->SetButtonType(RESTART_BUTTON);
-    btn_Restart->SetPosition({0.0f, -125.0f});
-    btn_Restart->SetZIndex(70);
-    m_PauseMenu.push_back(btn_Restart);
-    m_FinishMenu.push_back(btn_Restart);
-    m_UIButtons.push_back(btn_Restart);
-    m_Root.AddChild(btn_Restart);
-    const auto btn_Next = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
-    btn_Next->SetButtonType(NEXT_BUTTON);
-    btn_Next->SetPosition({200.0f, -125.0f});
-    btn_Next->SetZIndex(70);
-    m_FinishMenu.push_back(btn_Next);
-    m_UIButtons.push_back(btn_Next);
-    m_Root.AddChild(btn_Next);
-    const auto btn_Continue = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_START.png");
-    btn_Continue->SetButtonType(RESUME_BUTTON);
-    btn_Continue->SetPosition({200.0f, -125.0f});
-    btn_Continue->SetZIndex(70);
-    m_PauseMenu.push_back(btn_Continue);
-    m_UIButtons.push_back(btn_Continue);
-    m_Root.AddChild(btn_Continue);
+
+    const auto textLevelClear = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/LevelCleared.png");
+    textLevelClear->SetPosition({-130.f, 140.f});
+    textLevelClear->SetScale(0.5f);
+    textLevelClear->SetZIndex(60);
+    m_FinishMenu.push_back(textLevelClear);
+    m_Root.AddChild(textLevelClear);
+
+    const auto textScore = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/Score.png");
+    textScore->SetPosition({-250.f, 70.f});
+    textScore->SetScale(0.5f);
+    textScore->SetZIndex(60);
+    m_FinishMenu.push_back(textScore);
+    m_PauseMenu.push_back(textScore);
+    m_Root.AddChild(textScore);
+
+    const auto textLevelFailed = std::make_shared<UIObject>(RESOURCE_DIR"/GUI/LevelFailed.png");
+    textLevelFailed->SetPosition({0, 50.f});
+    textLevelFailed->SetZIndex(60);
+    m_LostMenu.push_back(textLevelFailed);
+    m_Root.AddChild(textLevelFailed);
+
+    const auto btnMenu = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_MENU.png");
+    btnMenu->SetButtonType(BACK_BUTTON);
+    btnMenu->SetPosition({-200.0f, -125.0f});
+    btnMenu->SetZIndex(70);
+    m_FinishMenu.push_back(btnMenu);
+    m_LostMenu.push_back(btnMenu);
+    m_PauseMenu.push_back(btnMenu);
+    m_UIButtons.push_back(btnMenu);
+    m_Root.AddChild(btnMenu);
+
+    const auto btnRestart = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_RESTART.png");
+    btnRestart->SetButtonType(RESTART_BUTTON);
+    btnRestart->SetPosition({0.0f, -125.0f});
+    btnRestart->SetZIndex(70);
+    m_FinishMenu.push_back(btnRestart);
+    m_LostMenu.push_back(btnRestart);
+    m_PauseMenu.push_back(btnRestart);
+    m_UIButtons.push_back(btnRestart);
+    m_Root.AddChild(btnRestart);
+
+    const auto btnNext = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
+    btnNext->SetButtonType(NEXT_BUTTON);
+    btnNext->SetPosition({200.0f, -125.0f});
+    btnNext->SetZIndex(70);
+    m_FinishMenu.push_back(btnNext);
+    m_UIButtons.push_back(btnNext);
+    m_Root.AddChild(btnNext);
+
+    const auto btnContinue = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_START.png");
+    btnContinue->SetButtonType(RESUME_BUTTON);
+    btnContinue->SetPosition({200.0f, -125.0f});
+    btnContinue->SetZIndex(70);
+    m_PauseMenu.push_back(btnContinue);
+    m_UIButtons.push_back(btnContinue);
+    m_Root.AddChild(btnContinue);
+
+    const auto btnCheatMode = std::make_shared<Button>(
+        m_isCheatMode ? RESOURCE_DIR"/GUI/CheatTrue.png" : RESOURCE_DIR"/GUI/CheatFalse.png");
+    btnCheatMode->SetButtonType(CHEAT_BUTTON);
+    btnCheatMode->SetPosition({400.f, -300.f});
+    btnCheatMode->SetSize({300, 80.0f});
+    btnCheatMode->SetZIndex(70);
+    m_PauseMenu.push_back(btnCheatMode);
+    m_UIButtons.push_back(btnCheatMode);
+    m_Root.AddChild(btnCheatMode);
 
     HideMenu(m_FinishMenu);
     HideMenu(m_PauseMenu);
+    HideMenu(m_LostMenu);
 }
 
 void App::ExitLevel() {
@@ -525,15 +545,27 @@ void App::ExitLevel() {
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
 
-    for (auto button: m_UIButtons) {
+    for (const auto &object: m_FinishMenu) {
+        m_Root.RemoveChild(object);
+    }
+    for (const auto &object: m_LostMenu) {
+        m_Root.RemoveChild(object);
+    }
+    for (const auto &object: m_PauseMenu) {
+        m_Root.RemoveChild(object);
+    }
+    for (const auto &button: m_UIButtons) {
         m_Root.RemoveChild(button);
     }
-    for (auto &score: m_ScoreManager->GetScoresObject()) {
+    for (const auto &score: m_ScoreManager->GetScoresObject()) {
         m_Root.RemoveChild(score);
     }
-
-    HideMenu(m_FinishMenu);
-    HideMenu(m_PauseMenu);
+    m_FinishMenu.clear();
+    m_LostMenu.clear();
+    m_PauseMenu.clear();
+    m_UIButtons.clear();
+    m_ScoreManager->ResetScore();
+    m_ScoreManager->GetScoresObject().clear();
 }
 
 void App::ShowMenu(const std::vector<std::shared_ptr<Util::GameObject> > &menu) {

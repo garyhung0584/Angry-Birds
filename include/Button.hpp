@@ -14,7 +14,11 @@ public:
 
     void SetButtonType(const ButtonType buttonType) { m_ButtonType = buttonType; }
 
-    ButtonType GetButtonType() const { return m_ButtonType; }
+    [[nodiscard]] ButtonType GetButtonType() const { return m_ButtonType; }
+
+    void SetSize(const glm::vec2 &size) {
+        m_size = size;
+    }
 
     bool IsButtonClick(const glm::vec2 position) {
         if (!IsVisible()) return false;

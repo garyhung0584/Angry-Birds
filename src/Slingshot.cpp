@@ -26,7 +26,7 @@ void Slingshot::SetVisible(const bool visible) const {
 
 void Slingshot::Pull(const glm::vec2 &pos) const {
     constexpr float WIRE_OFFSET_FACTOR = 2.8f;
-    constexpr glm::vec2 WIRE_OFFSET = glm::vec2(-15, -55.f);
+    constexpr auto WIRE_OFFSET = glm::vec2(-15, -55.f);
     const auto slingshotPos = GetPosition() - WIRE_OFFSET;
     const auto posBias = pos - slingshotPos;
     const auto posOffset = posBias/WIRE_OFFSET_FACTOR;
