@@ -9,7 +9,6 @@
 #include "PhysicsEngine.hpp"
 #include "ResourceManager.hpp"
 #include "ScoreManager.hpp"
-#include "ScoreBoard.hpp"
 #include <chrono>
 
 class App {

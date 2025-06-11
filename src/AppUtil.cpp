@@ -449,6 +449,8 @@ void App::SetUpGame() {
     m_Root.AddChildren(m_slingshot->GetWire());
     m_slingshot->Release(); // Release the slingshot to reset state
 
+    m_ScoreManager->SetOffset({600.f, 300.f});
+
     SetUpMenu();
 
     m_PE = std::make_shared<PhysicsEngine>(&m_Root, m_ScoreManager);
@@ -516,6 +518,9 @@ void App::ExitLevel() {
 
     for (auto button : m_UIButtons) {
         m_Root.RemoveChild(button);
+    }
+    for (auto &score : m_ScoreManager->GetScoresObject()) {
+        m_Root.RemoveChild(score);
     }
 
     HideMenu(m_FinishMenu);

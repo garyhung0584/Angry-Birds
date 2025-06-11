@@ -149,7 +149,7 @@ void PhysicsEngine::ProcessEvents() {
         const b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
         const auto speed = hitEvent.approachSpeed;
         if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false) {
-            LOG_ERROR("Not valid shape id");
+            // LOG_ERROR("Not valid shape id");
             continue;
         }
         const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
@@ -193,9 +193,9 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
             } else {
                 m_ScoreManager->AddScore(500); // Structure score
             }
-            // for (const auto &score: m_ScoreManager->GetScoresObject()) {
-            //     m_Root->RemoveChild(score);
-            // }
+            for (const auto &score: m_ScoreManager->GetScoresObject()) {
+                m_Root->RemoveChild(score);
+            }
             m_ScoreManager->UpdateScore();
             m_Root->AddChildren(m_ScoreManager->GetScoresObject());
             DeleteObject(obj->GetBodyId());

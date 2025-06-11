@@ -8,7 +8,6 @@
 #include "ObjectFactory.hpp"
 #include "Birds.hpp"
 #include "ScoreManager.hpp"
-#include "ScoreBoard.hpp"
 #include "Util/Logger.hpp"
 
 #include "box2d/box2d.h"

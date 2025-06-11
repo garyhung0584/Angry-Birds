@@ -82,9 +82,9 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
 std::shared_ptr<Physics2D> ObjectFactory::CreatePig(const PigType pigType, const glm::vec2 &position) const {
     // Pig type: { Name, Health, Size }
     static const std::unordered_map<PigType, std::tuple<std::string, int, glm::vec2> > pigProperties = {
-        {NORMAL, {"Normal", 90, {0.18f, 0.18f}}},
+        {NORMAL, {"Normal", 70, {0.18f, 0.18f}}},
         {KING, {"King", 1000, {0.3f, 0.3f}}},
-        {SOLDIER, {"Soldier", 500, {0.2f, 0.2f}}}
+        {SOLDIER, {"Soldier", 150, {0.2f, 0.2f}}}
     };
 
     auto it = pigProperties.find(pigType);

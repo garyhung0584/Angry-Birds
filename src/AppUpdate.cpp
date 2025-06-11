@@ -53,19 +53,17 @@ void App::Update() {
                                 PhaseManager();
                                 break;
                             case RESTART_BUTTON:
-                                LOG_DEBUG("RESTART_BUTTON");
                                 ExitLevel();
                                 m_PE->DestroyWorld();
                                 PhaseManager();
                                 break;
                             case RESUME_BUTTON:
                             case NEXT_BUTTON:
+                                // they're at the same place
                                 if (isPause) {
-                                    LOG_DEBUG("RESUME_BUTTON");
                                     isPause = false;
                                     HideMenu(m_PauseMenu);
                                 } else {
-                                    LOG_DEBUG("NEXT_BUTTON");
                                     ExitLevel();
                                     m_PE->DestroyWorld();
                                     m_RM->EnterLevel(static_cast<int>(m_Phase) + 1);

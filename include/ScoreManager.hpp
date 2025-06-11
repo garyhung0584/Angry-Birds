@@ -11,10 +11,7 @@ public:
 
     void AddScore(const int amount) { m_Score += amount; }
 
-
     int GetScore() const { return m_Score; }
-
-    void ResetScore() { m_Score = 0; }
 
     int GetHistory(const int level) const { return m_history[level - 1]; }
 
@@ -22,17 +19,20 @@ public:
 
     void UpdateScore();
 
-    std::vector<std::shared_ptr<Util::GameObject> > GetScoresObject() { return m_Scores; };
+    void SetOffset(const glm::vec2 &offset) { m_Offset = offset; }
+
+    std::vector<std::shared_ptr<Util::GameObject> > GetScoresObject() { return m_Scores; }
+
+    void ResetScore() { m_Score = 0; }
 
 private:
-    int m_Score;
-
-    std::vector<std::shared_ptr<Util::GameObject> > m_Scores;
-
     void AddToHistory(int level);
 
+    int m_Score;
 
+    glm::vec2 m_Offset{};
     std::vector<int> m_history; // Store the highest 10 scores in each level
+    std::vector<std::shared_ptr<Util::GameObject> > m_Scores;
 };
 
 #endif //SCOREMANAGER_HPP
