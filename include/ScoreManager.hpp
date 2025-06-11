@@ -21,7 +21,7 @@ public:
 
     void SetOffset(const glm::vec2 &offset) { m_Offset = offset; }
 
-    std::vector<std::shared_ptr<Util::GameObject> > GetScoresObject() { return m_Scores; }
+    std::vector<std::shared_ptr<Util::GameObject> >& GetScoresObject() { return m_Scores; }
 
     void ResetScore() { m_Score = 0; }
 

@@ -182,7 +182,7 @@ void PhysicsEngine::ProcessEvents() {
         obj->SetPosition({x * 100 + X_OFFSET, y * 100 + Y_OFFSET});
         obj->SetRotation(b2Rot_GetAngle(rotation));
     }
-    auto contact = b2World_GetContactEvents(m_WorldId).beginEvents;
+    auto contact = contactEvents.beginEvents;
     for (int i = 0; i < contactEvents.beginCount; ++i, ++contact) {
         if (b2Shape_IsValid(contact->shapeIdA) == false || b2Shape_IsValid(contact->shapeIdB) == false) {
             // LOG_ERROR("Not valid shape id");

@@ -48,42 +48,42 @@ add_executable(${PROJECT_NAME}
     ${HEADER_FILES}
         include/AppUtil.hpp
         include/BackgroundImage.hpp
+        include/BigBird.hpp
         include/Birds.hpp
+        include/BlackBird.hpp
+        include/BlueBird.hpp
         include/Button.hpp
-        include/physics2D.hpp
+        include/ObjectFactory.hpp
         include/PhysicsEngine.hpp
+        include/RedBird.hpp
         include/ResourceManager.hpp
+        include/ScoreManager.hpp
         include/Slingshot.hpp
+        include/Structure.hpp
+        include/UIObject.hpp
+        include/WhiteBird.hpp
+        include/YellowBird.hpp
+        include/physics2D.hpp
+        include/type.hpp
         src/AppEnd.cpp
         src/AppUpdate.cpp
         src/AppUtil.cpp
+        src/BigBird.cpp
         src/Birds.cpp
+        src/BlackBird.cpp
+        src/BlueBird.cpp
         src/Button.cpp
+        src/ObjectFactory.cpp
         src/Physics2D.cpp
         src/PhysicsEngine.cpp
-        src/ResourceManager.cpp
-        src/Slingshot.cpp
-        include/type.hpp
         src/RedBird.cpp
-        include/RedBird.hpp
-        src/ObjectFactory.cpp
-        include/ObjectFactory.hpp
-        src/YellowBird.cpp
-        include/YellowBird.hpp
-        src/BlueBird.cpp
-        include/BlueBird.hpp
-        src/BigBird.cpp
-        include/BigBird.hpp
-        src/BlackBird.cpp
-        include/BlackBird.hpp
-        src/WhiteBird.cpp
-        include/WhiteBird.hpp
-        src/Structure.cpp
-        include/Structure.hpp
+        src/ResourceManager.cpp
         src/ScoreManager.cpp
-        include/ScoreManager.hpp
+        src/Slingshot.cpp
+        src/Structure.cpp
         src/UIObject.cpp
-        include/UIObject.hpp
+        src/WhiteBird.cpp
+        src/YellowBird.cpp
 )
 
 if(MSVC)
