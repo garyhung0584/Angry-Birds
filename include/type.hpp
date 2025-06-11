@@ -9,6 +9,7 @@ typedef enum ButtonType {
     RESTART_BUTTON,
     PAUSE_BUTTON,
     RESUME_BUTTON,
+    FASTFORWARD_BUTTON,
 } ButtonType;
 
 typedef enum BirdType {

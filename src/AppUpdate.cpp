@@ -66,9 +66,18 @@ void App::Update() {
                                 } else {
                                     ExitLevel();
                                     m_PE->DestroyWorld();
-                                    m_RM->EnterLevel(static_cast<int>(m_Phase) + 1);
+                                    if (m_Phase == LEVEL_10) {
+                                        m_RM->EnterLevel(0);
+                                        m_Phase = LEVEL_SELECT;
+                                    } else {
+                                        m_RM->EnterLevel(m_Phase);
+                                        m_Phase = static_cast<Phase>(static_cast<int>(m_Phase) + 1);
+                                    }
                                     PhaseManager();
                                 }
+                                break;
+                            case FASTFORWARD_BUTTON:
+                                m_PE->SetFasForward();
                                 break;
                             default:
                                 break;
@@ -95,7 +104,7 @@ void App::Update() {
             }
         }
 
-        if (isPressed) {
+        if (isPressed and !m_PE->IsLastBirdReleased()) {
             auto position = Util::Input::GetCursorPosition();
             const auto posSlingshot = m_slingshot->GetPosition();
             auto posStart = posSlingshot + glm::vec2(0, 70);
@@ -117,17 +126,21 @@ void App::Update() {
         }
 
         // Periodic end check (commented out, can be enabled as needed)
-        auto now = std::chrono::steady_clock::now();
+        const auto now = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastIsEndCheck);
         if (duration.count() >= 5) {
-            // if (m_PE->IsEnd()) {
-            //     RemoveLevelUI();
-            //     m_PE->DestroyWorld();
-            //     m_Phase = LEVEL_SELECT;
-            //     m_RM->EnterLevel(0);
-            //     PhaseManager();
-            // }
-            // m_LastIsEndCheck = now;
+            if (m_PE->IsLastBirdReleased()) {
+                for (const auto &button: m_UIButtons) {
+                    if (button->GetButtonType() == FASTFORWARD_BUTTON) {
+                        button->SetVisible(true);
+                    }
+                }
+            }
+            if (m_PE->IsEnd()) {
+                isPause = true;
+                ShowMenu(m_FinishMenu);
+            }
+            m_LastIsEndCheck = now;
         }
 
         // Update world if not paused

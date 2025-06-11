@@ -1,8 +1,5 @@
 #include "ObjectFactory.hpp"
 
-#include "Structure.hpp"
-
-
 std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) const {
     // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
     // {RED, {"Red", {0.2f, 0.2f}}},
@@ -12,16 +9,7 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     // {WHITE, {"White", {0.2f, 0.2f}}},
     // {BIG, {"Big", {0.2f, 0.2f}}}
     // };
-    //
-    // auto it = birdProperties.find(birdType);
-    // if (it == birdProperties.end()) {
-    //     LOG_ERROR("Invalid bird type");
-    //     return nullptr;
-    // }
-    //
-    // const auto &[birdName, size] = it->second;
-    // const std::string imagePath = RESOURCE_DIR"/Birds/" + birdName + "Bird.png";
-    // return CreateObject(imagePath, position, 1, BIRD, size, 0.2f, 0, 0.1f, 0.3f, false);
+
     std::shared_ptr<Birds> bird;
 
     switch (birdType) {
@@ -69,7 +57,7 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     shapeDef.density = bird->GetDensity();
     shapeDef.friction = bird->GetFriction();
     const auto center = bird->GetCenter();
-    const b2Circle shape = {{center.x,center.y} , bird->GetRadius()};
+    const b2Circle shape = {{center.x, center.y}, bird->GetRadius()};
     b2CreateCircleShape(bodyId, &shapeDef, &shape);
     b2Body_Disable(bodyId);
 
@@ -139,12 +127,13 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     const auto &[material, health, density, friction] = entityIt->second;
     const auto &[shape, size] = structureIt->second;
 
-    auto obj = std::make_shared<Structure>(RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png", health, entityType, structureType);
+    auto obj = std::make_shared<Structure>(RESOURCE_DIR"/" + material + "/" + material + "_" + shape + ".png", health,
+                                           entityType, structureType);
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2{position.x, position.y};
     bodyDef.rotation = b2MakeRot(rotation);
-    bodyDef.isAwake = false;
+    bodyDef.isAwake = true;
 
     b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
 

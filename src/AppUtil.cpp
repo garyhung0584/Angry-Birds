@@ -31,7 +31,7 @@ void App::PhaseManager() {
         case LEVEL_1: {
             SetUpGame();
 
-            ShowMenu(m_FinishMenu);
+            // ShowMenu(m_FinishMenu);
 
             m_PE->CreateBird(BLACK);
             m_PE->CreateBird(RED);
@@ -355,6 +355,7 @@ void App::PhaseManager() {
             break;
         case LEVEL_10:
             SetUpGame();
+            ShowMenu(m_FinishMenu);
 
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -431,6 +432,13 @@ void App::SetUpGame() {
     btnPause->SetZIndex(10);
     m_UIButtons.push_back(btnPause);
     m_Root.AddChild(btnPause);
+    const auto btnFastForward = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_NEXT.png");
+    btnFastForward->SetButtonType(FASTFORWARD_BUTTON);
+    btnFastForward->SetVisible(false);
+    btnFastForward->SetPosition({550.0f, -260.0f});
+    btnFastForward->SetZIndex(10);
+    m_UIButtons.push_back(btnFastForward);
+    m_Root.AddChild(btnFastForward);
     // For faster debug, remove on release
     const auto btnQuit = std::make_shared<Button>(RESOURCE_DIR"/BUTTON_QUIT.png");
     btnQuit->SetButtonType(EXIT_BUTTON);
@@ -450,6 +458,7 @@ void App::SetUpGame() {
     m_slingshot->Release(); // Release the slingshot to reset state
 
     m_ScoreManager->SetOffset({600.f, 300.f});
+    m_ScoreManager->ResetScore();
 
     SetUpMenu();
 
@@ -516,10 +525,10 @@ void App::ExitLevel() {
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
 
-    for (auto button : m_UIButtons) {
+    for (auto button: m_UIButtons) {
         m_Root.RemoveChild(button);
     }
-    for (auto &score : m_ScoreManager->GetScoresObject()) {
+    for (auto &score: m_ScoreManager->GetScoresObject()) {
         m_Root.RemoveChild(score);
     }
 

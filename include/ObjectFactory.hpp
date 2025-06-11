@@ -11,6 +11,7 @@
 #include "RedBird.hpp"
 #include "WhiteBird.hpp"
 #include "YellowBird.hpp"
+#include "Structure.hpp"
 
 #include <memory>
 #include <string>
