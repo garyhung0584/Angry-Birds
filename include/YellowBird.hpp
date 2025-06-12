@@ -4,12 +4,9 @@
 #include "Birds.hpp"
 
 class YellowBird : public Birds {
-    public:
+public:
     YellowBird();
-
     void Ability() override;
 };
-
-
 
 #endif //YELLOWBIRD_HPP

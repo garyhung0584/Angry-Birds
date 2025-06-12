@@ -63,7 +63,7 @@ add_executable(${PROJECT_NAME}
         include/UIObject.hpp
         include/WhiteBird.hpp
         include/YellowBird.hpp
-        include/physics2D.hpp
+        include/Physics2D.hpp
         include/type.hpp
         src/AppEnd.cpp
         src/AppUpdate.cpp

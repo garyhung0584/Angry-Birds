@@ -1,7 +1,8 @@
 #include "ScoreManager.hpp"
 
 void ScoreManager::AddToHistory(const int level) {
-    if (m_history[level-2] > m_Score) return; // Do not update if the current score is less than the history score
+    if (level < 2 || level - 2 >= static_cast<int>(m_history.size())) return;
+    if (m_history[level-2] > m_Score) return;
     m_history[level-2] = m_Score;
 }
 
@@ -18,5 +19,4 @@ void ScoreManager::UpdateScore() {
         scoreObj->SetZIndex(20); //in game UI:10, Physics2D: 4, slingshot: 3 & 5, popMenu 20, score 20
         m_Scores.push_back(scoreObj);
     }
-
 }

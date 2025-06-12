@@ -1,5 +1,6 @@
 #ifndef STRUCTURE_HPP
 #define STRUCTURE_HPP
+
 #include "Physics2D.hpp"
 
 

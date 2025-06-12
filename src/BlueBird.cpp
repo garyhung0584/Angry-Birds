@@ -1,5 +1,4 @@
 #include "BlueBird.hpp"
-#include "BlackBird.hpp"
 #include "Util/Logger.hpp"
 
 // const std::string RedBird::m_birdType = "BlueBird";

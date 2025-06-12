@@ -6,9 +6,7 @@
 class WhiteBird : public Birds {
 public:
     WhiteBird();
-
     void Ability() override;
 };
-
 
 #endif //WHITEBIRD_HPP

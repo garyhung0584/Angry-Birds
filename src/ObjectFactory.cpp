@@ -1,57 +1,33 @@
 #include "ObjectFactory.hpp"
 
+namespace {
+    std::shared_ptr<Birds> createBirdByType(BirdType birdType) {
+        switch (birdType) {
+            case RED:    return std::make_shared<RedBird>();
+            case YELLOW: return std::make_shared<YellowBird>();
+            case BIG:    return std::make_shared<BigBird>();
+            case BLACK:  return std::make_shared<BlackBird>();
+            case BLUE:   return std::make_shared<BlueBird>();
+            case WHITE:  return std::make_shared<WhiteBird>();
+            default:     return nullptr;
+        }
+    }
+}
+
 std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const glm::vec2 &position) const {
-    // static const std::unordered_map<BirdType, std::pair<std::string, glm::vec2> > birdProperties = {
-    // {RED, {"Red", {0.2f, 0.2f}}},
-    // {BLUE, {"Blue", {0.2f, 0.2f}}},
-    // {YELLOW, {"Yellow", {0.2f, 0.2f}}},
-    // {BLACK, {"Black", {0.2f, 0.2f}}},
-    // {WHITE, {"White", {0.2f, 0.2f}}},
-    // {BIG, {"Big", {0.2f, 0.2f}}}
-    // };
-
-    std::shared_ptr<Birds> bird;
-
-    switch (birdType) {
-        case RED: {
-            bird = std::make_shared<RedBird>();
-            break;
-        }
-        case YELLOW: {
-            bird = std::make_shared<YellowBird>();
-            break;
-        }
-        case BIG: {
-            bird = std::make_shared<BigBird>();
-            break;
-        }
-        case BLACK: {
-            bird = std::make_shared<BlackBird>();
-            break;
-        }
-        case BLUE: {
-            bird = std::make_shared<BlueBird>();
-            break;
-        }
-        case WHITE: {
-            bird = std::make_shared<WhiteBird>();
-            break;
-        }
-        default:
-            LOG_ERROR("Unknown bird type");
-            return nullptr;
+    auto bird = createBirdByType(birdType);
+    if (!bird) {
+        LOG_ERROR("Unknown bird type");
+        return nullptr;
     }
     constexpr float rotation = 0.0f;
     constexpr bool isAwake = false;
-
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2{position.x, position.y};
     bodyDef.rotation = b2MakeRot(rotation);
     bodyDef.isAwake = isAwake;
-
     const b2BodyId bodyId = b2CreateBody(m_WorldId, &bodyDef);
-
     b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.enableHitEvents = true;
     shapeDef.density = bird->GetDensity();
@@ -60,7 +36,6 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     const b2Circle shape = {{center.x, center.y}, bird->GetRadius()};
     b2CreateCircleShape(bodyId, &shapeDef, &shape);
     b2Body_Disable(bodyId);
-
     bird->SetBodyId(bodyId);
     bird->SetWorldId(m_WorldId);
     bird->SetScale(0.2f);

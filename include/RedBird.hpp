@@ -6,7 +6,6 @@
 class RedBird : public Birds {
 public:
     RedBird();
-
     void Ability() override;
 };
 

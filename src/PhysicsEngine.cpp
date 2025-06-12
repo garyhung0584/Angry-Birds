@@ -1,11 +1,10 @@
 #include "PhysicsEngine.hpp"
 
-#include "Util/Keycode.hpp"  // For input handling
+#include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
 #include <unordered_map>
 
-// #include "Util/Animation.hpp"
 PhysicsEngine::PhysicsEngine(Util::Renderer *Root, const std::shared_ptr<ScoreManager> &scoreManager,
                              const bool cheat) {
     m_Root = Root;
@@ -22,6 +21,13 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root, const std::shared_ptr<ScoreMa
     const b2Polygon groundBox = b2MakeBox(6.4f, 1.0f);
     const b2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, &groundShapeDef, &groundBox);
+    // Create right wall body
+    b2BodyDef rightWallBodyDef = b2DefaultBodyDef();
+    rightWallBodyDef.position = b2Vec2{12.0f, 3.5f};
+    const b2BodyId rightWallId = b2CreateBody(m_WorldId, &rightWallBodyDef);
+    const b2Polygon rightWallBox = b2MakeBox(1.0f, 3.5f);
+    const b2ShapeDef rightWallShapeDef = b2DefaultShapeDef();
+    b2CreatePolygonShape(rightWallId, &rightWallShapeDef, &rightWallBox);
 
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
 }
@@ -167,7 +173,6 @@ void PhysicsEngine::SetUpWorld() const {
 void PhysicsEngine::UpdateWorld() {
     float timeStep = 1.0f / 60.0f;
     constexpr int subStepCount = 4;
-    // ReSharper disable once CppDFAConstantConditions
     if (m_isFastForward) {
         timeStep *= 4.0f;
     }
@@ -199,8 +204,7 @@ void PhysicsEngine::ProcessEvents() {
     for (int i = 0; i < contactEvents.hitCount; ++i) {
         const b2ContactHitEvent &hitEvent = contactEvents.hitEvents[i];
         const auto speed = hitEvent.approachSpeed;
-        if (b2Shape_IsValid(hitEvent.shapeIdA) == false or b2Shape_IsValid(hitEvent.shapeIdB) == false) {
-            // LOG_ERROR("Not valid shape id");
+        if (!b2Shape_IsValid(hitEvent.shapeIdA) || !b2Shape_IsValid(hitEvent.shapeIdB)) {
             continue;
         }
         const b2BodyId bodyA = b2Shape_GetBody(hitEvent.shapeIdA);
@@ -227,20 +231,18 @@ void PhysicsEngine::ProcessEvents() {
     }
     auto contact = contactEvents.beginEvents;
     for (int i = 0; i < contactEvents.beginCount; ++i, ++contact) {
-        if (b2Shape_IsValid(contact->shapeIdA) == false || b2Shape_IsValid(contact->shapeIdB) == false) {
-            // LOG_ERROR("Not valid shape id");
+        if (!b2Shape_IsValid(contact->shapeIdA) || !b2Shape_IsValid(contact->shapeIdB)) {
             continue;
         }
         const b2BodyId bodyA = b2Shape_GetBody(contact->shapeIdA);
         const b2BodyId bodyB = b2Shape_GetBody(contact->shapeIdB);
         if (B2_IS_NULL(bodyA) || B2_IS_NULL(bodyB)) {
-            // LOG_ERROR("Body ID is null");
             continue;
         }
         auto objA = FindObjectByBodyId(bodyA);
         auto objB = FindObjectByBodyId(bodyB);
         if (!objA || !objB) {
-            continue; // Skip if either object is not found
+            continue;
         }
         const auto entityA = objA->GetEntityType();
         const auto entityB = objB->GetEntityType();
