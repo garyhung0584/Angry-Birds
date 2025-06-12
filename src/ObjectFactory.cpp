@@ -156,3 +156,4 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateObject(const std::string &imageP
     obj->SetScale(scale);
     return obj;
 }
+

@@ -4,7 +4,6 @@
 UIObject::UIObject(const std::string &ImagePath) {
     SetImage(ImagePath);
     this->SetZIndex(10);
-
     ResetPosition();
 }
 

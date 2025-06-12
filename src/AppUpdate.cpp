@@ -78,7 +78,7 @@ void App::Update() {
                                 }
                                 break;
                             case FASTFORWARD_BUTTON:
-                                m_PE->SetFasForward();
+                                m_PE->SetFastForward();
                                 break;
                             case CHEAT_BUTTON:
                                 m_isCheatMode = !m_isCheatMode;

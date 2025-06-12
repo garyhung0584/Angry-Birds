@@ -1,16 +1,21 @@
 #include "PhysicsEngine.hpp"
-
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
-
 #include <unordered_map>
 
-PhysicsEngine::PhysicsEngine(Util::Renderer *Root, const std::shared_ptr<ScoreManager> &scoreManager,
-                             const bool cheat) {
-    m_Root = Root;
-    m_isCheatMode = cheat;
-    m_ScoreManager = scoreManager;
-
+PhysicsEngine::PhysicsEngine(Util::Renderer* root,
+                             std::shared_ptr<ScoreManager> scoreManager,
+                             bool cheat)
+    : m_Root(root),
+      m_ScoreManager(std::move(scoreManager)),
+      m_isCheatMode(cheat),
+      m_isFastForward(false),
+      m_isLastBirdReleased(false),
+      m_Flying(nullptr),
+      m_ObjectFactory(nullptr),
+      m_WorldId(),
+      m_LastBirdReleaseTime()
+{
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity = b2Vec2{0.0f, -9.0f};
     m_WorldId = b2CreateWorld(&worldDef);
@@ -28,7 +33,6 @@ PhysicsEngine::PhysicsEngine(Util::Renderer *Root, const std::shared_ptr<ScoreMa
     const b2Polygon rightWallBox = b2MakeBox(1.0f, 3.5f);
     const b2ShapeDef rightWallShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(rightWallId, &rightWallShapeDef, &rightWallBox);
-
     m_ObjectFactory = std::make_shared<ObjectFactory>(m_WorldId);
 }
 
@@ -40,7 +44,8 @@ void PhysicsEngine::CreateBird(const BirdType birdType) {
         m_Objects.push_back(obj);
         m_Birds.push(obj);
     }
-    const glm::vec2 position = m_Birds.empty() ? BIRD_POSITION_0 : glm::vec2{m_Birds.size() * -0.4f, 0.2f};
+    const float offset = static_cast<float>(m_Birds.size()) * -0.4f;
+    const glm::vec2 position = m_Birds.empty() ? BIRD_POSITION_0 : glm::vec2{offset, 0.2f};
     const auto obj = m_ObjectFactory->CreateBird(birdType, position);
     if (!obj) {
         LOG_ERROR("Failed to create bird");
@@ -263,7 +268,7 @@ void PhysicsEngine::ApplyForce(const b2BodyId &bodyId, const b2Vec2 &force) cons
 
 void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
     if (obj->GetEntityType() != BIRD) {
-        obj->ApplyDamage(20 * speed);
+        obj->ApplyDamage(static_cast<int>(20 * speed));
         if (obj->GetHealth() <= 0) {
             if (obj->GetEntityType() == PIG) {
                 m_ScoreManager->AddScore(5000); // Pig score
@@ -282,11 +287,11 @@ void PhysicsEngine::HitObject(std::shared_ptr<Physics2D> &obj, float speed) {
     }
 }
 
-glm::vec2 PhysicsEngine::B2Pos2GamePos(const glm::vec2 &pos) const {
+glm::vec2 PhysicsEngine::B2Pos2GamePos(const glm::vec2 &pos) {
     return {pos.x * 100.0f + X_OFFSET, pos.y * 100.0f + Y_OFFSET};
 }
 
-glm::vec2 PhysicsEngine::GamePos2B2Pos(const glm::vec2 &pos) const {
+glm::vec2 PhysicsEngine::GamePos2B2Pos(const glm::vec2 &pos) {
     return {(pos.x - X_OFFSET) * 0.01f, (pos.y - Y_OFFSET) * 0.01f};
 }
 
