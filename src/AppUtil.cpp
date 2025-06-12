@@ -47,9 +47,9 @@ void App::PhaseManager() {
         case LEVEL_2:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(YELLOW);
+            m_PE->CreateBird(YELLOW);
+            m_PE->CreateBird(YELLOW);
 
             m_PE->CreateStructure({6.7f, 0.4f}, STONE, BAR_SHORT, RAD90);
             m_PE->CreateStructure({5.3f, 0.4f}, STONE, BAR_SHORT, RAD90);
@@ -96,9 +96,9 @@ void App::PhaseManager() {
         case LEVEL_4:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
 
             m_PE->CreateStructure({5.0f, 0.4f}, STONE, RECTANGLE, RAD90);
             m_PE->CreateStructure({6.1f, 0.4f}, STONE, RECTANGLE, RAD90);
@@ -142,9 +142,9 @@ void App::PhaseManager() {
         case LEVEL_5:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
 
             m_PE->CreateStructure({5.0f, 0.2f}, STONE, RECTANGLE, 0);
             m_PE->CreateStructure({5.8f, 0.2f}, STONE, RECTANGLE, 0);
@@ -176,10 +176,10 @@ void App::PhaseManager() {
         case LEVEL_6:
             SetUpGame();
 
-            m_PE->CreateBird(BLACK);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(YELLOW);
+            m_PE->CreateBird(YELLOW);
+            m_PE->CreateBird(YELLOW);
+
 
             m_PE->CreateStructure({5.0f, 0.4f}, STONE, BAR_SHORT, RAD90);
             m_PE->CreateStructure({5.4f, 0.4f}, GLASS, BAR_SHORT, RAD90);
@@ -225,9 +225,9 @@ void App::PhaseManager() {
         case LEVEL_7:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
 
             m_PE->CreateStructure({5.0f, 0.4f}, WOOD, RECTANGLE, RAD90);
             m_PE->CreateStructure({5.4f, 0.4f}, WOOD, RECTANGLE, RAD90);
@@ -269,9 +269,8 @@ void App::PhaseManager() {
         case LEVEL_8:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BIG);
+            m_PE->CreateBird(BIG);
 
             m_PE->CreateStructure({5.0f, 0.4f}, STONE, RECTANGLE, RAD90);
             m_PE->CreateStructure({5.6f, 0.4f}, STONE, RECTANGLE, RAD90);
@@ -308,9 +307,8 @@ void App::PhaseManager() {
         case LEVEL_9:
             SetUpGame();
 
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
-            m_PE->CreateBird(RED);
+            m_PE->CreateBird(BLACK);
+            m_PE->CreateBird(BLACK);
 
             m_PE->CreateStructure({5.5f, 0.4f}, WOOD, BAR_SHORT, RAD90);
             m_PE->CreateStructure({6.3f, 0.4f}, WOOD, BAR_SHORT, RAD90);
@@ -351,6 +349,8 @@ void App::PhaseManager() {
         case LEVEL_10:
             SetUpGame();
 
+            m_PE->CreateBird(RED);
+            m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
             m_PE->CreateBird(RED);
@@ -543,7 +543,9 @@ void App::ExitLevel() {
     m_Root.RemoveChild(m_Text_Score);
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[0]);
     m_Root.RemoveChild(m_slingshot->GetSlingshot()[1]);
-
+    for (const auto &wire: m_slingshot->GetWire()) {
+        m_Root.RemoveChild(wire);
+    }
     for (const auto &object: m_FinishMenu) {
         m_Root.RemoveChild(object);
     }

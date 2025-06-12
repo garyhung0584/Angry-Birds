@@ -38,7 +38,6 @@ std::shared_ptr<Birds> ObjectFactory::CreateBird(const BirdType birdType, const 
     b2Body_Disable(bodyId);
     bird->SetBodyId(bodyId);
     bird->SetWorldId(m_WorldId);
-    bird->SetScale(0.2f);
     return bird;
 }
 
@@ -67,7 +66,7 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateStructure(const EntityType entit
     // Entity type: { Material, Health, Density, Friction }
     static const std::unordered_map<EntityType, std::tuple<std::string, int, float, float> > entityProperties = {
         {WOOD, {"Wood", 100, 0.1f, 0.3f}},
-        {STONE, {"Stone", 120, 0.2f, 0.3f}},
+        {STONE, {"Stone", 110, 0.2f, 0.3f}},
         {GLASS, {"Glass", 50, 0.1f, 0.1f}}
     };
 
@@ -143,8 +142,7 @@ std::shared_ptr<Physics2D> ObjectFactory::CreateObject(const std::string &imageP
     shapeDef.density = density;
     shapeDef.friction = friction;
 
-    if (entityType == BIRD || entityType == PIG) {
-        if (entityType == BIRD) b2Body_Disable(bodyId);
+    if (entityType == PIG) {
         const b2Circle dynamicBox = {{0, 0}, size.x};
         b2CreateCircleShape(bodyId, &shapeDef, &dynamicBox);
     } else {

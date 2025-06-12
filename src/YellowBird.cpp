@@ -2,10 +2,11 @@
 #include "Util/Logger.hpp"
 
 YellowBird::YellowBird() : Birds("YellowBird") {
+    SetCenter({0.0f, -0.05f});
     SetDensity(0.1f);
     SetFriction(0.3f);
-    SetCenter({0.0f, 0.0f});
     SetRadius(0.2f);
+    SetScale(0.2f);
 }
 
 void YellowBird::Ability() {

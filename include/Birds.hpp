@@ -7,10 +7,8 @@
 
 class Birds : public Physics2D {
 public:
-    Birds(const std::string &birdType) : Physics2D(RESOURCE_DIR"/Birds/" + birdType + ".png", 1, BIRD) {
+    explicit Birds(const std::string &birdType) : Physics2D(RESOURCE_DIR"/Birds/" + birdType + ".png", 1, BIRD) {
     }
-
-    Birds();
 
     virtual void Ability() = 0;
 
@@ -30,26 +28,27 @@ public:
         m_Radius = radius;
     }
 
-    float GetDensity() const {
+    [[nodiscard]] float GetDensity() const {
         return m_Density;
     }
 
-    float GetFriction() const {
+    [[nodiscard]] float GetFriction() const {
         return m_Friction;
     }
 
-    glm::vec2 GetCenter() const {
+    [[nodiscard]] glm::vec2 GetCenter() const {
         return m_Center;
     }
 
-    float GetRadius() const {
+    [[nodiscard]] float GetRadius() const {
         return m_Radius;
     }
 
     void SetWorldId(const b2WorldId worldId) {
         m_WorldId = worldId;
     }
-    b2WorldId GetWorldId() const {
+
+    [[nodiscard]] b2WorldId GetWorldId() const {
         return m_WorldId;
     }
 
