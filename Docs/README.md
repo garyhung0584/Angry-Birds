@@ -69,7 +69,7 @@
 
 模組之間透過成員變數（如 `m_PE`, `m_ScoreManager`）和函式呼叫進行互動，強調程式架構的模組化與維護性。
 
-App 擁有一個 Renderer Root，一個 PhysicsEngine，一個 ResourceManager 實體，一個 ScoreManager 實體，以及一個 ResourceManager 實體，並利用 vector 保存 UIObject 實體，通過控制這三者完成遊戲的進行。
+App 擁有一個 Renderer Root，一個 PhysicsEngine，一個 ScoreManager 實體，以及一個 ResourceManager 實體，並利用 vector 保存 UIObject 實體，通過控制這三者完成遊戲的進行。
 ![App](./pics/app.png)
 
 PhysicsEngine 是遊戲的核心，負責物理模擬與碰撞檢測。它包含了物理世界的設定、物件的創建與管理，以及物理計算。
